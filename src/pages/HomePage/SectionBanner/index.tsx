@@ -29,7 +29,7 @@ const SectionBanner = memo(() => {
   });
 
   return (
-    <section className="flex flex-col justify-start items-center w-screen h-auto pt-18  md:pt-4 gap-2 overflow-hidden">
+    <section className="flex flex-col justify-start items-center w-screen h-auto pt-7 lg:pt-18  md:pt-4 gap-2 overflow-hidden">
       <Swiper
         modules={[Autoplay]}
         slidesPerView={1}

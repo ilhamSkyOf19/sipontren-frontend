@@ -1,0 +1,39 @@
+// Ustad Interface (MongoDB)
+export interface IUstad {
+  id: number; // MongoDB ObjectId sebagai string
+  name: string;
+  jenis_kelamin: "laki_laki" | "perempuan";
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  alamat: string;
+  no_telepon: string;
+  jabatan: string;
+  ustad_img: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// create type
+export type CreateUstadType = {
+  name: string;
+  jenis_kelamin: "laki_laki" | "perempuan";
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  alamat: string;
+  no_telepon: string;
+  jabatan: string;
+  ustad_img: string;
+};
+
+// update type
+export type UpdateUstadType = Partial<CreateUstadType> & {
+  id: number;
+};
+
+// response type
+export type ResponseUstadType = Omit<CreateUstadType, "ustad_img"> & {
+  id: number;
+  ustad_img: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
