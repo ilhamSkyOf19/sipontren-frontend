@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "subJudul": "Ekstrakulikuler",
+    "title": "HW (Hizbul Wathan)",
+    "ket": "Gerakan kepanduan Muhammadiyah yang menanamkan nilai Islam, kemandirian, kepemimpinan, dan kepedulian sosial.",
+    "logo": "logo1",
+    "person": "person5",
+    "bg": "bg5",
+    "iconSize": "55%"
+  },
+  {
+    "id": 2,
+    "subJudul": "Organisasi",
+    "title": "IPM (Ikatan Pelajar Muhammadiyah)",
+    "ket": "Organisasi pelajar Muhammadiyah yang membina kepemimpinan, intelektual, dan karakter Islami pelajar melalui kegiatan organisasi dan dakwah.",
+    "logo": "logo3",
+    "person": "person1",
+    "bg": "bg1",
+    "iconSize": "45%"
+  },
+  {
+    "id": 3,
+    "subJudul": "Kegiatan Santri",
+    "title": "Tahfidz",
+    "ket": "Program pembinaan hafalan Al-Qur’an untuk membentuk generasi Qur’ani berakhlak mulia dan dekat dengan Al-Qur’an.",
+    "logo": "",
+    "person": "person4",
+    "bg": "bg3",
+    "iconSize": ""
+  },
+  {
+    "id": 4,
+    "subJudul": "Ekstrakulikuler",
+    "title": "Futsal",
+    "ket": "Kegiatan olahraga beregu untuk mengembangkan kemampuan fisik, sportivitas, kerja sama tim, dan semangat kompetitif siswa.",
+    "logo": "",
+    "person": "person2",
+    "bg": "bg4",
+    "iconSize": ""
+  },
+  {
+    "id": 5,
+    "subJudul": "Ekstrakulikuler",
+    "title": "Tapak Suci Muhammadiyah",
+    "ket": "Organisasi pencak silat berlandaskan nilai Islam dan ke-Muhammadiyahan untuk membentuk pribadi berakhlak mulia, disiplin, serta kuat fisik dan mental.",
+    "logo": "logo2",
+    "person": "person6",
+    "bg": "bg6",
+    "iconSize": "90%"
+  },
+  {
+    "id": 6,
+    "subJudul": "Organisasi",
+    "title": "KOKAM (Komando Kesiapsiagaan Angkatan Muda Muhammadiyah)",
+    "ket": "Organisasi kemanusiaan dan kesiapsiagaan yang menanamkan disiplin dan tanggung jawab.",
+    "logo": "",
+    "person": "personKokam",
+    "bg": "bgKokam",
+    "iconSize": "90%"
+  },
+  {
+    "id": 7,
+    "subJudul": "Ekstrakulikuler",
+    "title": "PASKIBRA (Pasukan Pengibar Bendera)",
+    "ket": "Ekstrakurikuler untuk membentuk disiplin, kepemimpinan, nasionalisme, dan tanggung jawab melalui baris-berbaris dan upacara.",
+    "logo": "",
+    "person": "personPaskibra",
+    "bg": "bgPaskibra",
+    "iconSize": "90%"
+  }
+]
