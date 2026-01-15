@@ -4,7 +4,7 @@ import type { FC } from "react";
 
 // Props
 type Props = {
-  width?: number;
+  width?: number | string;
   position?: string;
 };
 

@@ -9,7 +9,7 @@ import SectionMaps from "./SectionMaps";
 
 const HomePage: FC = () => {
   return (
-    <main className="flex flex-col overflow-hidden">
+    <main className="flex flex-col justify-start items-center overflow-hidden">
       {/* section one */}
       <SectionBanner />
 
