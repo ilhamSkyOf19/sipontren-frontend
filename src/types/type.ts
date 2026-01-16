@@ -37,3 +37,12 @@ export type ResponseMessage = {
   success: boolean;
   message: string;
 };
+
+// filter data
+export type FilterData = {
+  from?: string;
+  to?: string;
+  search?: string;
+  page?: string;
+  jenis_kelamin?: "laki_laki" | "perempuan";
+};

@@ -33,7 +33,7 @@ const SectionBanner = memo(() => {
       <Swiper
         modules={[Autoplay]}
         slidesPerView={1}
-        loop={true}
+        loop={isLoading ? false : true}
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
@@ -42,32 +42,29 @@ const SectionBanner = memo(() => {
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         className="w-full h-[40vw]"
       >
-        {isLoading
-          ? Array.from({ length: 3 }, (_, i) => (
-              <SwiperSlide>
-                <div
-                  key={i}
-                  className="w-full h-full bg-gray-400 animate-pulse"
-                />
-              </SwiperSlide>
-            ))
-          : banners?.success &&
-            banners?.data &&
-            banners?.data.length > 0 &&
-            banners.data.map((item, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={`${import.meta.env.VITE_API_BASE_IMG_URL}/banner/${
-                    item.img
-                  }`}
-                  alt="slide"
-                  className={clsx(
-                    "object-cover w-full h-full transition-transform duration-16000 origin-center",
-                    isReady && index === activeIndex ? "scale-125" : "scale-100"
-                  )}
-                />
-              </SwiperSlide>
-            ))}
+        {isLoading ? (
+          <SwiperSlide>
+            <div className="w-full h-full bg-gray-400 animate-pulse" />
+          </SwiperSlide>
+        ) : (
+          banners?.success &&
+          banners?.data &&
+          banners?.data.length > 0 &&
+          banners.data.map((item, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={`${import.meta.env.VITE_API_BASE_IMG_URL}/banner/${
+                  item.img
+                }`}
+                alt="slide"
+                className={clsx(
+                  "object-cover w-full h-full transition-transform duration-16000 origin-center",
+                  isReady && index === activeIndex ? "scale-125" : "scale-100"
+                )}
+              />
+            </SwiperSlide>
+          ))
+        )}
       </Swiper>
     </section>
   );

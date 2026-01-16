@@ -1,0 +1,151 @@
+import clsx from "clsx";
+import { LayoutDashboardIcon, Menu, UsersRound, X } from "lucide-react";
+import React, { useState, type FC } from "react";
+import useClickOutside from "../../hooks/useClickOutSide";
+import logo from "../../assets/icons/file_thumb.png";
+import { Link, useLocation } from "react-router-dom";
+
+// navigation
+const navigationList: { label: string; link: string }[] = [
+  {
+    label: "dashboard",
+    link: "/dashboard",
+  },
+  {
+    label: "calon santri",
+    link: "/dashboard/calon-santri",
+  },
+];
+
+const NavbarDashboardMobile: FC = () => {
+  // state active sidebar
+  const [isActiveSidebar, setIsActiveSidebar] = useState<boolean>(false);
+
+  //   ref sidebar
+  const sidebarRef = React.useRef<HTMLDivElement>(null);
+  //   ref button bars
+  const buttonBarsRef = React.useRef<HTMLButtonElement>(null);
+
+  //   use click outside
+  useClickOutside({
+    refs: [sidebarRef, buttonBarsRef],
+    onOutsideClick: () => setIsActiveSidebar(false),
+  });
+
+  //   pathname
+  const pathname = useLocation().pathname;
+
+  return (
+    <>
+      <div className="fixed top-0 bg-primary-blue h-12 z-40 left-0 right-0 flex flex-row justify-between items-center px-4 md:hidden">
+        {/* button bars */}
+        <button
+          ref={buttonBarsRef}
+          type="button"
+          onClick={() => setIsActiveSidebar(true)}
+          className="p-2"
+        >
+          <Menu size={24} className="text-primary-white" />
+        </button>
+
+        {/* label */}
+        <h2 className="text-primary-white text-lg font-semibold">Dashboard</h2>
+      </div>
+
+      {/* layer */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-40 bg-primary-black/40 pointer-events-none opacity-0 md:hidden",
+          isActiveSidebar && "opacity-100"
+        )}
+      />
+
+      {/* component sidebar */}
+      <div
+        ref={sidebarRef}
+        className={clsx(
+          "fixed left-0 w-[65vw] h-screen z-50 bg-secondary-blue transition-all duration-300 ease-in-out flex flex-col justify-start items-start md:hidden py-3",
+          isActiveSidebar ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {/* header */}
+        <div className="w-full flex flex-row justify-start items-center relative px-4 pb-4 before:content-[''] before:left-4 before:right-4 before:absolute before:h-0.5 before:rounded-full before:bg-primary-white before:bottom-0">
+          {/* logo */}
+          <img src={logo} alt="logo sipontren" className="w-10" />
+
+          {/* label */}
+          <h2 className="text-primary-white text-base font-semibold ml-2">
+            Sippontren
+          </h2>
+
+          {/* button close */}
+          <button
+            type="button"
+            className="absolute right-2 text-primary-white"
+            onClick={() => setIsActiveSidebar(false)}
+          >
+            <X />
+          </button>
+        </div>
+
+        {/* navigation */}
+        <div className="w-full flex flex-col justify-start items-start mt-8">
+          {navigationList.map((item, index) => (
+            <ButtonNavigation
+              key={index}
+              label={item.label}
+              link={item.link}
+              active={
+                item.link === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : pathname.startsWith(item.link) && pathname !== "/dashboard"
+              }
+              line={index !== navigationList.length - 1}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+// button navigatin
+type ButtonNavigationProps = {
+  label: string;
+  link: string;
+  active: boolean;
+  line: boolean;
+};
+
+const ButtonNavigation: FC<ButtonNavigationProps> = ({
+  label,
+  link,
+  active,
+  line,
+}) => {
+  return (
+    <Link
+      to={link}
+      className={clsx(
+        "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out  justify-start",
+        active ? "bg-primary-blue" : "hover:bg-primary-blue"
+        // line && "border-b border-primary-white/20"
+      )}
+    >
+      {/* icon */}
+      {label === "dashboard" && (
+        <LayoutDashboardIcon size={24} className="text-primary-white" />
+      )}
+      {label === "calon santri" && (
+        <UsersRound size={24} className="text-primary-white" />
+      )}
+
+      {/* label */}
+      <span className={clsx("text-primary-white text-base uppercase")}>
+        {label}
+      </span>
+    </Link>
+  );
+};
+
+export default NavbarDashboardMobile;

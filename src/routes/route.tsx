@@ -6,6 +6,8 @@ import KemahadanPage from "../pages/KemahadanPage";
 import GalleryPage from "../pages/GalleryPage";
 import BeritaDetail from "../pages/BeritaDetailPage";
 import PsbPage from "../pages/PsbPage";
+import LayoutDashboard from "../layouts/LayoutDashboard";
+import CalonSantriPage from "../pages/CalonSantriPage";
 
 const route = createBrowserRouter([
   {
@@ -35,6 +37,20 @@ const route = createBrowserRouter([
       {
         path: "/psb",
         element: <PsbPage />,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <LayoutDashboard />,
+    children: [
+      {
+        index: true,
+        element: <p>dashboard</p>,
+      },
+      {
+        path: "calon-santri",
+        element: <CalonSantriPage />,
       },
     ],
   },
