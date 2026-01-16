@@ -16,7 +16,12 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
   // use query
   const { data, isLoading } = useQuery({
     queryKey: ["alumniForUSer"],
-    queryFn: () => AlumniService.read(),
+    queryFn: () =>
+      AlumniService.read({
+        page: undefined,
+        search: undefined,
+      }),
+    refetchOnWindowFocus: false,
   });
 
   return (
@@ -25,9 +30,9 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
       {widthDevice < 1024 ? (
         isLoading ? (
           <span>loding</span>
-        ) : data?.success && data?.data && data.data.length > 0 ? (
+        ) : data?.success && data?.data && data.data.data.length > 0 ? (
           <ScrollXNonDesktop>
-            {data.data.map((item) => (
+            {data.data.data.map((item) => (
               <CardAlumni
                 key={item.id}
                 img={item.img_alumni}
@@ -42,9 +47,9 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
         )
       ) : isLoading ? (
         <span>loading</span>
-      ) : data?.success && data?.data && data.data.length > 0 ? (
+      ) : data?.success && data?.data && data.data.data.length > 0 ? (
         <ScrollXDesktop>
-          {data.data.map((item) => (
+          {data.data.data.map((item) => (
             <CardAlumni
               key={item.id}
               img={item.img_alumni}

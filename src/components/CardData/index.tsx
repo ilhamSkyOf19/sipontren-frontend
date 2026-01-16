@@ -8,6 +8,7 @@ type Props = {
   id: number;
   index: number;
   handleOpenModal: () => void;
+  handleDelete: () => void;
 };
 
 const CardData: FC<Props> = ({
@@ -16,6 +17,7 @@ const CardData: FC<Props> = ({
   index,
   handleOpenModal,
   dataSizeSmall,
+  handleDelete,
 }) => {
   return (
     <div
@@ -39,7 +41,7 @@ const CardData: FC<Props> = ({
       <div className="basis-[90%] flex-row justify-evenly items-center hidden lg:flex">
         {data.map((item, index) => (
           <h3 key={index} className="text-sm w-full">
-            {item}
+            {item.length > 20 ? `${item.slice(0, 25)}...` : item}
           </h3>
         ))}
       </div>
@@ -62,9 +64,11 @@ const CardData: FC<Props> = ({
         >
           <Pencil size={14} className="text-primary-white" />
         </button>
+
         {/* delete */}
         <button
           onClick={(e) => {
+            handleDelete();
             e.stopPropagation();
           }}
           onKeyDown={(e) => e.stopPropagation()}

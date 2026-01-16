@@ -1,5 +1,9 @@
 import AXIOS from "../libs/axios";
-import type { ResponseAlumniType } from "../models/alumni-model";
+import type {
+  FilterData,
+  ResponseAlumniType,
+  ResponseAlumniWithMetaType,
+} from "../models/alumni-model";
 import type { ResponseData } from "../types/type";
 export class AlumniService {
   // create
@@ -18,9 +22,17 @@ export class AlumniService {
   }
 
   // read
-  static async read(): Promise<ResponseData<ResponseAlumniType[]>> {
+  static async read({
+    page,
+    search,
+  }: FilterData): Promise<ResponseData<ResponseAlumniWithMetaType>> {
     // get response
-    const response = await AXIOS.get("/alumni/read").then((res) => res.data);
+    const response = await AXIOS.get("/alumni/read", {
+      params: {
+        page,
+        search,
+      },
+    }).then((res) => res.data);
 
     // return
     return response;

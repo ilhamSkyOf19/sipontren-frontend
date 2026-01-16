@@ -15,6 +15,10 @@ const navigationList: { label: string; link: string }[] = [
     label: "calon santri",
     link: "/dashboard/calon-santri",
   },
+  {
+    label: "alumni",
+    link: "/dashboard/alumni",
+  },
 ];
 
 const NavbarDashboardMobile: FC = () => {
@@ -137,6 +141,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
         <LayoutDashboardIcon size={24} className="text-primary-white" />
       )}
       {label === "calon santri" && (
+        <UsersRound size={24} className="text-primary-white" />
+      )}
+      {label === "alumni" && (
         <UsersRound size={24} className="text-primary-white" />
       )}
 

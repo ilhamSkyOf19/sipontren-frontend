@@ -32,3 +32,20 @@ export type ResponseAlumniType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+// response with meta
+export type ResponseAlumniWithMetaType = {
+  data: ResponseAlumniType[];
+  meta: {
+    currentPage: number;
+    totalPage: number;
+    totalData: number;
+    pageSize: number;
+  };
+};
+
+// filter data
+export type FilterData = {
+  search?: string;
+  page?: string;
+};

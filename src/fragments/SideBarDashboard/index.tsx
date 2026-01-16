@@ -22,6 +22,10 @@ const navigationList: { label: string; link: string }[] = [
     label: "calon santri",
     link: "/dashboard/calon-santri",
   },
+  {
+    label: "alumni",
+    link: "/dashboard/alumni",
+  },
 ];
 
 type Props = {
@@ -182,8 +186,8 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       {label === "calon santri" && (
         <UsersRound size={24} className="text-primary-white" />
       )}
-      {label === "surat keluar" && (
-        <FileOutput size={24} className="text-primary-white" />
+      {label === "alumni" && (
+        <UsersRound size={24} className="text-primary-white" />
       )}
       {label === "panduan" && <Info size={24} className="text-primary-white" />}
 

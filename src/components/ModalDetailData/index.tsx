@@ -1,6 +1,7 @@
 import { type FC } from "react";
 import { Download, Pencil, Trash, X } from "lucide-react";
 import ButtonIcon from "../ButtonIcon";
+import clsx from "clsx";
 
 type Props = {
   data: {
@@ -8,9 +9,16 @@ type Props = {
     value: string;
   }[];
   handleClose: () => void;
+  handleDelete: () => void;
+  size?: "sm" | "lg";
 };
 
-const ModalDetailData: FC<Props> = ({ data, handleClose }) => {
+const ModalDetailData: FC<Props> = ({
+  data,
+  handleClose,
+  handleDelete,
+  size,
+}) => {
   //   // call hoks
   //   const { deleteSuratMasukWithRefresh } = useDeleteSuratMasuk();
   //   const { deleteSuratKeluarWithRefresh } = useDeleteSuratKeluar();
@@ -57,7 +65,12 @@ const ModalDetailData: FC<Props> = ({ data, handleClose }) => {
   //   };
 
   return (
-    <div className="w-[90vw] h-[90vh] flex flex-col justify-start items-center py-8 px-8 overflow-y-scroll scrollbar-hidden relative lg:w-[40vw]">
+    <div
+      className={clsx(
+        "w-[90vw]  flex flex-col justify-start items-center py-8 px-8 overflow-y-scroll scrollbar-hidden relative lg:w-[40vw]",
+        size === "sm" ? "h-[50]" : "h-[90vh]"
+      )}
+    >
       {/* button close */}
       <button
         type="button"
@@ -105,7 +118,7 @@ const ModalDetailData: FC<Props> = ({ data, handleClose }) => {
           {/* button delete */}
           <ButtonIcon
             label="delete"
-            handleClick={() => {}}
+            handleClick={() => handleDelete()}
             color="bg-primary-red"
             icon={<Trash size={20} className="text-primary-white" />}
           />

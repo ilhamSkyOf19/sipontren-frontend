@@ -1,6 +1,13 @@
 import Swal from "sweetalert2";
 
-export const handleDelete = async (_id: number) => {
+export const handleActionDelete = async (
+  id: number,
+  deleteService: (id: number) => Promise<any>,
+  options?: {
+    successMessage?: string;
+    errorMessage?: string;
+  }
+): Promise<boolean> => {
   const result = await Swal.fire({
     title: "Yakin ingin menghapus?",
     text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -15,31 +22,28 @@ export const handleDelete = async (_id: number) => {
     },
   });
 
-  // Jika user klik Batal
-  if (!result.isConfirmed) return null;
+  if (!result.isConfirmed) return false;
 
   try {
-    // call service
-    // const response = await SuratMasukService.deleteById(id);
+    const response = await deleteService(id);
 
-    Swal.fire({
+    await Swal.fire({
       icon: "success",
       title: "Berhasil",
-      text: "Data berhasil dihapus",
+      text: options?.successMessage ?? "Data berhasil dihapus",
       timer: 1500,
       width: 400,
       showConfirmButton: false,
     });
 
-    // return
-    // return response;
+    return response ? true : false;
   } catch (error) {
-    Swal.fire({
+    await Swal.fire({
       icon: "error",
       title: "Gagal",
-      text: "Data gagal dihapus",
+      text: options?.errorMessage ?? "Data gagal dihapus",
     });
 
-    return null;
+    return false;
   }
 };

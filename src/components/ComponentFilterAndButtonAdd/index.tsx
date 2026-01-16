@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Calendar, ChevronDown, Search } from "lucide-react";
+import { Calendar, ChevronDown, Search, UsersRound } from "lucide-react";
 import { useRef, useState, type FC, type RefObject } from "react";
 import {
   formatDateID,
@@ -13,11 +13,11 @@ import useClickOutside from "../../hooks/useClickOutSide";
 // time
 
 type Props = {
-  handleFilter: (
+  handleFilter?: (
     newValues: Partial<{ page: number; from: string; to: string }>
   ) => void;
-  handleSearch: (search: string) => void;
-  handleFilterJenisKelamin: (
+  handleSearch?: (search: string) => void;
+  handleFilterJenisKelamin?: (
     jenisKelamin: "laki_laki" | "perempuan" | undefined
   ) => void;
   searchValue: string;
@@ -47,7 +47,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   // handle jenis kelamin
   const handleJenisKelamin = (value: "laki_laki" | "perempuan" | undefined) => {
     // set jenis kelamin
-    handleFilterJenisKelamin(value);
+    handleFilterJenisKelamin?.(value);
 
     // close
     setIsModalJenisKelamin({ active: false, jenisKelamin: value });
@@ -73,16 +73,16 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   // handle set date from
   const handleSetDate = (type: "from" | "to", value: string) => {
     if (type === "from") {
-      handleFilter({ from: value });
+      handleFilter?.({ from: value });
     } else {
-      handleFilter({ to: value });
+      handleFilter?.({ to: value });
     }
   };
 
   // handle reset filter
   const handleResetFilter = () => {
     // set is date
-    handleFilter({
+    handleFilter?.({
       from: getTodayLocal(),
       to: getTodayLocal(),
     });
@@ -100,6 +100,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   // use click outside
   useClickOutside({
     refs: [refFilterJenisKelamin, refButtonJenisKelamin],
+
     onOutsideClick: () =>
       setIsModalJenisKelamin((prev) => ({
         ...prev,
@@ -119,173 +120,207 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
           name={"search"}
           id="search"
           value={searchValue}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleSearch?.(e.target.value)}
           placeholder={"Cari data ..."}
           className="w-full h-full border-none outline-none text-base placeholder:text-sm font-medium"
         />
       </div>
 
       {/* filter */}
-      <div className=" h-12 flex flex-row justify-start items-center gap-2 relative lg:flex-2 lg:h-full lg:justify-end">
+      <div
+        className={clsx(
+          " h-12 flex-row justify-start items-center gap-2 relative lg:flex-2 lg:h-full lg:justify-end",
+          handleFilter && handleFilterJenisKelamin ? "flex" : "hidden"
+        )}
+      >
         {/* filter jenis kelamin */}
         <div className="relative h-full">
-          <button
-            ref={refButtonJenisKelamin}
-            onClick={() =>
-              setIsModalJenisKelamin((prev) => ({
-                ...prev,
-                active: !prev.active,
-              }))
-            }
-            type="button"
-            className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
-          >
-            <Calendar size={24} />
-            <span className="text-sm font-medium">Jenis Kelamin</span>
+          {handleFilterJenisKelamin && (
+            <>
+              <button
+                ref={refButtonJenisKelamin}
+                onClick={() =>
+                  setIsModalJenisKelamin((prev) => ({
+                    ...prev,
+                    active: !prev.active,
+                  }))
+                }
+                type="button"
+                className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+              >
+                <UsersRound size={24} />
+                <span className="text-sm font-medium text-left hidden lg:block">
+                  {isModalJenisKelamin.jenisKelamin
+                    ? isModalJenisKelamin.jenisKelamin === "laki_laki"
+                      ? "Laki-laki"
+                      : "Perempuan"
+                    : "Jenis Kelamin"}
+                </span>
 
-            <ChevronDown
-              size={24}
-              className={clsx(
-                "transition-transform duration-200 ease-in-out",
-                isModalJenisKelamin.active ? "-rotate-180" : "rotate-0"
-              )}
-            />
-          </button>
+                <ChevronDown
+                  size={24}
+                  className={clsx(
+                    "transition-transform duration-200 ease-in-out",
+                    isModalJenisKelamin.active ? "-rotate-180" : "rotate-0"
+                  )}
+                />
+              </button>
 
-          {/* modal jenis kelamin */}
-          <div
-            ref={refFilterJenisKelamin}
-            className={clsx(
-              " w-[40vw] bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-40",
-              isModalJenisKelamin.active ? "max-h-43" : "max-h-0 shadow-none"
-            )}
-          >
-            {/* choose laki laki */}
-            <button
-              type="button"
-              onClick={() => handleJenisKelamin("laki_laki")}
-              className="w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
-            >
-              <span className="text-sm font-medium w-full text-center">
-                Laki-laki
-              </span>
-            </button>
+              {/* modal jenis kelamin */}
+              <div
+                ref={refFilterJenisKelamin}
+                className={clsx(
+                  " w-[40vw] bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-40",
+                  isModalJenisKelamin.active
+                    ? "max-h-43"
+                    : "max-h-0 shadow-none"
+                )}
+              >
+                {/* choose laki laki */}
+                <button
+                  type="button"
+                  onClick={() => handleJenisKelamin("laki_laki")}
+                  className={clsx(
+                    "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
+                    isModalJenisKelamin.jenisKelamin === "laki_laki" &&
+                      "bg-primary-black/10"
+                  )}
+                >
+                  <span className="text-sm font-medium w-full text-center">
+                    Laki-laki
+                  </span>
+                </button>
 
-            {/* choose perempuan */}
-            <button
-              type="button"
-              onClick={() => handleJenisKelamin("perempuan")}
-              className="w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
-            >
-              <span className="text-sm font-medium w-full text-center">
-                Perempuan
-              </span>
-            </button>
+                {/* choose perempuan */}
+                <button
+                  type="button"
+                  onClick={() => handleJenisKelamin("perempuan")}
+                  className={clsx(
+                    "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
+                    isModalJenisKelamin.jenisKelamin === "perempuan" &&
+                      "bg-primary-black/10"
+                  )}
+                >
+                  <span className="text-sm font-medium w-full text-center">
+                    Perempuan
+                  </span>
+                </button>
 
-            {/* choose reset */}
-            <button
-              type="button"
-              onClick={() => handleJenisKelamin(undefined)}
-              className="w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
-            >
-              <span className="text-sm font-medium w-full text-center">
-                Reset
-              </span>
-            </button>
-          </div>
+                {/* choose reset */}
+                <button
+                  type="button"
+                  onClick={() => handleJenisKelamin(undefined)}
+                  className="w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
+                >
+                  <span className="text-sm font-medium w-full text-center">
+                    Reset
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="relative h-full flex flex-row justify-start items-center">
           {/* filter any date  */}
-          <button
-            ref={refButtonAnyDate}
-            onClick={() => handleOpenModalFilterDate()}
-            type="button"
-            className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
-          >
-            <Calendar size={24} />
-            <span className="text-sm font-medium">Filter Tanggal</span>
+          {handleFilter && (
+            <>
+              <button
+                ref={refButtonAnyDate}
+                onClick={() => handleOpenModalFilterDate()}
+                type="button"
+                className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+              >
+                <Calendar size={24} />
+                <span className="text-sm font-medium hidden lg:block">
+                  Filter Tanggal
+                </span>
 
-            <ChevronDown
-              size={24}
-              className={clsx(
-                "transition-transform duration-200 ease-in-out",
-                isModalFilterDate ? "-rotate-180" : "rotate-0"
-              )}
-            />
-          </button>
+                <ChevronDown
+                  size={24}
+                  className={clsx(
+                    "transition-transform duration-200 ease-in-out",
+                    isModalFilterDate ? "-rotate-180" : "rotate-0"
+                  )}
+                />
+              </button>
 
-          <div className=" flex-row justify-start items-center gap-2 ml-4 h-full px-4 bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg hidden lg:flex">
-            {(from && to && from === to) || (!from && !to) ? (
-              <p className="text-sm font-medium">
-                {formatDateID(
-                  isValidDate(from)
-                    ? new Date(from as string)
-                    : new Date(getTodayLocal())
+              <div className=" flex-row justify-start items-center gap-2 ml-4 h-full px-4 bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg hidden lg:flex">
+                {(from && to && from === to) || (!from && !to) ? (
+                  <p className="text-sm font-medium">
+                    {formatDateID(
+                      isValidDate(from)
+                        ? new Date(from as string)
+                        : new Date(getTodayLocal())
+                    )}
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium">
+                      {formatDateID(
+                        isValidDate(from)
+                          ? new Date(from ?? getTodayLocal())
+                          : new Date(getTodayLocal())
+                      )}
+                    </p>{" "}
+                    -{" "}
+                    <p className="text-sm font-medium">
+                      {formatDateID(
+                        isValidDate(to)
+                          ? new Date(to ?? getTodayLocal())
+                          : new Date(getTodayLocal())
+                      )}
+                    </p>
+                  </>
                 )}
-              </p>
-            ) : (
-              <>
-                <p className="text-sm font-medium">
-                  {formatDateID(
-                    isValidDate(from)
-                      ? new Date(from ?? getTodayLocal())
-                      : new Date(getTodayLocal())
-                  )}
-                </p>{" "}
-                -{" "}
-                <p className="text-sm font-medium">
-                  {formatDateID(
-                    isValidDate(to)
-                      ? new Date(to ?? getTodayLocal())
-                      : new Date(getTodayLocal())
-                  )}
-                </p>
-              </>
-            )}
-          </div>
+              </div>
+
+              <div
+                ref={refFilterAnyDate}
+                className={clsx(
+                  "w-[50vw] h-60 md:h-43 bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-80",
+                  isModalFilterDate ? "max-h-60" : "max-h-0 shadow-none"
+                )}
+              >
+                <div className="w-full h-full flex flex-col justify-start items-center py-4 px-4 gap-2">
+                  {/* date */}
+                  <div className="w-full flex flex-col gap-4 md:flex-row justify-start items-center md:gap-1">
+                    {/* date from */}
+                    <BoxInputDate
+                      type="from"
+                      refInput={refInputDateFrom}
+                      handleDate={handleSetDate}
+                      label={from ?? ""}
+                      to={to ?? ""}
+                    />
+                    <BoxInputDate
+                      type="to"
+                      refInput={refInputDateTo}
+                      handleDate={handleSetDate}
+                      label={to ?? ""}
+                      from={from ?? ""}
+                    />
+                  </div>
+
+                  {/* button action */}
+                  <div className="w-full flex flex-row justify-between items-center gap-3 mt-4">
+                    {/* reset */}
+                    <button
+                      onClick={() => handleResetFilter()}
+                      type="button"
+                      className="py-2 flex-1 border border-primary-blue rounded-sm hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
+                    >
+                      <span className="text-sm font-medium capitalize">
+                        reset
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* modal filter */}
-          <div
-            ref={refFilterAnyDate}
-            className={clsx(
-              " w-[90vw] h-43 bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-80",
-              isModalFilterDate ? "max-h-43" : "max-h-0 shadow-none"
-            )}
-          >
-            <div className="w-full h-full flex flex-col justify-start items-center py-4 px-4 gap-2">
-              {/* date */}
-              <div className="w-full flex flex-row justify-start items-center gap-1">
-                {/* date from */}
-                <BoxInputDate
-                  type="from"
-                  refInput={refInputDateFrom}
-                  handleDate={handleSetDate}
-                  label={from ?? ""}
-                  to={to ?? ""}
-                />
-                <BoxInputDate
-                  type="to"
-                  refInput={refInputDateTo}
-                  handleDate={handleSetDate}
-                  label={to ?? ""}
-                  from={from ?? ""}
-                />
-              </div>
-
-              {/* button action */}
-              <div className="w-full flex flex-row justify-between items-center gap-3 mt-4">
-                {/* reset */}
-                <button
-                  onClick={() => handleResetFilter()}
-                  type="button"
-                  className="py-2 flex-1 border border-primary-blue rounded-sm hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
-                >
-                  <span className="text-sm font-medium capitalize">reset</span>
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

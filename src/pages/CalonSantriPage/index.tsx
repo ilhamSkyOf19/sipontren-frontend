@@ -8,12 +8,19 @@ import CardData from "../../components/CardData";
 import { formatDateID, getTodayLocal, isValidDate } from "../../utils/utils";
 import ModalContainer from "../../components/ModalContainer";
 import ModalDetailData from "../../components/ModalDetailData";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { StudentService } from "../../services/student.service";
 import type { ResponseStudentType } from "../../models/student-model";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../../components/Pagination";
+import { useShowingRange } from "../../hooks/useShowingRange";
+import { handleActionDelete } from "../../utils/sweetalert/delete";
 
 const CalonSantriPage: FC = () => {
+  // query client
+  const queryClient = useQueryClient();
+
+  // search
   const [searchParams, setSearchParams] = useSearchParams();
 
   // state jenis kelamin
@@ -72,12 +79,12 @@ const CalonSantriPage: FC = () => {
   // use query
   const { data: student, isLoading } = useQuery({
     queryKey: [
-      "suratKeluar",
+      "studentForDashboard",
       page,
       jenisKelaminQuery,
       queryFrom,
       queryTo,
-      jenisKelamin,
+      debouncedSearch,
     ],
     queryFn: () =>
       StudentService.read({
@@ -88,14 +95,31 @@ const CalonSantriPage: FC = () => {
         jenis_kelamin: jenisKelaminQuery as "laki_laki" | "perempuan",
       }),
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   });
+
+  // use showing range
+  const { start, end } = useShowingRange(
+    student?.success ? student?.data?.meta.currentPage : undefined,
+    student?.success ? student?.data?.meta.pageSize : undefined,
+    student?.success ? student?.data?.meta.totalData : undefined
+  );
 
   // cek student
   if (!student?.success) return null;
 
+  // handle delete
+  const handleDelete = async (id: number) => {
+    // handle delete
+    await handleActionDelete(id, StudentService.delete);
+
+    // refresh
+    queryClient.invalidateQueries({
+      queryKey: ["studentForDashboard"],
+    });
+  };
+
   return (
-    <main className="w-full h-full flex flex-col justify-start items-start relative overflow-hidden lg:pt-4">
+    <main className="w-full h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4">
       {/* header */}
       <HeaderDashboard
         title="Data Calon Santri"
@@ -153,14 +177,26 @@ const CalonSantriPage: FC = () => {
                   handleOpenModal={() =>
                     setIsModal({ active: true, data: item })
                   }
+                  handleDelete={() => handleDelete(item.id)}
                 />
               ))}
         </div>
       </div>
 
+      {/* showing */}
+      <Pagination
+        start={start}
+        end={end}
+        totalData={student?.data?.meta.totalData ?? 0}
+        totalPage={student?.data?.meta.totalPage ?? 0}
+        handlePage={handleFilter}
+        currentPage={student?.data?.meta.currentPage ?? 0}
+      />
+
       {/* modal */}
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
+          handleDelete={() => handleDelete(isModal.data?.id || 0)}
           data={[
             {
               label: "Nama",

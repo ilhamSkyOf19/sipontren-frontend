@@ -23,7 +23,7 @@ const LayoutDashboard: FC = () => {
 
       <div
         className={clsx(
-          "w-full h-full flex flex-col justify-start items-start transition-all duration-300 ease-in-out pt-16 pr-6 relative overflow-y-scroll scrollbar-hidden scroll-smooth",
+          "w-full h-full flex flex-col justify-start items-center transition-all duration-300 ease-in-out pt-16 relative overflow-y-scroll scrollbar-hidden scroll-smooth",
           isSideBarSmal ? "md:pl-26 md:pt-4" : "md:pl-76 md:pt-4"
         )}
       >

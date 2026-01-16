@@ -8,6 +8,7 @@ import BeritaDetail from "../pages/BeritaDetailPage";
 import PsbPage from "../pages/PsbPage";
 import LayoutDashboard from "../layouts/LayoutDashboard";
 import CalonSantriPage from "../pages/CalonSantriPage";
+import AlumniPage from "../pages/AlumniPage";
 
 const route = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const route = createBrowserRouter([
       {
         path: "calon-santri",
         element: <CalonSantriPage />,
+      },
+      {
+        path: "alumni",
+        element: <AlumniPage />,
       },
     ],
   },
