@@ -13,6 +13,7 @@ import { handleActionDelete } from "../../utils/sweetalert/delete";
 import Pagination from "../../components/Pagination";
 import ModalContainer from "../../components/ModalContainer";
 import ModalDetailData from "../../components/ModalDetailData";
+import NoData from "../../components/NoData";
 
 const AlumniPage: FC = () => {
   // use query client
@@ -61,11 +62,16 @@ const AlumniPage: FC = () => {
   // handle delete
   const handleDelete = async (id: number) => {
     // handle delete
-    await handleActionDelete(id, AlumniService.delete);
+    const result = await handleActionDelete(id, AlumniService.delete);
+
+    if (!result) return;
+
+    // close modal detail
+    setIsModal({ active: false, data: undefined });
 
     // refresh
     queryClient.invalidateQueries({
-      queryKey: ["studentForDashboard"],
+      queryKey: ["alumniForDashboard"],
     });
   };
 
@@ -84,6 +90,7 @@ const AlumniPage: FC = () => {
         <ComponentFilterAndButtonAdd
           searchValue={isSearch}
           handleSearch={handleSearch}
+          linkAdd="/dashboard/alumni/tambah"
         />
 
         {/* header data */}
@@ -94,27 +101,28 @@ const AlumniPage: FC = () => {
 
         {/* card data */}
         <div className="w-full flex flex-col justify-start items-start gap-4 mt-4">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
-                />
-              ))
-            : alumni?.success &&
-              alumni?.data?.data.map((item, index) => (
-                <CardData
-                  key={item.id}
-                  data={[item.name, item.angkatan, item.description]}
-                  dataSizeSmall={item.name}
-                  id={item.id}
-                  index={index}
-                  handleOpenModal={() =>
-                    setIsModal({ active: true, data: item })
-                  }
-                  handleDelete={() => handleDelete(item.id)}
-                />
-              ))}
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
+              />
+            ))
+          ) : alumni?.success && alumni?.data?.data.length > 0 ? (
+            alumni?.data?.data.map((item, index) => (
+              <CardData
+                key={item.id}
+                data={[item.name, item.angkatan, item.description]}
+                dataSizeSmall={item.name}
+                id={item.id}
+                index={index}
+                handleOpenModal={() => setIsModal({ active: true, data: item })}
+                handleDelete={() => handleDelete(item.id)}
+              />
+            ))
+          ) : (
+            <NoData />
+          )}
         </div>
       </div>
 
@@ -132,6 +140,7 @@ const AlumniPage: FC = () => {
       {/* modal */}
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
+          linkUpdate={`/dashboard/alumni/edit/${isModal.data?.id}`}
           size="sm"
           handleDelete={() => handleDelete(isModal.data?.id || 0)}
           data={[

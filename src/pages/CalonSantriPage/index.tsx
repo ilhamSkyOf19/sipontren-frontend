@@ -15,6 +15,7 @@ import { useSearchParams } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { useShowingRange } from "../../hooks/useShowingRange";
 import { handleActionDelete } from "../../utils/sweetalert/delete";
+import NoData from "../../components/NoData";
 
 const CalonSantriPage: FC = () => {
   // query client
@@ -110,7 +111,12 @@ const CalonSantriPage: FC = () => {
   // handle delete
   const handleDelete = async (id: number) => {
     // handle delete
-    await handleActionDelete(id, StudentService.delete);
+    const result = await handleActionDelete(id, StudentService.delete);
+
+    if (!result) return;
+
+    // close modal
+    setIsModal({ active: false, data: undefined });
 
     // refresh
     queryClient.invalidateQueries({
@@ -152,34 +158,36 @@ const CalonSantriPage: FC = () => {
 
         {/* card data */}
         <div className="w-full flex flex-col justify-start items-start gap-4 mt-4">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
-                />
-              ))
-            : student?.data?.data.map((item, index) => (
-                <CardData
-                  key={item.id}
-                  data={[
-                    item.nama_lengkap,
-                    formatDateID(new Date(item.createdAt)),
-                    item.jenis_sekolah,
-                    item.jenis_kelamin === "laki_laki"
-                      ? "Laki-laki"
-                      : "Perempuan",
-                    item.no_telepon,
-                  ]}
-                  dataSizeSmall={item.nama_lengkap}
-                  id={item.id}
-                  index={index}
-                  handleOpenModal={() =>
-                    setIsModal({ active: true, data: item })
-                  }
-                  handleDelete={() => handleDelete(item.id)}
-                />
-              ))}
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
+              />
+            ))
+          ) : student.data && student.data.data.length > 0 ? (
+            student?.data?.data.map((item, index) => (
+              <CardData
+                key={item.id}
+                data={[
+                  item.nama_lengkap,
+                  formatDateID(new Date(item.createdAt)),
+                  item.jenis_sekolah,
+                  item.jenis_kelamin === "laki_laki"
+                    ? "Laki-laki"
+                    : "Perempuan",
+                  item.no_telepon,
+                ]}
+                dataSizeSmall={item.nama_lengkap}
+                id={item.id}
+                index={index}
+                handleOpenModal={() => setIsModal({ active: true, data: item })}
+                handleDelete={() => handleDelete(item.id)}
+              />
+            ))
+          ) : (
+            <NoData />
+          )}
         </div>
       </div>
 
@@ -196,6 +204,7 @@ const CalonSantriPage: FC = () => {
       {/* modal */}
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
+          linkUpdate={`/dashboard/calon-santri/edit/${isModal.data?.id || 0}`}
           handleDelete={() => handleDelete(isModal.data?.id || 0)}
           data={[
             {

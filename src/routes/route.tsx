@@ -9,6 +9,7 @@ import PsbPage from "../pages/PsbPage";
 import LayoutDashboard from "../layouts/LayoutDashboard";
 import CalonSantriPage from "../pages/CalonSantriPage";
 import AlumniPage from "../pages/AlumniPage";
+import InputAlumniPage from "../pages/InputAlumniPage";
 
 const route = createBrowserRouter([
   {
@@ -56,6 +57,14 @@ const route = createBrowserRouter([
       {
         path: "alumni",
         element: <AlumniPage />,
+      },
+      {
+        path: "alumni/tambah",
+        element: <InputAlumniPage />,
+      },
+      {
+        path: "alumni/edit/:id",
+        element: <InputAlumniPage />,
       },
     ],
   },

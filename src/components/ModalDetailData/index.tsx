@@ -1,7 +1,8 @@
 import { type FC } from "react";
 import { Download, Pencil, Trash, X } from "lucide-react";
-import ButtonIcon from "../ButtonIcon";
 import clsx from "clsx";
+import ButtonAction from "../ButtonAction";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data: {
@@ -11,6 +12,7 @@ type Props = {
   handleClose: () => void;
   handleDelete: () => void;
   size?: "sm" | "lg";
+  linkUpdate: string;
 };
 
 const ModalDetailData: FC<Props> = ({
@@ -18,6 +20,7 @@ const ModalDetailData: FC<Props> = ({
   handleClose,
   handleDelete,
   size,
+  linkUpdate,
 }) => {
   //   // call hoks
   //   const { deleteSuratMasukWithRefresh } = useDeleteSuratMasuk();
@@ -64,6 +67,9 @@ const ModalDetailData: FC<Props> = ({
   //     }
   //   };
 
+  // navigate
+  const navigate = useNavigate();
+
   return (
     <div
       className={clsx(
@@ -100,15 +106,15 @@ const ModalDetailData: FC<Props> = ({
         {/* action */}
         <div className="w-full flex flex-row justify-evenly items-center mt-8 lg:gap-4">
           {/* button update */}
-          <ButtonIcon
+          <ButtonAction
             label="update"
-            handleClick={() => {}}
+            handleClick={() => navigate(linkUpdate)}
             color="bg-primary-blue"
             icon={<Pencil size={20} className="text-primary-white" />}
           />
 
           {/* download */}
-          <ButtonIcon
+          <ButtonAction
             label="download"
             handleClick={() => {}}
             color="bg-gray-400"
@@ -116,7 +122,7 @@ const ModalDetailData: FC<Props> = ({
           />
 
           {/* button delete */}
-          <ButtonIcon
+          <ButtonAction
             label="delete"
             handleClick={() => handleDelete()}
             color="bg-primary-red"

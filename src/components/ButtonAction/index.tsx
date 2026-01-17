@@ -8,7 +8,7 @@ type Props = {
   label: string;
 };
 
-const ButtonIcon: FC<Props> = ({ handleClick, color, icon, label }) => {
+const ButtonAction: FC<Props> = ({ handleClick, color, icon, label }) => {
   return (
     <button
       onClick={() => handleClick()}
@@ -26,4 +26,4 @@ const ButtonIcon: FC<Props> = ({ handleClick, color, icon, label }) => {
   );
 };
 
-export default ButtonIcon;
+export default ButtonAction;

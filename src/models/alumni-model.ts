@@ -4,7 +4,7 @@ export type IAlumni = {
   name: string;
   angkatan: string;
   description: string;
-  img_alumni: string;
+  img_alumni: File;
   createdAt: Date; // timestamps wajib ada
   updatedAt: Date;
 };
@@ -14,7 +14,7 @@ export type CreateAlumniType = {
   name: string;
   angkatan: string;
   description: string;
-  img_alumni: string;
+  img_alumni: File;
 };
 
 // UPDATE – semua optional kecuali id

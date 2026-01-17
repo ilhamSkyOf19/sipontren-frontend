@@ -51,8 +51,8 @@ export class AlumniService {
 
   // update
   static async update(
-    req: FormData,
-    id: number
+    id: number,
+    req: FormData
   ): Promise<ResponseData<ResponseAlumniType>> {
     // get response
     const response = await AXIOS.patch(`/alumni/update/${id}`, req, {

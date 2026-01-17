@@ -105,6 +105,7 @@ const NavbarDashboardMobile: FC = () => {
                   : pathname.startsWith(item.link) && pathname !== "/dashboard"
               }
               line={index !== navigationList.length - 1}
+              handleClose={() => setIsActiveSidebar(false)}
             />
           ))}
         </div>
@@ -119,16 +120,19 @@ type ButtonNavigationProps = {
   link: string;
   active: boolean;
   line: boolean;
+  handleClose: () => void;
 };
 
 const ButtonNavigation: FC<ButtonNavigationProps> = ({
   label,
   link,
   active,
+  handleClose,
   line,
 }) => {
   return (
     <Link
+      onClick={() => handleClose()}
       to={link}
       className={clsx(
         "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out  justify-start",

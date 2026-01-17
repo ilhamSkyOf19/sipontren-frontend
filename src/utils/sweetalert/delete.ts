@@ -34,6 +34,9 @@ export const handleActionDelete = async (
       timer: 1500,
       width: 400,
       showConfirmButton: false,
+      customClass: {
+        container: "swal-z",
+      },
     });
 
     return response ? true : false;
@@ -42,6 +45,9 @@ export const handleActionDelete = async (
       icon: "error",
       title: "Gagal",
       text: options?.errorMessage ?? "Data gagal dihapus",
+      customClass: {
+        container: "swal-z",
+      },
     });
 
     return false;
