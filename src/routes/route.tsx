@@ -10,6 +10,8 @@ import LayoutDashboard from "../layouts/LayoutDashboard";
 import CalonSantriPage from "../pages/CalonSantriPage";
 import AlumniPage from "../pages/AlumniPage";
 import InputAlumniPage from "../pages/InputAlumniPage";
+import UstadPage from "../pages/UstadPage";
+import InputUstadPage from "../pages/InputUstadPage";
 
 const route = createBrowserRouter([
   {
@@ -50,10 +52,14 @@ const route = createBrowserRouter([
         index: true,
         element: <p>dashboard</p>,
       },
+
+      // calon santri
       {
         path: "calon-santri",
         element: <CalonSantriPage />,
       },
+
+      // alumni
       {
         path: "alumni",
         element: <AlumniPage />,
@@ -65,6 +71,20 @@ const route = createBrowserRouter([
       {
         path: "alumni/edit/:id",
         element: <InputAlumniPage />,
+      },
+
+      // ustad
+      {
+        path: "ustad",
+        element: <UstadPage />,
+      },
+      {
+        path: "ustad/tambah",
+        element: <InputUstadPage />,
+      },
+      {
+        path: "ustad/edit/:id",
+        element: <InputUstadPage />,
       },
     ],
   },

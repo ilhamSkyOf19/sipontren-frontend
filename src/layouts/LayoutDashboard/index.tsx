@@ -24,10 +24,10 @@ const LayoutDashboard: FC = () => {
       <div
         className={clsx(
           "w-full h-full flex flex-col justify-start items-center transition-all duration-300 ease-in-out pt-16 relative overflow-y-scroll scrollbar-hidden scroll-smooth",
-          isSideBarSmal ? "md:pl-26 md:pt-4" : "md:pl-76 md:pt-4"
+          isSideBarSmal ? "md:pl-24 md:pt-4" : "md:pl-74 md:pt-4",
         )}
       >
-        <div className="w-full h-full px-4">
+        <div className="w-full h-full">
           <Outlet />
         </div>
 
@@ -35,7 +35,7 @@ const LayoutDashboard: FC = () => {
         <footer
           className={clsx(
             "fixed w-full h-8 border-t bg-primary-white border-primary-black/15 bottom-0 transition-all duration-300 ease-in-out px-3 flex flex-row justify-start items-center",
-            isSideBarSmal ? "md:left-20" : "md:left-70"
+            isSideBarSmal ? "md:left-20" : "md:left-70",
           )}
         >
           <p className="text-xs">

@@ -11,11 +11,12 @@ import type {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlumniValidation } from "../../validations/alumni-validation";
 import BoxInputText from "../../components/BoxInputText";
-import BoxInputChoose from "../../components/BoxInputAngkatan";
+import BoxInputChoose from "../../components/BoxInputChoose";
 import BoxInputTextArea from "../../components/BoxInputTextArea";
 import BoxInputGambar from "../../components/BoxInputGambar";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import ButtonBack from "../../components/ButtonBack";
+import LoadingPulseFormulir from "../../components/LoadingPulseFormulir";
 
 // choose list
 const chooseList: string[] = [
@@ -44,7 +45,7 @@ const InputAlumniPage: FC = () => {
   const idParam = useParams().id;
   const id = idParam ? Number(idParam) : undefined;
 
-  const { data: dataAlumni } = useQuery({
+  const { data: dataAlumni, isLoading } = useQuery({
     queryKey: ["alumniForInput", id],
     queryFn: () => AlumniService.detail(+id!),
     enabled: typeof id === "number" && !isNaN(id),
@@ -62,7 +63,7 @@ const InputAlumniPage: FC = () => {
     clearErrors,
   } = useForm<CreateAlumniType | Omit<UpdateAlumniType, "id">>({
     resolver: zodResolver(
-      id ? AlumniValidation.UPDATE : AlumniValidation.CREATE
+      id ? AlumniValidation.UPDATE : AlumniValidation.CREATE,
     ),
   });
 
@@ -100,7 +101,12 @@ const InputAlumniPage: FC = () => {
     },
     onSuccess: () => {
       // navigate
-      navigate("/dashboard/alumni");
+      navigate("/dashboard/alumni", {
+        state: {
+          success: true,
+          message: "berhasil tambah data",
+        },
+      });
 
       //   reset
       reset();
@@ -112,7 +118,7 @@ const InputAlumniPage: FC = () => {
 
   // handle submit
   const onSubmit = async (
-    data: CreateAlumniType | Omit<UpdateAlumniType, "id">
+    data: CreateAlumniType | Omit<UpdateAlumniType, "id">,
   ) => {
     try {
       // form data
@@ -134,7 +140,7 @@ const InputAlumniPage: FC = () => {
   };
 
   return (
-    <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 pb-32">
+    <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 pb-32 md:items-start px-4">
       {/* header */}
       <HeaderDashboard
         title="Tambah Alumni"
@@ -145,57 +151,63 @@ const InputAlumniPage: FC = () => {
       {/* form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full flex flex-col justify-strat items-start mt-8"
+        className="w-full flex flex-col justify-start items-start mt-8 lg:w-[40vw]"
       >
-        {/* input name */}
-        <BoxInputText
-          register={register("name")}
-          label="Nama Alumni"
-          name="name"
-          placeholder="Masukan nama alumni ..."
-          errorMessage={errors.name?.message}
-          required={true}
-        />
+        {isLoading ? (
+          <LoadingPulseFormulir />
+        ) : (
+          <>
+            {/* input name */}
+            <BoxInputText
+              register={register("name")}
+              label="Nama Alumni"
+              name="name"
+              placeholder="Masukan nama alumni ..."
+              errorMessage={errors.name?.message}
+              required={true}
+            />
 
-        {/* input angkatan */}
-        <BoxInputChoose<CreateAlumniType | Omit<UpdateAlumniType, "id">>
-          controller={angkatanController}
-          label="Angkatan Alumni"
-          required={true}
-          defaultValue={
-            dataAlumni?.success && dataAlumni?.data.angkatan
-              ? dataAlumni?.data.angkatan
-              : ""
-          }
-          chooseList={chooseList}
-        />
+            {/* input angkatan */}
+            <BoxInputChoose<CreateAlumniType | Omit<UpdateAlumniType, "id">>
+              controller={angkatanController}
+              label="Angkatan Alumni"
+              required={true}
+              defaultValue={
+                dataAlumni?.success && dataAlumni?.data.angkatan
+                  ? dataAlumni?.data.angkatan
+                  : ""
+              }
+              chooseList={chooseList}
+            />
 
-        {/* input description */}
-        <BoxInputTextArea
-          register={register("description")}
-          label="Deskripsi Alumni"
-          name="description"
-          placeholder="Masukan deskripsi alumni ..."
-          errorMessage={errors.description?.message}
-          required={true}
-        />
+            {/* input description */}
+            <BoxInputTextArea
+              register={register("description")}
+              label="Deskripsi Alumni"
+              name="description"
+              placeholder="Masukan deskripsi alumni ..."
+              errorMessage={errors.description?.message}
+              required={true}
+            />
 
-        {/* input img alumni */}
-        <BoxInputGambar<CreateAlumniType | Omit<UpdateAlumniType, "id">>
-          label="Foto Alumni"
-          controller={fileController}
-          required={true}
-          clearError={() => clearErrors("img_alumni")}
-        />
+            {/* input img alumni */}
+            <BoxInputGambar<CreateAlumniType | Omit<UpdateAlumniType, "id">>
+              label="Foto Alumni"
+              controller={fileController}
+              required={true}
+              clearError={() => clearErrors("img_alumni")}
+            />
 
-        {/* action */}
-        <div className="w-full flex flex-row justify-between items-center gap-4 mt-6">
-          {/* button back */}
-          <ButtonBack link="/dashboard/alumni" />
+            {/* action */}
+            <div className="w-full flex flex-row justify-between items-center gap-4 mt-6">
+              {/* button back */}
+              <ButtonBack link="/dashboard/alumni" />
 
-          {/* button submit */}
-          <ButtonSubmit label="Simpan" loading={isPending} />
-        </div>
+              {/* button submit */}
+              <ButtonSubmit label="Simpan" loading={isPending} />
+            </div>
+          </>
+        )}
       </form>
     </main>
   );

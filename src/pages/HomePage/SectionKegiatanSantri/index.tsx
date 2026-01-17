@@ -22,10 +22,10 @@ const SectionKegiatanSantri: FC<Props> = ({ width }) => {
           width > 0 && width <= 760
             ? 5
             : width > 760 && width < 1024
-            ? 1
-            : width > 1024
-            ? 1
-            : 1
+              ? 1
+              : width > 1024
+                ? 1
+                : 1
         }
       />
       {width > 1024 ? (
@@ -43,9 +43,6 @@ const SectionKegiatanSantri: FC<Props> = ({ width }) => {
               id={item.id}
             />
           ))}
-
-          {/* space */}
-          <div className="w-4 shrink-0 h-ful" />
         </ScrollXDesktop>
       ) : (
         <ScrollXNonDesktop>

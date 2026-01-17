@@ -1,91 +1,91 @@
+import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { type FC } from "react";
+import { type FC, useMemo } from "react";
 
 type Props = {
-  start: number;
-  end: number;
   totalData: number;
   totalPage: number;
   handlePage: (
-    newValues: Partial<{ page: number; from: string; to: string }>
+    newValues: Partial<{ page: number; from: string; to: string }>,
   ) => void;
   currentPage: number;
   handlePageSingle?: (page: number) => void;
 };
+
 const Pagination: FC<Props> = ({
-  end,
-  start,
   totalData,
   totalPage,
   handlePage,
   currentPage,
   handlePageSingle,
 }) => {
+  // 🔥 LOGIKA INTI: WINDOW 3 HALAMAN
+  const pages = useMemo(() => {
+    const groupSize = 3;
+
+    // grup ke berapa user berada
+    const currentGroup = Math.ceil(currentPage / groupSize);
+
+    const startPage = (currentGroup - 1) * groupSize + 1;
+    const endPage = Math.min(startPage + groupSize - 1, totalPage);
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i,
+    );
+  }, [currentPage, totalPage]);
+
+  const changePage = (page: number) => {
+    handlePageSingle ? handlePageSingle(page) : handlePage({ page });
+  };
+
   return (
-    <div className="w-full flex flex-row justify-between items-center absolute bottom-12">
-      {/* showing */}
+    <div className="w-full h-32 flex flex-row justify-between items-center lg:absolute lg:bottom-12 lg:px-4">
       {totalData !== 0 && (
-        <>
-          <div className="flex-1 flex flex-row justify-start items-center gap-1 text-sm">
-            <span className="font-medium">showing</span>
-            <span className="font-medium">
-              {start.toString().padStart(2, "0")}
-            </span>
-            <span>-</span>
-            <span className="font-medium">
-              {end.toString().padStart(2, "0")}
-            </span>
-            <span className="font-medium">of {totalData}</span>
-          </div>
+        <div className="flex-1 flex flex-row justify-end items-center gap-1">
+          {/* PREV GROUP */}
+          <button
+            type="button"
+            className="p-1 disabled:opacity-40"
+            disabled={currentPage === 1}
+            onClick={() => changePage(currentPage === 1 ? 1 : currentPage - 1)}
+          >
+            <ChevronLeft />
+          </button>
 
-          {/* pagination */}
-          <div className="flex-1 flex flex-row justify-end items-center">
-            {/* prev */}
+          {/* NOMOR HALAMAN (WINDOW 3) */}
+          {pages.map((page) => (
             <button
+              key={page}
               type="button"
-              className="p-1"
-              onClick={() => {
-                handlePageSingle
-                  ? handlePageSingle(currentPage === 1 ? 1 : currentPage - 1)
-                  : handlePage({
-                      page: currentPage === 1 ? 1 : currentPage - 1,
-                    });
-              }}
+              className="p-2"
+              onClick={() => changePage(page)}
             >
-              <ChevronLeft />
-            </button>
-
-            {Array.from({ length: totalPage }, (_, i) => (
-              <button
-                key={i}
-                type="button"
-                className="p-2"
-                onClick={() => {
-                  handlePageSingle
-                    ? handlePageSingle(i + 1)
-                    : handlePage({
-                        page: i + 1,
-                      });
-                }}
+              <span
+                className={clsx(
+                  "text-sm font-semibold text-gray-400",
+                  currentPage === page && "text-primary-blue",
+                )}
               >
-                <span className="text-sm font-semibold">{i + 1}</span>
-              </button>
-            ))}
-
-            {/* next */}
-            <button
-              type="button"
-              className="p-1"
-              onClick={() =>
-                handlePage({
-                  page: currentPage === totalPage ? totalPage : currentPage + 1,
-                })
-              }
-            >
-              <ChevronRight />
+                {page}
+              </span>
             </button>
-          </div>
-        </>
+          ))}
+
+          {/* NEXT GROUP */}
+          <button
+            type="button"
+            className="p-1 disabled:opacity-40"
+            disabled={currentPage === totalPage}
+            onClick={() =>
+              changePage(
+                currentPage === totalPage ? totalPage : currentPage + 1,
+              )
+            }
+          >
+            <ChevronRight />
+          </button>
+        </div>
       )}
     </div>
   );

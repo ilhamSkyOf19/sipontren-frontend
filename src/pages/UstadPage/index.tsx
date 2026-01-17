@@ -3,19 +3,20 @@ import HeaderDashboard from "../../components/HeaderDashboard";
 import ComponentFilterAndButtonAdd from "../../components/ComponentFilterAndButtonAdd";
 import useSearch from "../../hooks/useSearch";
 import HeaderData from "../../components/HeaderData";
-import { AlumniService } from "../../services/alumni.service";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHandlePage } from "../../hooks/useHandlePage";
 import CardData from "../../components/CardData";
-import type { ResponseAlumniType } from "../../models/alumni-model";
 import { handleActionDelete } from "../../utils/sweetalert/delete";
 import Pagination from "../../components/Pagination";
 import ModalContainer from "../../components/ModalContainer";
 import ModalDetailData from "../../components/ModalDetailData";
 import NoData from "../../components/NoData";
 import useNotifSuccess from "../../hooks/useNotifSuccess";
+import type { ResponseUstadType } from "../../models/ustad-model";
+import { UstadService } from "../../services/ustad.service";
+import { formatDateID } from "../../utils/utils";
 
-const AlumniPage: FC = () => {
+const UstadPage: FC = () => {
   // notif succes
   useNotifSuccess();
 
@@ -25,7 +26,7 @@ const AlumniPage: FC = () => {
   // state modal
   const [isModal, setIsModal] = useState<{
     active: boolean;
-    data: ResponseAlumniType | undefined;
+    data: ResponseUstadType | undefined;
   }>({
     active: false,
     data: undefined,
@@ -45,10 +46,10 @@ const AlumniPage: FC = () => {
   }, [isSearch]);
 
   //   use query
-  const { data: alumni, isLoading } = useQuery({
-    queryKey: ["alumniForDashboard", debouncedSearch, page],
+  const { data: ustad, isLoading } = useQuery({
+    queryKey: ["ustadForDashboard", debouncedSearch, page],
     queryFn: () =>
-      AlumniService.read({
+      UstadService.read({
         page: page.toString(),
         search: debouncedSearch,
       }),
@@ -58,7 +59,7 @@ const AlumniPage: FC = () => {
   // handle delete
   const handleDelete = async (id: number) => {
     // handle delete
-    const result = await handleActionDelete(id, AlumniService.delete);
+    const result = await handleActionDelete(id, UstadService.delete);
 
     if (!result) return;
 
@@ -67,7 +68,7 @@ const AlumniPage: FC = () => {
 
     // refresh
     queryClient.invalidateQueries({
-      queryKey: ["alumniForDashboard"],
+      queryKey: ["ustadForDashboard"],
     });
   };
 
@@ -75,8 +76,8 @@ const AlumniPage: FC = () => {
     <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 lg:h-full px-4">
       {/* header page */}
       <HeaderDashboard
-        title="Data Alumni"
-        subTitle="Pusat pengelolaan data alumni untuk kebutuhan review pondok pesantren"
+        title="Data Ustad"
+        subTitle="Pusat pengelolaan data ustad"
         tanggal={true}
       />
 
@@ -86,12 +87,12 @@ const AlumniPage: FC = () => {
         <ComponentFilterAndButtonAdd
           searchValue={isSearch}
           handleSearch={handleSearch}
-          linkAdd="/dashboard/alumni/tambah"
+          linkAdd="/dashboard/ustad/tambah"
         />
 
         {/* header data */}
         <HeaderData
-          header={["Nama", "Angkatan", "Deskripsi"]}
+          header={["Nama", "Jabatan", "Jenis Kelamin", "alamat", "No Telepon"]}
           headerSizeSmall="Nama"
         />
 
@@ -104,14 +105,22 @@ const AlumniPage: FC = () => {
                 className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
               />
             ))
-          ) : alumni?.success && alumni?.data?.data.length > 0 ? (
-            alumni?.data?.data.map((item, index) => (
+          ) : ustad?.success && ustad?.data?.data.length > 0 ? (
+            ustad?.data?.data.map((item, index) => (
               <CardData
                 key={item.id}
-                data={[item.name, item.angkatan, item.description]}
+                data={[
+                  item.name,
+                  item.jabatan,
+                  item.jenis_kelamin === "laki_laki"
+                    ? "Laki-Laki"
+                    : "Perempuan",
+                  item.alamat,
+                  item.no_telepon,
+                ]}
                 dataSizeSmall={item.name}
-                linkUpdate={`/dashboard/alumni/edit/${item.id}`}
-                index={index + (alumni.data?.meta.pageSize ?? 0) * (page - 1)}
+                linkUpdate={`/dashboard/ustad/edit/${item.id}`}
+                index={index + (ustad.data?.meta.pageSize ?? 0) * (page - 1)}
                 handleOpenModal={() => setIsModal({ active: true, data: item })}
                 handleDelete={() => handleDelete(item.id)}
               />
@@ -124,9 +133,9 @@ const AlumniPage: FC = () => {
 
       {/* showing */}
       <Pagination
-        totalData={alumni?.success ? alumni?.data?.meta.totalData : 0}
-        totalPage={alumni?.success ? alumni?.data?.meta.totalPage : 0}
-        currentPage={alumni?.success ? alumni?.data?.meta.currentPage : 1}
+        totalData={ustad?.success ? ustad?.data?.meta.totalData : 0}
+        totalPage={ustad?.success ? ustad?.data?.meta.totalPage : 0}
+        currentPage={ustad?.success ? ustad?.data?.meta.currentPage : 1}
         handlePageSingle={handleChangePage}
         handlePage={() => {}}
       />
@@ -135,21 +144,43 @@ const AlumniPage: FC = () => {
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
           download={false}
-          linkUpdate={`/dashboard/alumni/edit/${isModal.data?.id}`}
-          size="sm"
+          linkUpdate={`/dashboard/ustad/edit/${isModal.data?.id}`}
           handleDelete={() => handleDelete(isModal.data?.id || 0)}
+          img={isModal.data?.ustad_img}
+          pathImg="ustad_img"
           data={[
             {
               label: "Nama",
               value: isModal.data?.name || "-",
             },
             {
-              label: "Angkatan",
-              value: `Tahun ${isModal.data?.angkatan}` || "-",
+              label: "Tanggal Lahir",
+              value:
+                isModal.data?.jenis_kelamin === "laki_laki"
+                  ? "Laki-Laki"
+                  : "Perempuan",
             },
             {
-              label: "Deskripsi",
-              value: isModal.data?.description || "-",
+              label: "Jabatan",
+              value: `Tahun ${isModal.data?.jabatan}` || "-",
+            },
+            {
+              label: "Tempat Lahir",
+              value: isModal.data?.tempat_lahir || "-",
+            },
+            {
+              label: "Tanggal Lahir",
+              value: isModal.data?.tanggal_lahir
+                ? formatDateID(new Date())
+                : "-",
+            },
+            {
+              label: "no telepon",
+              value: isModal.data?.no_telepon || "-",
+            },
+            {
+              label: "alamat",
+              value: isModal.data?.alamat || "-",
             },
           ]}
           handleClose={() => setIsModal({ active: false, data: undefined })}
@@ -159,4 +190,4 @@ const AlumniPage: FC = () => {
   );
 };
 
-export default AlumniPage;
+export default UstadPage;

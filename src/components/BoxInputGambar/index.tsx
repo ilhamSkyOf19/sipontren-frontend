@@ -60,7 +60,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
         }}
         className={clsx(
           "px-6 py-1 h-11 bg-secondary-blue rounded-lg mt-2 relative focus-within:shadow-[0_4px_6px_0_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out hover:bg-primary-blue gap-3",
-          fieldState.error?.message && "border-primary-red"
+          fieldState.error?.message && "border-primary-red",
         )}
       >
         {/* label */}
@@ -81,7 +81,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
       <div
         className={clsx(
           "w-full flex flex-col justify-start items-start gap-1",
-          isPreview ? "my-6" : "mt-2"
+          isPreview ? "my-6" : "mt-2",
         )}
       >
         {isPreview ? (
@@ -90,7 +90,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
             <img
               src={isPreview}
               alt="preview"
-              className="w-[50vw] h-[30vh] object-cover rounded-2xl"
+              className="w-55 h-60 object-cover rounded-2xl"
             />
 
             {/* button reset */}

@@ -11,6 +11,7 @@ type Props<T extends FieldValues = any> = {
   required: boolean;
   controller: UseControllerReturn<T>;
   defaultValue?: string;
+  hAuto?: boolean;
 };
 
 export default function BoxInputChoose<T extends FieldValues = any>({
@@ -18,6 +19,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
   controller,
   defaultValue,
   label,
+  hAuto,
 }: Props<T>) {
   // state choose angkatan
   const [value, setValue] = useState<string>("");
@@ -55,15 +57,21 @@ export default function BoxInputChoose<T extends FieldValues = any>({
 
       <div
         className={clsx(
-          "w-full px-4 py-1 h-11 border border-primary-brown rounded-lg mt-2 focus-within:shadow-[0_4px_6px_0_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out focus-within:-translate-y-1 relative",
-          fieldState.error && "border-primary-red"
+          "w-full px-4 py-1 h-11 border border-secondary-blue rounded-lg mt-2 focus-within:shadow-[0_4px_6px_0_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out focus-within:-translate-y-1 relative",
+          fieldState.error && "border-primary-red",
         )}
       >
         <input
           type="text"
           name="angkatan"
           id="angkatan"
-          value={value}
+          value={
+            value === "laki_laki"
+              ? "Laki-laki"
+              : value === "perempuan"
+                ? "Perempuan"
+                : value
+          }
           placeholder="Masukan angkatan alumni ..."
           className="w-full h-full border-none outline-none text-base placeholder:text-sm"
           readOnly
@@ -80,7 +88,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
         >
           <ChevronDown
             size={24}
-            className={clsx("text-primary-brown", isOpenModal && "rotate-180")}
+            className={clsx("text-secondary-blue", isOpenModal && "rotate-180")}
           />
         </button>
       </div>
@@ -89,14 +97,21 @@ export default function BoxInputChoose<T extends FieldValues = any>({
       <div
         ref={modalRef}
         className={clsx(
-          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] h-35 z-10 overflow-hidden overflow-y-auto transition-all duration-300 ease-in-out",
-          isOpenModal ? "max-h-35" : "max-h-0"
+          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] z-10 overflow-hidden overflow-y-auto transition-all duration-300 ease-in-out",
+          hAuto ? "h-auto" : "h-50",
+          isOpenModal ? "max-h-50" : "max-h-0",
         )}
       >
         {chooseList.map((item, index) => (
           <ButtonChooseAngkatan
             key={index}
-            label={item}
+            label={
+              item === "laki_laki"
+                ? "Laki-laki"
+                : item === "perempuan"
+                  ? "Perempuan"
+                  : item
+            }
             handleClick={() => {
               field.onChange(item);
               setValue(item);
@@ -129,7 +144,7 @@ const ButtonChooseAngkatan: FC<ButtonChooseAngkatanProps> = ({
       type="button"
       className={clsx(
         "w-full py-3 px-4 hover:bg-primary-black/10 transition-all duration-200 ease-in-out text-left",
-        active && "bg-primary-black/10"
+        active && "bg-primary-black/10",
       )}
       onClick={() => handleClick()}
     >

@@ -13,7 +13,6 @@ import { StudentService } from "../../services/student.service";
 import type { ResponseStudentType } from "../../models/student-model";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import { useShowingRange } from "../../hooks/useShowingRange";
 import { handleActionDelete } from "../../utils/sweetalert/delete";
 import NoData from "../../components/NoData";
 
@@ -51,7 +50,7 @@ const CalonSantriPage: FC = () => {
 
   // handle jenis kelamin
   const handleFilterJenisKelamin = (
-    jenisKelamin: "laki_laki" | "perempuan" | undefined
+    jenisKelamin: "laki_laki" | "perempuan" | undefined,
   ) => {
     setJenisKelamin(jenisKelamin);
   };
@@ -98,13 +97,6 @@ const CalonSantriPage: FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  // use showing range
-  const { start, end } = useShowingRange(
-    student?.success ? student?.data?.meta.currentPage : undefined,
-    student?.success ? student?.data?.meta.pageSize : undefined,
-    student?.success ? student?.data?.meta.totalData : undefined
-  );
-
   // cek student
   if (!student?.success) return null;
 
@@ -125,7 +117,7 @@ const CalonSantriPage: FC = () => {
   };
 
   return (
-    <main className="w-full h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4">
+    <main className="w-full h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4">
       {/* header */}
       <HeaderDashboard
         title="Data Calon Santri"
@@ -193,8 +185,6 @@ const CalonSantriPage: FC = () => {
 
       {/* showing */}
       <Pagination
-        start={start}
-        end={end}
         totalData={student?.data?.meta.totalData ?? 0}
         totalPage={student?.data?.meta.totalPage ?? 0}
         handlePage={handleFilter}

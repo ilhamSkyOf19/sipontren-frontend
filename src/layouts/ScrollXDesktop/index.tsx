@@ -16,8 +16,11 @@ const ScrollXDesktop: FC<Props> = ({ children }) => {
         overflowY: "hidden",
       }}
     >
-      <div className="flex flex-row py-12 pl-12 pr-12 cursor-pointer gap-6">
+      <div className="flex flex-row py-12 pl-4  cursor-pointer gap-6">
         {children || ""}
+
+        {/* space */}
+        <div className="w-4 shrink-0 h-ful" />
       </div>
     </SimpleBar>
   );

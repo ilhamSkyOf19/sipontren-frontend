@@ -1,10 +1,14 @@
 import AXIOS from "../libs/axios";
 import type { ResponseData } from "../types/type";
-import type { ResponseUstadType } from "../models/ustad-model";
+import type {
+  FilterData,
+  ResponseUstadType,
+  ResponseUstadWithMetaType,
+} from "../models/ustad-model";
 export class UstadService {
   // create
   static async create(
-    req: FormData
+    req: FormData,
   ): Promise<ResponseData<ResponseUstadType | null>> {
     // get response
     const response = await AXIOS.post("/ustad/create", req, {
@@ -18,9 +22,17 @@ export class UstadService {
   }
 
   // read
-  static async read(): Promise<ResponseData<ResponseUstadType[]>> {
+  static async read({
+    page,
+    search,
+  }: FilterData): Promise<ResponseData<ResponseUstadWithMetaType>> {
     // get response
-    const response = await AXIOS.get("/ustad/read").then((res) => res.data);
+    const response = await AXIOS.get("/ustad/read", {
+      params: {
+        page,
+        search,
+      },
+    }).then((res) => res.data);
 
     // return
     return response;
@@ -30,7 +42,7 @@ export class UstadService {
   static async detail(id: number): Promise<ResponseData<ResponseUstadType>> {
     // get response
     const response = await AXIOS.get(`/ustad/detail/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return
@@ -39,8 +51,8 @@ export class UstadService {
 
   // update
   static async update(
+    id: number,
     req: FormData,
-    id: number
   ): Promise<ResponseData<ResponseUstadType>> {
     // get response
     const response = await AXIOS.patch(`/ustad/update/${id}`, req, {
@@ -57,7 +69,7 @@ export class UstadService {
   static async delete(id: number): Promise<ResponseData<ResponseUstadType>> {
     // get response
     const response = await AXIOS.delete(`/ustad/delete/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return

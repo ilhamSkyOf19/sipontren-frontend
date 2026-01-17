@@ -11,7 +11,7 @@ type Props = {
   errorMessage?: string;
   register: UseFormRegisterReturn;
 };
-const BoxInputText: FC<Props> = ({
+const BoxInputNumber: FC<Props> = ({
   label,
   name,
   placeholder,
@@ -38,7 +38,7 @@ const BoxInputText: FC<Props> = ({
       >
         <input
           {...register}
-          type="text"
+          type="number"
           name={name}
           id={name}
           placeholder={placeholder}
@@ -52,4 +52,4 @@ const BoxInputText: FC<Props> = ({
   );
 };
 
-export default BoxInputText;
+export default BoxInputNumber;

@@ -15,7 +15,11 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
   // use query
   const { data, isLoading } = useQuery({
     queryKey: ["profile-ustad"],
-    queryFn: () => UstadService.read(),
+    queryFn: () =>
+      UstadService.read({
+        page: undefined,
+        search: undefined,
+      }),
   });
 
   return (
@@ -26,9 +30,9 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
           <div className="w-full h-full flex flex-row justify-center items-center">
             <span>loading</span>
           </div>
-        ) : data?.success && data?.data && data?.data.length > 0 ? (
+        ) : data?.success && data?.data.data && data?.data.data.length > 0 ? (
           <ScrollXNonDesktop gap={widthDevice < 700 ? 4 : 4}>
-            {data.data.map((item) => (
+            {data.data.data.map((item) => (
               <CardUstad
                 key={item.id}
                 img={item.ustad_img}
@@ -48,9 +52,9 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
         <div className="w-full h-full flex flex-row justify-center items-center">
           <span>loading</span>
         </div>
-      ) : data?.success && data?.data && data?.data.length > 0 ? (
+      ) : data?.success && data?.data.data && data?.data.data.length > 0 ? (
         <ScrollXDesktop>
-          {data.data.map((item) => (
+          {data.data.data.map((item) => (
             <CardUstad
               key={item.id}
               img={item.ustad_img}

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { LayoutDashboardIcon, Menu, UsersRound, X } from "lucide-react";
+import { LayoutDashboardIcon, LogOut, Menu, UsersRound, X } from "lucide-react";
 import React, { useState, type FC } from "react";
 import useClickOutside from "../../hooks/useClickOutSide";
 import logo from "../../assets/icons/file_thumb.png";
@@ -18,6 +18,10 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "alumni",
     link: "/dashboard/alumni",
+  },
+  {
+    label: "ustad",
+    link: "/dashboard/ustad",
   },
 ];
 
@@ -60,7 +64,7 @@ const NavbarDashboardMobile: FC = () => {
       <div
         className={clsx(
           "fixed inset-0 z-40 bg-primary-black/40 pointer-events-none opacity-0 md:hidden",
-          isActiveSidebar && "opacity-100"
+          isActiveSidebar && "opacity-100",
         )}
       />
 
@@ -69,7 +73,7 @@ const NavbarDashboardMobile: FC = () => {
         ref={sidebarRef}
         className={clsx(
           "fixed left-0 w-[65vw] h-screen z-50 bg-secondary-blue transition-all duration-300 ease-in-out flex flex-col justify-start items-start md:hidden py-3",
-          isActiveSidebar ? "translate-x-0" : "-translate-x-full"
+          isActiveSidebar ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {/* header */}
@@ -104,10 +108,25 @@ const NavbarDashboardMobile: FC = () => {
                   ? pathname === "/dashboard"
                   : pathname.startsWith(item.link) && pathname !== "/dashboard"
               }
-              line={index !== navigationList.length - 1}
+              line={index === navigationList.length - 1}
               handleClose={() => setIsActiveSidebar(false)}
             />
           ))}
+          {/* button logout */}
+          <button
+            type="button"
+            //   onClick={() => mutateAsync()}
+            className={clsx(
+              "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out hover:bg-primary-brown justify-start",
+            )}
+          >
+            <LogOut size={24} className="text-primary-white" />
+
+            {/* label */}
+            <span className={clsx("text-primary-white text-base uppercase")}>
+              Logout
+            </span>
+          </button>
         </div>
       </div>
     </>
@@ -136,18 +155,17 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       to={link}
       className={clsx(
         "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out  justify-start",
-        active ? "bg-primary-blue" : "hover:bg-primary-blue"
-        // line && "border-b border-primary-white/20"
+        active ? "bg-primary-blue" : "hover:bg-primary-blue",
+        line && "border-b border-primary-white/20",
       )}
     >
       {/* icon */}
       {label === "dashboard" && (
         <LayoutDashboardIcon size={24} className="text-primary-white" />
       )}
-      {label === "calon santri" && (
-        <UsersRound size={24} className="text-primary-white" />
-      )}
-      {label === "alumni" && (
+      {(label === "calon santri" ||
+        label === "ustad" ||
+        label === "alumni") && (
         <UsersRound size={24} className="text-primary-white" />
       )}
 

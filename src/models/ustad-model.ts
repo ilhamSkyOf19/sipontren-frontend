@@ -8,7 +8,7 @@ export interface IUstad {
   alamat: string;
   no_telepon: string;
   jabatan: string;
-  ustad_img: string;
+  ustad_img: File;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,7 +22,7 @@ export type CreateUstadType = {
   alamat: string;
   no_telepon: string;
   jabatan: string;
-  ustad_img: string;
+  ustad_img: File;
 };
 
 // update type
@@ -36,4 +36,21 @@ export type ResponseUstadType = Omit<CreateUstadType, "ustad_img"> & {
   ustad_img: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+// response with meta
+export type ResponseUstadWithMetaType = {
+  data: ResponseUstadType[];
+  meta: {
+    currentPage: number;
+    totalPage: number;
+    totalData: number;
+    pageSize: number;
+  };
+};
+
+// filter data
+export type FilterData = {
+  search?: string;
+  page?: string;
 };

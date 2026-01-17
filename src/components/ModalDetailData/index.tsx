@@ -13,6 +13,9 @@ type Props = {
   handleDelete: () => void;
   size?: "sm" | "lg";
   linkUpdate: string;
+  img?: string;
+  pathImg?: string;
+  download?: boolean;
 };
 
 const ModalDetailData: FC<Props> = ({
@@ -21,6 +24,9 @@ const ModalDetailData: FC<Props> = ({
   handleDelete,
   size,
   linkUpdate,
+  img,
+  pathImg,
+  download,
 }) => {
   //   // call hoks
   //   const { deleteSuratMasukWithRefresh } = useDeleteSuratMasuk();
@@ -73,8 +79,8 @@ const ModalDetailData: FC<Props> = ({
   return (
     <div
       className={clsx(
-        "w-[90vw]  flex flex-col justify-start items-center py-8 px-8 overflow-y-scroll scrollbar-hidden relative lg:w-[40vw]",
-        size === "sm" ? "h-[50]" : "h-[90vh]"
+        "w-[90vw] flex flex-col justify-start items-center py-8 px-8 overflow-y-scroll overflow-hidden scrollbar-hidden relative lg:w-[40vw]",
+        size === "sm" ? "h-[50]" : "h-[90vh]",
       )}
     >
       {/* button close */}
@@ -101,6 +107,28 @@ const ModalDetailData: FC<Props> = ({
           {data.map((item, index) => (
             <ComponentData key={index} label={item.label} value={item.value} />
           ))}
+
+          {/* img */}
+          {pathImg && img && (
+            <div className="w-full flex flex-row justify-start items-start gap-2">
+              <div className="flex-1 flex flex-row justify-between items-start">
+                <p className="text-sm lg:text-base font-medium capitalize">
+                  Foto
+                </p>
+                <p className="text-sm lg:text-base font-medium">:</p>
+              </div>
+
+              <div className="flex-1 w-full overflow-hidden">
+                <div className="w-35 h-45 overflow-hidden rounded-xl">
+                  <img
+                    src={`${import.meta.env.VITE_API_BASE_IMG_URL}/${pathImg}/${img}`}
+                    alt="foto"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* action */}
@@ -114,12 +142,14 @@ const ModalDetailData: FC<Props> = ({
           />
 
           {/* download */}
-          <ButtonAction
-            label="download"
-            handleClick={() => {}}
-            color="bg-gray-400"
-            icon={<Download size={20} className="text-primary-white" />}
-          />
+          {download && (
+            <ButtonAction
+              label="download"
+              handleClick={() => {}}
+              color="bg-gray-400"
+              icon={<Download size={20} className="text-primary-white" />}
+            />
+          )}
 
           {/* button delete */}
           <ButtonAction

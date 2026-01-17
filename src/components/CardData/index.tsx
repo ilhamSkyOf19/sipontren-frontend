@@ -1,28 +1,32 @@
 import { type FC } from "react";
 import { Pencil, Trash } from "lucide-react";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data: string[];
   dataSizeSmall: string;
-  id: number;
   index: number;
   handleOpenModal: () => void;
   handleDelete: () => void;
+  linkUpdate: string;
 };
 
 const CardData: FC<Props> = ({
   data,
-  id,
   index,
   handleOpenModal,
   dataSizeSmall,
+  linkUpdate,
   handleDelete,
 }) => {
+  // navigate
+  const navigate = useNavigate();
+
   return (
     <div
       className={clsx(
-        "w-full flex flex-row justify-start items-center px-5 rounded-lg shadow-[0_6px_10px_0_rgba(0,0,0,0.05)] hover:bg-primary-black/10 transition-all duration-200 ease-in-out cursor-pointer relative h-15 bg-white gap-4 lg:gap-0"
+        "w-full flex flex-row justify-start items-center px-5 rounded-lg shadow-[0_6px_10px_0_rgba(0,0,0,0.05)] hover:bg-primary-black/10 transition-all duration-200 ease-in-out cursor-pointer relative h-15 bg-white gap-4 lg:gap-0",
       )}
       onClick={() => handleOpenModal()}
       tabIndex={0}
@@ -56,10 +60,17 @@ const CardData: FC<Props> = ({
         {/* update */}
         <button
           onClick={(e) => {
+            navigate(linkUpdate, {
+              state: {
+                from: "page display",
+              },
+            });
             e.stopPropagation();
           }}
           type="button"
-          onKeyDown={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+          }}
           className="w-6.5 h-6.5 flex flex-row justify-center items-center bg-primary-blue rounded-sm"
         >
           <Pencil size={14} className="text-primary-white" />

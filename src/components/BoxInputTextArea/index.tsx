@@ -32,8 +32,8 @@ const BoxInputTextArea: FC<Props> = ({
 
       <div
         className={clsx(
-          "w-full px-4 py-3 h-full border border-primary-brown rounded-lg mt-2 focus-within:shadow-[0_4px_6px_0_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out focus-within:-translate-y-1",
-          errorMessage && "border-primary-red"
+          "w-full px-4 py-3 h-full border border-secondary-blue rounded-lg mt-2 focus-within:shadow-[0_4px_6px_0_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out focus-within:-translate-y-1",
+          errorMessage && "border-primary-red",
         )}
       >
         <textarea

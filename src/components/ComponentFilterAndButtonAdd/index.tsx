@@ -7,18 +7,18 @@ import {
   getTodayLocal,
   isValidDate,
 } from "../../utils/utils";
-import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutSide";
 
 // time
 
 type Props = {
   handleFilter?: (
-    newValues: Partial<{ page: number; from: string; to: string }>
+    newValues: Partial<{ page: number; from: string; to: string }>,
   ) => void;
   handleSearch?: (search: string) => void;
   handleFilterJenisKelamin?: (
-    jenisKelamin: "laki_laki" | "perempuan" | undefined
+    jenisKelamin: "laki_laki" | "perempuan" | undefined,
   ) => void;
   searchValue: string;
   linkAdd?: string;
@@ -110,6 +110,9 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       })),
   });
 
+  // navigate
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-auto flex flex-col justify-between items-start gap-4 jg:flex-row lg:h-12 lg:items-center lg:flex-row">
       {/* search */}
@@ -132,7 +135,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       <div
         className={clsx(
           " h-12 flex-row justify-start items-center gap-2 relative lg:flex-2 lg:h-full lg:justify-end",
-          handleFilter && handleFilterJenisKelamin ? "flex" : "hidden"
+          handleFilter && handleFilterJenisKelamin ? "flex" : "hidden",
         )}
       >
         {/* filter jenis kelamin */}
@@ -163,7 +166,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   size={24}
                   className={clsx(
                     "transition-transform duration-200 ease-in-out",
-                    isModalJenisKelamin.active ? "-rotate-180" : "rotate-0"
+                    isModalJenisKelamin.active ? "-rotate-180" : "rotate-0",
                   )}
                 />
               </button>
@@ -175,7 +178,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   " w-[40vw] bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-40",
                   isModalJenisKelamin.active
                     ? "max-h-43"
-                    : "max-h-0 shadow-none"
+                    : "max-h-0 shadow-none",
                 )}
               >
                 {/* choose laki laki */}
@@ -185,7 +188,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   className={clsx(
                     "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
                     isModalJenisKelamin.jenisKelamin === "laki_laki" &&
-                      "bg-primary-black/10"
+                      "bg-primary-black/10",
                   )}
                 >
                   <span className="text-sm font-medium w-full text-center">
@@ -200,7 +203,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   className={clsx(
                     "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
                     isModalJenisKelamin.jenisKelamin === "perempuan" &&
-                      "bg-primary-black/10"
+                      "bg-primary-black/10",
                   )}
                 >
                   <span className="text-sm font-medium w-full text-center">
@@ -242,7 +245,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   size={24}
                   className={clsx(
                     "transition-transform duration-200 ease-in-out",
-                    isModalFilterDate ? "-rotate-180" : "rotate-0"
+                    isModalFilterDate ? "-rotate-180" : "rotate-0",
                   )}
                 />
               </button>
@@ -253,7 +256,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                     {formatDateID(
                       isValidDate(from)
                         ? new Date(from as string)
-                        : new Date(getTodayLocal())
+                        : new Date(getTodayLocal()),
                     )}
                   </p>
                 ) : (
@@ -262,7 +265,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                       {formatDateID(
                         isValidDate(from)
                           ? new Date(from ?? getTodayLocal())
-                          : new Date(getTodayLocal())
+                          : new Date(getTodayLocal()),
                       )}
                     </p>{" "}
                     -{" "}
@@ -270,7 +273,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                       {formatDateID(
                         isValidDate(to)
                           ? new Date(to ?? getTodayLocal())
-                          : new Date(getTodayLocal())
+                          : new Date(getTodayLocal()),
                       )}
                     </p>
                   </>
@@ -281,7 +284,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                 ref={refFilterAnyDate}
                 className={clsx(
                   "w-[50vw] h-60 md:h-43 bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-80",
-                  isModalFilterDate ? "max-h-60" : "max-h-0 shadow-none"
+                  isModalFilterDate ? "max-h-60" : "max-h-0 shadow-none",
                 )}
               >
                 <div className="w-full h-full flex flex-col justify-start items-center py-4 px-4 gap-2">
@@ -325,12 +328,19 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       </div>
       {/* button add */}
       {linkAdd && (
-        <Link
-          to={linkAdd}
+        <button
+          type="button"
+          onClick={() => {
+            navigate(linkAdd, {
+              state: {
+                from: "state",
+              },
+            });
+          }}
           className="px-6 py-2.5 capitalize rounded-lg bg-primary-green text-primary-white font-medium text-base relative before:absolute before:content-[''] before:inset-0 before:bg-primary-black/10 before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-200 before:ease-in-out"
         >
           tambah
-        </Link>
+        </button>
       )}
     </div>
   );
