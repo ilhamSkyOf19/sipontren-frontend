@@ -2,6 +2,8 @@ import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import useWindowSize from "../../hooks/useWindowSize";
 import clsx from "clsx";
+import ButtonEditText from "../ButtonEditText";
+import ButtonDeleteText from "../ButtonDeleteText";
 
 // Props
 type Props = {
@@ -99,32 +101,10 @@ const CardBeritaSmall: FC<Props> = ({
       {admin && linkUpdate && handleDelete && (
         <div className="w-full flex flex-row justify-start items-center gap-2">
           {/* button edit */}
-          <button
-            onClick={() => {
-              navigate(linkUpdate, {
-                state: {
-                  from: "berita & artikel",
-                },
-              });
-            }}
-            type="button"
-            className="w-full flex flex-row justify-center items-center bg-secondary-blue hover:bg-primary-blue transition-all ease-in-out duration-200 py-2 px-4 rounded-lg"
-          >
-            <span className="text-sm font-medium text-white capitalize">
-              edit
-            </span>
-          </button>
+          <ButtonEditText from="berita & artikel" linkUpdate={linkUpdate} />
 
           {/* button delete */}
-          <button
-            onClick={() => handleDelete()}
-            type="button"
-            className="w-full bg-primary-red flex flex-row justify-center items-center relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-primary-black/20 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:ease-in-out before:duration-200 py-2 px-4 rounded-lg"
-          >
-            <span className="text-sm font-medium text-white capitalize">
-              delete
-            </span>
-          </button>
+          <ButtonDeleteText handleDelete={handleDelete} />
         </div>
       )}
     </div>

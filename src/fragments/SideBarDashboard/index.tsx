@@ -2,6 +2,7 @@ import { useState, type FC } from "react";
 import logo from "../../assets/icons/logo.png";
 import {
   Building2,
+  GalleryThumbnails,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -37,6 +38,10 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "berita & artikel",
     link: "/dashboard/berita-artikel",
+  },
+  {
+    label: "banner",
+    link: "/dashboard/banner",
   },
 ];
 
@@ -206,6 +211,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       )}
       {label === "berita & artikel" && (
         <Newspaper size={24} className="text-primary-white" />
+      )}
+      {label === "banner" && (
+        <GalleryThumbnails size={24} className="text-primary-white" />
       )}
 
       {/* label */}

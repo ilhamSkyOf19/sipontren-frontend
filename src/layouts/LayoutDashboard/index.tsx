@@ -14,7 +14,7 @@ const LayoutDashboard: FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen relative">
+    <div className="w-screen h-screen relative bg-primary-white">
       {/* side bar for desktop */}
       <SideBarDashboard handleSideBarSmall={handelSideBarSmall} />
 

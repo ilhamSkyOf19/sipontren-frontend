@@ -16,6 +16,8 @@ import FasilitasPage from "../pages/FasilitasPage";
 import InputFasilitasPage from "../pages/InputFasilitasPage";
 import BeritaPage from "../pages/BeritaPage";
 import InputBeritaPage from "../pages/InputBeritaPage";
+import BannerPage from "../pages/BannerPage";
+import InputBannerPage from "../pages/InputBannerPage";
 
 const route = createBrowserRouter([
   {
@@ -117,6 +119,20 @@ const route = createBrowserRouter([
       {
         path: "berita-artikel/edit/:id",
         element: <InputBeritaPage />,
+      },
+
+      // banner
+      {
+        path: "banner",
+        element: <BannerPage />,
+      },
+      {
+        path: "banner/tambah",
+        element: <InputBannerPage />,
+      },
+      {
+        path: "banner/edit/:id",
+        element: <InputBannerPage />,
       },
     ],
   },

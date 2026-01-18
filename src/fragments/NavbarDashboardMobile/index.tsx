@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   Building2,
+  GalleryThumbnails,
   LayoutDashboardIcon,
   LogOut,
   Menu,
@@ -38,6 +39,14 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "berita & artikel",
     link: "/dashboard/berita-artikel",
+  },
+  {
+    label: "banner",
+    link: "/dashboard/banner",
+  },
+  {
+    label: "pamflet",
+    link: "/dashboard/pamflet",
   },
 ];
 
@@ -88,7 +97,7 @@ const NavbarDashboardMobile: FC = () => {
       <div
         ref={sidebarRef}
         className={clsx(
-          "fixed left-0 w-[65vw] h-screen z-50 bg-secondary-blue transition-all duration-300 ease-in-out flex flex-col justify-start items-start md:hidden py-3",
+          "fixed h-screen overflow-y-scroll left-0 w-[65vw] z-50 bg-secondary-blue transition-all duration-300 ease-in-out flex flex-col justify-start items-start md:hidden py-3 pb-32",
           isActiveSidebar ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -190,6 +199,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       )}
       {label === "berita & artikel" && (
         <Newspaper size={24} className="text-primary-white" />
+      )}
+      {(label === "banner" || label === "pamflet") && (
+        <GalleryThumbnails size={24} className="text-primary-white" />
       )}
       {/* label */}
       <span className={clsx("text-primary-white text-base uppercase")}>

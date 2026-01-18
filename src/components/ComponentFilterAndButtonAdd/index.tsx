@@ -7,8 +7,9 @@ import {
   getTodayLocal,
   isValidDate,
 } from "../../utils/utils";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutSide";
+import ButtonAddText from "../ButtonAddText";
 
 // time
 
@@ -109,9 +110,6 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
         active: false,
       })),
   });
-
-  // navigate
-  const navigate = useNavigate();
 
   return (
     <div className="w-full h-auto flex flex-col justify-between items-start gap-4 jg:flex-row lg:h-12 lg:items-center lg:flex-row">
@@ -328,21 +326,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
           )}
 
           {/* button add */}
-          {linkAdd && (
-            <button
-              type="button"
-              onClick={() => {
-                navigate(linkAdd, {
-                  state: {
-                    from: "state",
-                  },
-                });
-              }}
-              className="px-6 py-2.5 capitalize rounded-lg bg-primary-green text-primary-white font-medium text-base relative before:absolute before:content-[''] before:inset-0 before:bg-primary-black/10 before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-200 before:ease-in-out"
-            >
-              tambah
-            </button>
-          )}
+          {linkAdd && <ButtonAddText linkAdd={linkAdd} />}
         </div>
       </div>
     </div>

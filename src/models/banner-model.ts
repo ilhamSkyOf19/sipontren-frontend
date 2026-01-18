@@ -1,20 +1,20 @@
 // MongoDB / Mongoose style
 export type IBanner = {
   id: number;
-  img: string;
+  img: File;
   createdAt: string;
   updatedAt: string;
 };
 
 // Create – tanpa id, dibuat otomatis
 export type CreateBannerType = {
-  img: string;
+  img: File;
 };
 
 // Update – id wajib, pamflet optional
 export type UpdateBannerType = {
   id: number;
-  img?: string;
+  img?: File;
 };
 
 // Response – dikirim ke FE

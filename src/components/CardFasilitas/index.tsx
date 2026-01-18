@@ -2,7 +2,8 @@
 import clsx from "clsx";
 import type { FC } from "react";
 import gedung from "../../assets/fasilitas/masjid.png";
-import { useNavigate } from "react-router-dom";
+import ButtonEditText from "../ButtonEditText";
+import ButtonDeleteText from "../ButtonDeleteText";
 
 // Props
 type Props = {
@@ -22,9 +23,6 @@ const CardFasilitas: FC<Props> = ({
   handleDelete,
   id,
 }) => {
-  // navigate
-  const navigate = useNavigate();
-
   return (
     <div
       className={clsx(
@@ -69,34 +67,16 @@ const CardFasilitas: FC<Props> = ({
       </div>
 
       {/* action */}
-      {admin && (
-        <div className="w-full flex flex-row justify-evenly items-center mb-3">
+      {admin && handleDelete && (
+        <div className="w-full flex flex-row justify-evenly items-center mb-3 px-3 gap-3">
           {/* button delete */}
-          <button
-            type="button"
-            className="px-4 h-8 bg-primary-red/80 hover:bg-primary-red transition-all duration-200 ease-in-out text-white font-medium rounded-md text-sm capitalize"
-            onClick={() => {
-              handleDelete && handleDelete();
-            }}
-          >
-            delete
-          </button>
+          <ButtonEditText
+            linkUpdate={`/dashboard/fasilitas/edit/${id}`}
+            from="fasilitas"
+          />
 
-          {/* button update */}
-          <button
-            type="button"
-            className="px-4 h-8 bg-secondary-blue/80 hover:bg-secondary-blue transition-all duration-200 ease-in-out text-white font-medium rounded-md text-sm capitalize"
-            onClick={() => {
-              id &&
-                navigate(`/dashboard/fasilitas/edit/${id}`, {
-                  state: {
-                    from: "fasilitas",
-                  },
-                });
-            }}
-          >
-            update
-          </button>
+          {/* button delete */}
+          <ButtonDeleteText handleDelete={handleDelete} />
         </div>
       )}
     </div>

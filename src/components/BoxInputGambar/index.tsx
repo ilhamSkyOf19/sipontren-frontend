@@ -9,6 +9,7 @@ type Props<T extends FieldValues = any> = {
   required: boolean;
   controller: UseControllerReturn<T>;
   clearError?: () => void;
+  fullPreview?: boolean;
 };
 
 function BoxInputGambar<TFieldValues extends FieldValues = any>({
@@ -16,6 +17,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
   label,
   required,
   clearError,
+  fullPreview,
 }: Props<TFieldValues>) {
   // state value
   const [isPreview, setIsPreview] = useState<string>("");
@@ -85,25 +87,40 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
         )}
       >
         {isPreview ? (
-          <div className="w-full flex flex-row justify-start items-center gap-8">
+          <div
+            className={clsx(
+              "w-full flex justify-start items-center",
+              fullPreview ? "flex-col gap-2" : "flex-row gap-8",
+            )}
+          >
             {/* preview */}
             <img
               src={isPreview}
               alt="preview"
-              className="w-55 h-60 object-cover rounded-2xl"
+              className={clsx(
+                " object-cover rounded-2xl",
+                fullPreview ? "w-full h-40 lg:h-60" : "w-55 h-60",
+              )}
             />
 
             {/* button reset */}
-            <button
-              type="button"
-              className="w-12 h-12 bg-primary-red rounded-full flex flex-row justify-center items-center relative overflow-hidden before:absolute before:content-[''] before:inset-0 before:bg-primary-black/20 before:opacity-0 before:transition-all before:duration-200 before:ease-in-out hover:before:opacity-100"
-              onClick={() => {
-                setIsPreview("");
-                field.onChange(null);
-              }}
+            <div
+              className={clsx(
+                "flex flex-row items-center h-full",
+                fullPreview ? "w-full justify-end " : "justify-start",
+              )}
             >
-              <Trash size={24} className="text-primary-white" />
-            </button>
+              <button
+                type="button"
+                className="w-12 h-12 bg-primary-red rounded-full flex flex-row justify-center items-center relative overflow-hidden before:absolute before:content-[''] before:inset-0 before:bg-primary-black/20 before:opacity-0 before:transition-all before:duration-200 before:ease-in-out hover:before:opacity-100"
+                onClick={() => {
+                  setIsPreview("");
+                  field.onChange(null);
+                }}
+              >
+                <Trash size={24} className="text-primary-white" />
+              </button>
+            </div>
           </div>
         ) : (
           !fieldState.error?.message && (

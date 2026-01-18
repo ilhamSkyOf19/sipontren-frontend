@@ -110,8 +110,8 @@ const InputFasilitasPage: FC = () => {
     <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 pb-32 md:items-start px-4">
       {/* header */}
       <HeaderDashboard
-        title="Tambah Alumni"
-        subTitle="Tambahkan data alumni baru ke dalam sistem pendataan pondok."
+        title={id ? "Edit Fasilitas" : "Tambah Fasilitas"}
+        subTitle={`${id ? "Edit" : "Tambah"} data fasilitas baru ke dalam sistem pendataan pondok.`}
         tanggal={true}
       />
 
