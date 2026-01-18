@@ -56,7 +56,7 @@ const FasilitasPage: FC = () => {
   };
 
   return (
-    <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 lg:h-full px-4">
+    <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4 lg:pb-32">
       {/* header page */}
       <HeaderDashboard
         title="Data Fasilitas"
@@ -74,12 +74,12 @@ const FasilitasPage: FC = () => {
         />
 
         {/* card data */}
-        <div className="w-full flex flex-col justify-start items-center gap-4 mt-12">
+        <div className="w-full flex flex-col justify-start items-center gap-4 mt-12 lg:flex-row lg:flex-wrap lg:justify-start">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className="w-full h-13 bg-gray-300 rounded-lg animate-pulse"
+                className="w-80 h-80 bg-gray-300 rounded-lg animate-pulse"
               />
             ))
           ) : fasilitas?.success && fasilitas?.data?.data.length > 0 ? (

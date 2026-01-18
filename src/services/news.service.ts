@@ -1,12 +1,17 @@
 import AXIOS from "../libs/axios";
 import {} from "../models/news-model";
 import type { ResponseData } from "../types/type";
-import type { NewsFilterType, ResponseNewsType } from "../models/news-model";
+import type {
+  FilterData,
+  NewsFilterType,
+  ResponseNewsType,
+  ResponseNewsWithMetaType,
+} from "../models/news-model";
 
 export class NewsService {
   // create
   static async create(
-    req: FormData
+    req: FormData,
   ): Promise<ResponseData<ResponseNewsType | null>> {
     // get response
     const response = await AXIOS.post("/news/create", req, {
@@ -20,9 +25,21 @@ export class NewsService {
   }
 
   // read
-  static async read(): Promise<ResponseData<ResponseNewsType[]>> {
+  static async read({
+    from,
+    page,
+    search,
+    to,
+  }: FilterData): Promise<ResponseData<ResponseNewsWithMetaType>> {
     // get response
-    const response = await AXIOS.get("/news/read").then((res) => res.data);
+    const response = await AXIOS.get("/news/read", {
+      params: {
+        from,
+        page,
+        search,
+        to,
+      },
+    }).then((res) => res.data);
 
     // return
     return response;
@@ -32,7 +49,7 @@ export class NewsService {
   static async detail(id: number): Promise<ResponseData<ResponseNewsType>> {
     // get response
     const response = await AXIOS.get(`/news/detail/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return
@@ -41,11 +58,11 @@ export class NewsService {
 
   // read by filter
   static async readByFilter(
-    filter: NewsFilterType
+    filter: NewsFilterType,
   ): Promise<ResponseData<ResponseNewsType[]>> {
     // get response
     const response = await AXIOS.get(`/news/readByFilter/${filter}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return
@@ -53,7 +70,7 @@ export class NewsService {
   }
 
   // update
-  static async update(req: FormData, id: number) {
+  static async update(id: number, req: FormData) {
     // get response
     const response = await AXIOS.patch(`/news/update/${id}`, req, {
       headers: {
@@ -70,7 +87,7 @@ export class NewsService {
   static async delete(id: number) {
     // get response
     const response = await AXIOS.delete(`/news/delete/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return

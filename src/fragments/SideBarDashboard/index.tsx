@@ -1,11 +1,11 @@
 import { useState, type FC } from "react";
 import logo from "../../assets/icons/logo.png";
 import {
-  FileOutput,
-  Info,
+  Building2,
   LayoutDashboard,
   LogOut,
   Menu,
+  Newspaper,
   UsersRound,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -29,6 +29,14 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "ustad",
     link: "/dashboard/ustad",
+  },
+  {
+    label: "fasilitas",
+    link: "/dashboard/fasilitas",
+  },
+  {
+    label: "berita & artikel",
+    link: "/dashboard/berita-artikel",
   },
 ];
 
@@ -192,6 +200,12 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
         label === "calon santri" ||
         label === "alumni") && (
         <UsersRound size={24} className="text-primary-white" />
+      )}
+      {label === "fasilitas" && (
+        <Building2 size={24} className="text-primary-white" />
+      )}
+      {label === "berita & artikel" && (
+        <Newspaper size={24} className="text-primary-white" />
       )}
 
       {/* label */}

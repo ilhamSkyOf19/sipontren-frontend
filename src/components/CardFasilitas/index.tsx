@@ -28,8 +28,8 @@ const CardFasilitas: FC<Props> = ({
   return (
     <div
       className={clsx(
-        "w-[70%] bg-white rounded-xl shadow-xl flex flex-col justify-between items-center overflow-hidden shrink-0 md:w-[70%] md:h-100 lg:w-xs lg:h-80",
-        admin ? "h-70" : "h-54",
+        "w-[70%] bg-white rounded-xl shadow-xl flex flex-col justify-between items-center overflow-hidden shrink-0 md:w-[70%] lg:w-xs",
+        admin ? "h-70" : "h-54 lg:h-80 md:h-100 ",
       )}
     >
       <div

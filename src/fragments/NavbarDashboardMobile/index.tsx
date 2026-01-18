@@ -4,6 +4,7 @@ import {
   LayoutDashboardIcon,
   LogOut,
   Menu,
+  Newspaper,
   UsersRound,
   X,
 } from "lucide-react";
@@ -33,6 +34,10 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "fasilitas",
     link: "/dashboard/fasilitas",
+  },
+  {
+    label: "berita & artikel",
+    link: "/dashboard/berita-artikel",
   },
 ];
 
@@ -182,6 +187,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
 
       {label === "fasilitas" && (
         <Building2 size={24} className="text-primary-white" />
+      )}
+      {label === "berita & artikel" && (
+        <Newspaper size={24} className="text-primary-white" />
       )}
       {/* label */}
       <span className={clsx("text-primary-white text-base uppercase")}>

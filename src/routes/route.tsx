@@ -14,6 +14,8 @@ import UstadPage from "../pages/UstadPage";
 import InputUstadPage from "../pages/InputUstadPage";
 import FasilitasPage from "../pages/FasilitasPage";
 import InputFasilitasPage from "../pages/InputFasilitasPage";
+import BeritaPage from "../pages/BeritaPage";
+import InputBeritaPage from "../pages/InputBeritaPage";
 
 const route = createBrowserRouter([
   {
@@ -101,6 +103,20 @@ const route = createBrowserRouter([
       {
         path: "fasilitas/edit/:id",
         element: <InputFasilitasPage />,
+      },
+
+      // berita artikel
+      {
+        path: "berita-artikel",
+        element: <BeritaPage />,
+      },
+      {
+        path: "berita-artikel/tambah",
+        element: <InputBeritaPage />,
+      },
+      {
+        path: "berita-artikel/edit/:id",
+        element: <InputBeritaPage />,
       },
     ],
   },

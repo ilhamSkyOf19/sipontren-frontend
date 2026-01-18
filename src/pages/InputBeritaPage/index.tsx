@@ -9,22 +9,23 @@ import BoxInputGambar from "../../components/BoxInputGambar";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import ButtonBack from "../../components/ButtonBack";
 import LoadingPulseFormulir from "../../components/LoadingPulseFormulir";
-import { FasilitasService } from "../../services/fasilitas.service";
-import type {
-  CreateFasilitasType,
-  UpdateFasilitasType,
-} from "../../models/fasilitas-model";
-import { FasilitasValidation } from "../../validations/fasilitas-validation";
 import BoxInputTextArea from "../../components/BoxInputTextArea";
+import { NewsService } from "../../services/news.service";
+import type { CreateNewsType, UpdateNewsType } from "../../models/news-model";
+import { NewsValidation } from "../../validations/news-validation";
+import BoxInputChoose from "../../components/BoxInputChoose";
 
-const InputFasilitasPage: FC = () => {
+// category list
+const categoryList: string[] = ["berita", "artikel"];
+
+const InputBeritaPage: FC = () => {
   // get id from params
   const idParam = useParams().id;
   const id = idParam ? Number(idParam) : undefined;
 
-  const { data: dataFasilitas, isLoading } = useQuery({
-    queryKey: ["fasilitasForInput", id],
-    queryFn: () => FasilitasService.detail(+id!),
+  const { data: dataNews, isLoading } = useQuery({
+    queryKey: ["beritaForInput", id],
+    queryFn: () => NewsService.detail(+id!),
     enabled: typeof id === "number" && !isNaN(id),
   });
 
@@ -38,40 +39,46 @@ const InputFasilitasPage: FC = () => {
     control,
     reset,
     clearErrors,
-  } = useForm<CreateFasilitasType | UpdateFasilitasType>({
-    resolver: zodResolver(
-      id ? FasilitasValidation.UPDATE : FasilitasValidation.CREATE,
-    ),
+  } = useForm<CreateNewsType | UpdateNewsType>({
+    resolver: zodResolver(id ? NewsValidation.UPDATE : NewsValidation.CREATE),
   });
 
   // set value if id hotel is existing
   useEffect(() => {
-    if (id && dataFasilitas?.success) {
+    if (id && dataNews?.success) {
       reset({
-        fasilitas: dataFasilitas.data.fasilitas,
-        keterangan: dataFasilitas.data.keterangan,
+        title: dataNews?.data.title,
+        category: dataNews?.data.category,
+        content: dataNews?.data.content,
       });
     }
-  }, [id, dataFasilitas?.success, reset]);
+  }, [id, dataNews?.success, reset]);
 
   //   use control for dokumen
   const fileController = useController({
-    name: "images",
+    name: "thumbnail",
+    control,
+  });
+
+  //   use control for category
+  const categoryController = useController({
+    name: "category",
     control,
   });
 
   //   use mutation
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (data: FormData) => {
-      if (id && dataFasilitas?.success && dataFasilitas?.data) {
-        return FasilitasService.update(+id, data);
+      if (id && dataNews?.success && dataNews?.data) {
+        return NewsService.update(+id, data);
       } else {
-        return FasilitasService.create(data);
+        return NewsService.create(data);
       }
     },
+
     onSuccess: () => {
       // navigate
-      navigate("/dashboard/fasilitas", {
+      navigate("/dashboard/berita-artikel", {
         state: {
           success: true,
           message: "berhasil tambah data",
@@ -87,18 +94,19 @@ const InputFasilitasPage: FC = () => {
   });
 
   // handle submit
-  const onSubmit = async (data: CreateFasilitasType | UpdateFasilitasType) => {
+  const onSubmit = async (data: CreateNewsType | UpdateNewsType) => {
     try {
       // form data
       const formData = new FormData();
 
       // data files
-      if (data.images) {
-        formData.append("images", data.images);
+      if (data.thumbnail) {
+        formData.append("news", data.thumbnail);
       }
 
-      formData.append("fasilitas", data.fasilitas || "");
-      formData.append("keterangan", data.keterangan || "");
+      formData.append("title", data.title || "");
+      formData.append("category", data.category || "");
+      formData.append("content", data.content || "");
 
       await mutateAsync(formData);
     } catch (error) {
@@ -124,34 +132,48 @@ const InputFasilitasPage: FC = () => {
           <LoadingPulseFormulir />
         ) : (
           <>
-            {/* input name */}
+            {/* input title */}
             <BoxInputText
-              register={register("fasilitas")}
-              label="Nama Fasilitas"
-              name="fasilitas"
-              placeholder="Masukan nama fasilitas ..."
-              errorMessage={errors.fasilitas?.message}
+              register={register("title")}
+              label="Judul Berita"
+              name="title"
+              placeholder="Masukan judul berita ..."
+              errorMessage={errors.title?.message}
               required={true}
-              max={50}
+              max={200}
             />
 
-            {/* input keterangan */}
+            <BoxInputChoose<CreateNewsType | UpdateNewsType>
+              controller={categoryController}
+              label="Kategori Berita"
+              required={true}
+              hAuto={true}
+              placeholder="Pilih kategori ..."
+              defaultValue={
+                dataNews?.success && dataNews?.data.category
+                  ? dataNews?.data.category
+                  : ""
+              }
+              chooseList={categoryList}
+            />
+
+            {/* input content */}
             <BoxInputTextArea
-              register={register("keterangan")}
-              label="Keterangan"
-              name="keterangan"
-              placeholder="Masukan nama keterangan ..."
-              errorMessage={errors.keterangan?.message}
+              register={register("content")}
+              label="Konten Berita"
+              name="content"
+              placeholder="Masukan konten berita ..."
+              errorMessage={errors.content?.message}
               required={true}
-              max={70}
+              max={2500}
             />
 
-            {/* input img alumni */}
-            <BoxInputGambar<CreateFasilitasType | UpdateFasilitasType>
-              label="Foto Fasilitas"
+            {/* input gambar */}
+            <BoxInputGambar<CreateNewsType | UpdateNewsType>
+              label="Foto Berita"
               controller={fileController}
               required={false}
-              clearError={() => clearErrors("images")}
+              clearError={() => clearErrors("thumbnail")}
             />
 
             {/* action */}
@@ -169,4 +191,4 @@ const InputFasilitasPage: FC = () => {
   );
 };
 
-export default InputFasilitasPage;
+export default InputBeritaPage;

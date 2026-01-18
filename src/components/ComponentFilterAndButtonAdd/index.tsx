@@ -135,7 +135,9 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       <div
         className={clsx(
           " h-12 flex-row justify-start items-center gap-2 relative lg:flex-2 lg:h-full lg:justify-end",
-          handleFilter && handleFilterJenisKelamin ? "flex" : "hidden",
+          handleFilter || handleFilterJenisKelamin || linkAdd
+            ? "flex"
+            : "hidden",
         )}
       >
         {/* filter jenis kelamin */}
@@ -226,7 +228,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
           )}
         </div>
 
-        <div className="relative h-full flex flex-row justify-start items-center">
+        <div className="relative h-full flex flex-row justify-start items-center gap-4">
           {/* filter any date  */}
           {handleFilter && (
             <>
@@ -324,24 +326,25 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
               </div>
             </>
           )}
+
+          {/* button add */}
+          {linkAdd && (
+            <button
+              type="button"
+              onClick={() => {
+                navigate(linkAdd, {
+                  state: {
+                    from: "state",
+                  },
+                });
+              }}
+              className="px-6 py-2.5 capitalize rounded-lg bg-primary-green text-primary-white font-medium text-base relative before:absolute before:content-[''] before:inset-0 before:bg-primary-black/10 before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-200 before:ease-in-out"
+            >
+              tambah
+            </button>
+          )}
         </div>
       </div>
-      {/* button add */}
-      {linkAdd && (
-        <button
-          type="button"
-          onClick={() => {
-            navigate(linkAdd, {
-              state: {
-                from: "state",
-              },
-            });
-          }}
-          className="px-6 py-2.5 capitalize rounded-lg bg-primary-green text-primary-white font-medium text-base relative before:absolute before:content-[''] before:inset-0 before:bg-primary-black/10 before:opacity-0 hover:before:opacity-100 before:transition-all before:duration-200 before:ease-in-out"
-        >
-          tambah
-        </button>
-      )}
     </div>
   );
 };

@@ -171,7 +171,7 @@ const CalonSantriPage: FC = () => {
                   item.no_telepon,
                 ]}
                 dataSizeSmall={item.nama_lengkap}
-                id={item.id}
+                linkUpdate={`/dashboard/calon-santri/edit/${item.id}`}
                 index={index}
                 handleOpenModal={() => setIsModal({ active: true, data: item })}
                 handleDelete={() => handleDelete(item.id)}

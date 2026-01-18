@@ -75,7 +75,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
                 : value
           }
           placeholder={placeholder}
-          className="w-full h-full border-none outline-none text-base placeholder:text-sm"
+          className="w-full h-full border-none outline-none text-base placeholder:text-sm capitalize"
           readOnly
         />
 
@@ -105,7 +105,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
         )}
       >
         {chooseList.map((item, index) => (
-          <ButtonChooseAngkatan
+          <ButtonChoose
             key={index}
             label={
               item === "laki_laki"
@@ -131,12 +131,12 @@ export default function BoxInputChoose<T extends FieldValues = any>({
 }
 
 // button choose angkatan
-type ButtonChooseAngkatanProps = {
+type ButtonChooseProps = {
   label: string;
   handleClick: () => void;
   active: boolean;
 };
-const ButtonChooseAngkatan: FC<ButtonChooseAngkatanProps> = ({
+const ButtonChoose: FC<ButtonChooseProps> = ({
   handleClick,
   label,
   active,
@@ -145,7 +145,7 @@ const ButtonChooseAngkatan: FC<ButtonChooseAngkatanProps> = ({
     <button
       type="button"
       className={clsx(
-        "w-full py-3 px-4 hover:bg-primary-black/10 transition-all duration-200 ease-in-out text-left",
+        "w-full py-3 px-4 hover:bg-primary-black/10 transition-all duration-200 ease-in-out text-left capitalize",
         active && "bg-primary-black/10",
       )}
       onClick={() => handleClick()}
