@@ -15,7 +15,11 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
   // query fasilitas
   const { data: dataFasilitas, isLoading } = useQuery({
     queryKey: ["fasilitasForUser"],
-    queryFn: () => FasilitasService.read(),
+    queryFn: () =>
+      FasilitasService.read({
+        page: undefined,
+        search: undefined,
+      }),
   });
 
   return (
@@ -33,9 +37,9 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
           </div>
         ) : dataFasilitas?.success &&
           dataFasilitas.data &&
-          dataFasilitas.data.length > 0 ? (
+          dataFasilitas.data.data.length > 0 ? (
           <ScrollXNonDesktop gap={6}>
-            {dataFasilitas.data.map((item, _index) => (
+            {dataFasilitas.data.data.map((item, _index) => (
               <CardFasilitas
                 key={item.id}
                 img={item.images}
@@ -53,9 +57,9 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
         </div>
       ) : dataFasilitas?.success &&
         dataFasilitas.data &&
-        dataFasilitas.data.length > 0 ? (
+        dataFasilitas.data.data.length > 0 ? (
         <ScrollXNonDesktop>
-          {dataFasilitas.data.map((item, _index) => (
+          {dataFasilitas.data.data.map((item, _index) => (
             <CardFasilitas
               key={item.id}
               img={item.images}

@@ -1,5 +1,12 @@
 import clsx from "clsx";
-import { LayoutDashboardIcon, LogOut, Menu, UsersRound, X } from "lucide-react";
+import {
+  Building2,
+  LayoutDashboardIcon,
+  LogOut,
+  Menu,
+  UsersRound,
+  X,
+} from "lucide-react";
 import React, { useState, type FC } from "react";
 import useClickOutside from "../../hooks/useClickOutSide";
 import logo from "../../assets/icons/file_thumb.png";
@@ -23,6 +30,10 @@ const navigationList: { label: string; link: string }[] = [
     label: "ustad",
     link: "/dashboard/ustad",
   },
+  {
+    label: "fasilitas",
+    link: "/dashboard/fasilitas",
+  },
 ];
 
 const NavbarDashboardMobile: FC = () => {
@@ -45,7 +56,7 @@ const NavbarDashboardMobile: FC = () => {
 
   return (
     <>
-      <div className="fixed top-0 bg-primary-blue h-12 z-40 left-0 right-0 flex flex-row justify-between items-center px-4 md:hidden">
+      <div className="fixed top-0 bg-primary-blue h-14 z-40 left-0 right-0 flex flex-row justify-between items-center px-4 md:hidden">
         {/* button bars */}
         <button
           ref={buttonBarsRef}
@@ -169,6 +180,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
         <UsersRound size={24} className="text-primary-white" />
       )}
 
+      {label === "fasilitas" && (
+        <Building2 size={24} className="text-primary-white" />
+      )}
       {/* label */}
       <span className={clsx("text-primary-white text-base uppercase")}>
         {label}

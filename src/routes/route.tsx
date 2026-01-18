@@ -12,6 +12,8 @@ import AlumniPage from "../pages/AlumniPage";
 import InputAlumniPage from "../pages/InputAlumniPage";
 import UstadPage from "../pages/UstadPage";
 import InputUstadPage from "../pages/InputUstadPage";
+import FasilitasPage from "../pages/FasilitasPage";
+import InputFasilitasPage from "../pages/InputFasilitasPage";
 
 const route = createBrowserRouter([
   {
@@ -85,6 +87,20 @@ const route = createBrowserRouter([
       {
         path: "ustad/edit/:id",
         element: <InputUstadPage />,
+      },
+
+      // fasilitas
+      {
+        path: "fasilitas",
+        element: <FasilitasPage />,
+      },
+      {
+        path: "fasilitas/tambah",
+        element: <InputFasilitasPage />,
+      },
+      {
+        path: "fasilitas/edit/:id",
+        element: <InputFasilitasPage />,
       },
     ],
   },

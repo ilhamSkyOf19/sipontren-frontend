@@ -15,7 +15,7 @@ export class UstadValidation {
         .string("nama harus diisi")
         .trim()
         .min(3, "nama minimal 3 karakter")
-        .max(70, "nama maksimal 70 karakter"),
+        .max(50, "nama maksimal 50 karakter"),
 
       jenis_kelamin: z.enum(
         ["laki_laki", "perempuan"],
@@ -38,7 +38,7 @@ export class UstadValidation {
         .string("alamat harus diisi")
         .trim()
         .min(10, "alamat minimal 10 karakter agar lebih lengkap")
-        .max(200, "alamat maksimal 200 karakter"),
+        .max(100, "alamat maksimal 100 karakter"),
 
       no_telepon: z
         .string("nomor telepon harus diisi")
@@ -71,7 +71,7 @@ export class UstadValidation {
         .string()
         .trim()
         .min(3, "nama minimal 3 karakter")
-        .max(70, "nama maksimal 70 karakter")
+        .max(50, "nama maksimal 50 karakter")
         .optional(),
 
       jenis_kelamin: z
@@ -96,7 +96,7 @@ export class UstadValidation {
         .string()
         .trim()
         .min(10, "alamat minimal 10 karakter agar lebih lengkap")
-        .max(200, "alamat maksimal 200 karakter")
+        .max(100, "alamat maksimal 100 karakter")
         .optional(),
 
       no_telepon: z

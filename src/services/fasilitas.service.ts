@@ -1,11 +1,15 @@
 import AXIOS from "../libs/axios";
-import type { ResponseFasilitasType } from "../models/fasilitas-model";
+import type {
+  FilterData,
+  ResponseFasilitasType,
+  ResponseFasilitasWithMetaType,
+} from "../models/fasilitas-model";
 import type { ResponseData } from "../types/type";
 
 export class FasilitasService {
   // create
   static async create(
-    req: FormData
+    req: FormData,
   ): Promise<ResponseData<ResponseFasilitasType | null>> {
     // get response
     const response = await AXIOS.post("/fasilitas/create", req, {
@@ -19,9 +23,17 @@ export class FasilitasService {
   }
 
   // read
-  static async read(): Promise<ResponseData<ResponseFasilitasType[]>> {
+  static async read({
+    page,
+    search,
+  }: FilterData): Promise<ResponseData<ResponseFasilitasWithMetaType>> {
     // get response
-    const response = await AXIOS.get("/fasilitas/read").then((res) => res.data);
+    const response = await AXIOS.get("/fasilitas/read", {
+      params: {
+        page,
+        search,
+      },
+    }).then((res) => res.data);
 
     // return
     return response;
@@ -29,11 +41,11 @@ export class FasilitasService {
 
   // detail
   static async detail(
-    id: number
+    id: number,
   ): Promise<ResponseData<ResponseFasilitasType>> {
     // get response
     const response = await AXIOS.get(`/fasilitas/detail/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return
@@ -42,8 +54,8 @@ export class FasilitasService {
 
   // update
   static async update(
+    id: number,
     req: FormData,
-    id: number
   ): Promise<ResponseData<ResponseFasilitasType>> {
     // get response
     const response = await AXIOS.patch(`/fasilitas/update/${id}`, req, {
@@ -59,11 +71,11 @@ export class FasilitasService {
   // delete
 
   static async delete(
-    id: number
+    id: number,
   ): Promise<ResponseData<ResponseFasilitasType>> {
     // get response
     const response = await AXIOS.delete(`/fasilitas/delete/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return

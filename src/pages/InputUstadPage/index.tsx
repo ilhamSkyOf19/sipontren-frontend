@@ -137,8 +137,8 @@ const InputUstadPage: FC = () => {
     <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 pb-32 md:items-start px-4">
       {/* header */}
       <HeaderDashboard
-        title="Tambah Alumni"
-        subTitle="Tambahkan data alumni baru ke dalam sistem pendataan pondok."
+        title={id ? "Edit Ustad" : "Tambah Ustad"}
+        subTitle={`${id ? "Edit" : "Tambahkan"} data ustad / ustadzah`}
         tanggal={true}
       />
 
@@ -159,14 +159,16 @@ const InputUstadPage: FC = () => {
               placeholder="Masukan nama ustad / ustadzah ..."
               errorMessage={errors.name?.message}
               required={true}
+              max={50}
             />
 
-            {/* input angkatan */}
+            {/* input jenis kelamin */}
             <BoxInputChoose<CreateUstadType | Omit<UpdateUstadType, "id">>
               controller={jenisKelaminController}
               label="Jenis Kelamin"
               required={true}
               hAuto={true}
+              placeholder="Pilih jenis kelamin ..."
               defaultValue={
                 dataUstad?.success && dataUstad?.data.jenis_kelamin
                   ? dataUstad?.data.jenis_kelamin
@@ -183,6 +185,7 @@ const InputUstadPage: FC = () => {
               placeholder="Masukan jabatan ..."
               errorMessage={errors.jabatan?.message}
               required={true}
+              max={50}
             />
 
             {/* input jabatan */}
@@ -193,6 +196,7 @@ const InputUstadPage: FC = () => {
               placeholder="Masukan alamat ..."
               errorMessage={errors.alamat?.message}
               required={true}
+              max={100}
             />
 
             {/* input tempat lahir */}
@@ -203,6 +207,7 @@ const InputUstadPage: FC = () => {
               placeholder="Masukan tempat lahir ..."
               errorMessage={errors.tempat_lahir?.message}
               required={true}
+              max={50}
             />
 
             <BoxInputDate<CreateUstadType | Omit<UpdateUstadType, "id">>
@@ -224,6 +229,7 @@ const InputUstadPage: FC = () => {
               placeholder="Masukan no telepon ..."
               errorMessage={errors.no_telepon?.message}
               required={true}
+              max={14}
             />
 
             {/* input img alumni */}

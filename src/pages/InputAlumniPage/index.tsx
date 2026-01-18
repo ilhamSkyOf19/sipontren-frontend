@@ -143,8 +143,8 @@ const InputAlumniPage: FC = () => {
     <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 pb-32 md:items-start px-4">
       {/* header */}
       <HeaderDashboard
-        title="Tambah Alumni"
-        subTitle="Tambahkan data alumni baru ke dalam sistem pendataan pondok."
+        title={id ? "Edit Alumni" : "Tambah Alumni"}
+        subTitle={`${id ? "Edit" : "Tambahkan"} data alumni baru ke dalam sistem pendataan pondok.`}
         tanggal={true}
       />
 
@@ -165,12 +165,14 @@ const InputAlumniPage: FC = () => {
               placeholder="Masukan nama alumni ..."
               errorMessage={errors.name?.message}
               required={true}
+              max={50}
             />
 
             {/* input angkatan */}
             <BoxInputChoose<CreateAlumniType | Omit<UpdateAlumniType, "id">>
               controller={angkatanController}
               label="Angkatan Alumni"
+              placeholder="Pilih angkatan"
               required={true}
               defaultValue={
                 dataAlumni?.success && dataAlumni?.data.angkatan
@@ -188,6 +190,7 @@ const InputAlumniPage: FC = () => {
               placeholder="Masukan deskripsi alumni ..."
               errorMessage={errors.description?.message}
               required={true}
+              max={250}
             />
 
             {/* input img alumni */}

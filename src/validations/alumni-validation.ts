@@ -17,7 +17,7 @@ export class AlumniValidation {
         .string()
         .trim()
         .min(3, { message: "Nama minimal 3 karakter" })
-        .max(100, { message: "Nama maksimal 100 karakter" })
+        .max(50, { message: "Nama maksimal 50 karakter" })
         .regex(/^[a-zA-Z\s'.-]+$/, {
           message: "Nama hanya boleh berisi huruf dan tanda umum ( ' . - )",
         }),
@@ -36,7 +36,7 @@ export class AlumniValidation {
         .trim()
         .min(10, { message: "Deskripsi minimal 10 karakter" })
         // disesuaikan dengan @db.Text (~65rb karakter)
-        .max(300, {
+        .max(250, {
           message: "Deskripsi terlalu panjang ",
         }),
 
@@ -57,7 +57,7 @@ export class AlumniValidation {
         .string()
         .trim()
         .min(3, { message: "Nama minimal 3 karakter" })
-        .max(100, { message: "Nama maksimal 100 karakter" })
+        .max(50, { message: "Nama maksimal 50 karakter" })
         .regex(/^[a-zA-Z\s'.-]+$/, {
           message: "Nama hanya boleh berisi huruf dan tanda umum ( ' . - )",
         })
@@ -77,7 +77,7 @@ export class AlumniValidation {
         .string()
         .trim()
         .min(10, { message: "Deskripsi minimal 10 karakter" })
-        .max(300, {
+        .max(250, {
           message: "Deskripsi terlalu panjang",
         })
         .optional(),

@@ -12,6 +12,7 @@ type Props<T extends FieldValues = any> = {
   controller: UseControllerReturn<T>;
   defaultValue?: string;
   hAuto?: boolean;
+  placeholder: string;
 };
 
 export default function BoxInputChoose<T extends FieldValues = any>({
@@ -20,6 +21,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
   defaultValue,
   label,
   hAuto,
+  placeholder,
 }: Props<T>) {
   // state choose angkatan
   const [value, setValue] = useState<string>("");
@@ -50,7 +52,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
   return (
     <div className="w-full flex flex-col justify-start items-start relative">
       {/* label */}
-      <label htmlFor="name" className="text-base relative">
+      <label htmlFor={field.name} className="text-base relative">
         {label}
         <span className="absolute -top-1 ml-1 text-primary-red">*</span>
       </label>
@@ -63,7 +65,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
       >
         <input
           type="text"
-          name="angkatan"
+          name={field.name}
           id="angkatan"
           value={
             value === "laki_laki"
@@ -72,7 +74,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
                 ? "Perempuan"
                 : value
           }
-          placeholder="Masukan angkatan alumni ..."
+          placeholder={placeholder}
           className="w-full h-full border-none outline-none text-base placeholder:text-sm"
           readOnly
         />
