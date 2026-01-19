@@ -18,6 +18,8 @@ import BeritaPage from "../pages/BeritaPage";
 import InputBeritaPage from "../pages/InputBeritaPage";
 import BannerPage from "../pages/BannerPage";
 import InputBannerPage from "../pages/InputBannerPage";
+import PamfletPage from "../pages/PamfletPage";
+import InputPamfletPage from "../pages/InputPamfletPage";
 
 const route = createBrowserRouter([
   {
@@ -133,6 +135,20 @@ const route = createBrowserRouter([
       {
         path: "banner/edit/:id",
         element: <InputBannerPage />,
+      },
+
+      // banner
+      {
+        path: "pamflet",
+        element: <PamfletPage />,
+      },
+      {
+        path: "pamflet/tambah",
+        element: <InputPamfletPage />,
+      },
+      {
+        path: "pamflet/edit/:id",
+        element: <InputPamfletPage />,
       },
     ],
   },

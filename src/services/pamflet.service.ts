@@ -1,8 +1,12 @@
-import AXIOS from "../lib/axios";
+import AXIOS from "../libs/axios";
+import type { ResponsePamfletType } from "../models/pamflet-model";
+import type { ResponseData } from "../types/type";
 
 export class PamfletService {
   // create
-  static async create(req) {
+  static async create(
+    req: FormData,
+  ): Promise<ResponseData<ResponsePamfletType>> {
     // get response
     const response = await AXIOS.post("/pamflet/create", req, {
       headers: {
@@ -15,7 +19,7 @@ export class PamfletService {
   }
 
   // read
-  static async read() {
+  static async read(): Promise<ResponseData<ResponsePamfletType[]>> {
     // get response
     const response = await AXIOS.get("/pamflet/read").then((res) => res.data);
 
@@ -24,10 +28,10 @@ export class PamfletService {
   }
 
   // detail
-  static async detail(id) {
+  static async detail(id: number): Promise<ResponseData<ResponsePamfletType>> {
     // get response
     const response = await AXIOS.get(`/pamflet/detail/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return
@@ -35,7 +39,10 @@ export class PamfletService {
   }
 
   // update
-  static async update(req, id) {
+  static async update(
+    id: number,
+    req: FormData,
+  ): Promise<ResponseData<ResponsePamfletType>> {
     // get response
     const response = await AXIOS.patch(`/pamflet/update/${id}`, req, {
       headers: {
@@ -48,10 +55,10 @@ export class PamfletService {
   }
 
   // delete
-  static async delete(id) {
+  static async delete(id: number): Promise<ResponseData<ResponsePamfletType>> {
     // get response
     const response = await AXIOS.delete(`/pamflet/delete/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return

@@ -43,6 +43,10 @@ const navigationList: { label: string; link: string }[] = [
     label: "banner",
     link: "/dashboard/banner",
   },
+  {
+    label: "pamflet",
+    link: "/dashboard/pamflet",
+  },
 ];
 
 type Props = {
@@ -212,7 +216,7 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       {label === "berita & artikel" && (
         <Newspaper size={24} className="text-primary-white" />
       )}
-      {label === "banner" && (
+      {(label === "banner" || label === "pamflet") && (
         <GalleryThumbnails size={24} className="text-primary-white" />
       )}
 
