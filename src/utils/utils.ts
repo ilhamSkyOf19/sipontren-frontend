@@ -77,3 +77,21 @@ export const isValidDate = (value: string | null) => {
   const d = new Date(value);
   return !isNaN(d.getTime());
 };
+
+export function formatPhoneWA(num: string) {
+  // bersihkan selain angka
+  let clean = num.replace(/\D/g, "");
+
+  // kalau diawali 0 → ubah jadi 62
+  if (clean.startsWith("0")) {
+    clean = "62" + clean.slice(1);
+  }
+
+  // pastikan diawali 62
+  if (!clean.startsWith("62")) {
+    clean = "62" + clean;
+  }
+
+  // pola: +62 858-9689-0881
+  return clean.replace(/^(62)(\d{3})(\d{4})(\d+)$/, "+$1 $2-$3-$4");
+}

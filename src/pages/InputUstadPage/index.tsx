@@ -15,7 +15,6 @@ import type {
   UpdateUstadType,
 } from "../../models/ustad-model";
 import { UstadValidation } from "../../validations/ustad-validation";
-import BoxInputNumber from "../../components/BoxInputNumber";
 import BoxInputDate from "../../components/BoxInputDate";
 import LoadingPulseFormulir from "../../components/LoadingPulseFormulir";
 
@@ -222,7 +221,7 @@ const InputUstadPage: FC = () => {
             />
 
             {/* input no telepon */}
-            <BoxInputNumber
+            <BoxInputText
               register={register("no_telepon")}
               label="No Telepon / Whatsapp"
               name="no_telepon"

@@ -40,55 +40,52 @@ const Pagination: FC<Props> = ({
 
   return (
     <div className="w-full flex h-32 flex-row justify-between items-center lg:absolute lg:bottom-14 lg:px-4 lg:h-0">
-      {totalData !== 0 ||
-        (pages.length <= 1 && (
-          <div className="flex-1 flex flex-row justify-end items-center gap-1">
-            {/* PREV GROUP */}
-            <button
-              type="button"
-              className="p-1 disabled:opacity-40"
-              disabled={currentPage === 1}
-              onClick={() =>
-                changePage(currentPage === 1 ? 1 : currentPage - 1)
-              }
-            >
-              <ChevronLeft />
-            </button>
+      {(totalData > 0 || pages.length >= 1) && (
+        <div className="flex-1 flex flex-row justify-end items-center gap-1">
+          {/* PREV GROUP */}
+          <button
+            type="button"
+            className="p-1 disabled:opacity-40"
+            disabled={currentPage === 1}
+            onClick={() => changePage(currentPage === 1 ? 1 : currentPage - 1)}
+          >
+            <ChevronLeft />
+          </button>
 
-            {/* NOMOR HALAMAN (WINDOW 3) */}
-            {pages.map((page) => (
-              <button
-                key={page}
-                type="button"
-                className="p-2"
-                onClick={() => changePage(page)}
+          {/* NOMOR HALAMAN (WINDOW 3) */}
+          {pages.map((page) => (
+            <button
+              key={page}
+              type="button"
+              className="p-2"
+              onClick={() => changePage(page)}
+            >
+              <span
+                className={clsx(
+                  "text-sm font-semibold text-gray-400",
+                  currentPage === page && "text-primary-blue",
+                )}
               >
-                <span
-                  className={clsx(
-                    "text-sm font-semibold text-gray-400",
-                    currentPage === page && "text-primary-blue",
-                  )}
-                >
-                  {page}
-                </span>
-              </button>
-            ))}
-
-            {/* NEXT GROUP */}
-            <button
-              type="button"
-              className="p-1 disabled:opacity-40"
-              disabled={currentPage === totalPage}
-              onClick={() =>
-                changePage(
-                  currentPage === totalPage ? totalPage : currentPage + 1,
-                )
-              }
-            >
-              <ChevronRight />
+                {page}
+              </span>
             </button>
-          </div>
-        ))}
+          ))}
+
+          {/* NEXT GROUP */}
+          <button
+            type="button"
+            className="p-1 disabled:opacity-40"
+            disabled={currentPage === totalPage}
+            onClick={() =>
+              changePage(
+                currentPage === totalPage ? totalPage : currentPage + 1,
+              )
+            }
+          >
+            <ChevronRight />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

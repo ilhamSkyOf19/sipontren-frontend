@@ -27,7 +27,7 @@ const ProfilePage: FC = () => {
         deskripsi="Pesantren ini berdiri sebagai salah satu upaya Muhammadiyah untuk mencetak generasi muda yang berakhlak mulia, memiliki wawasan keislaman yang mendalam, serta mampu berkontribusi dalam pembangunan masyarakat."
       />
       <SectionSejarah />
-      <SectionVisiMisi widthDevice={widthDevice} />
+      <SectionVisiMisi />
       <SectionProgramUnggulan />
       <SectionFasilitas widthDevice={widthDevice} />
       <SectionPrestasi />

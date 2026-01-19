@@ -23,7 +23,7 @@ const ModalContainer: FC<Props> = ({
       appElement={document.getElementById("root")!}
       style={{
         overlay: {
-          backgroundColor: "rgba(0,0,0,0.7)",
+          backgroundColor: "rgba(0,0,0,0.8)",
           zIndex: 9998,
           display: "flex",
           justifyContent: "center",

@@ -39,7 +39,7 @@ const LayoutDashboard: FC = () => {
           )}
         >
           <p className="text-xs">
-            Copyright &copy; 2026 Sipontren. All rights reserved.
+            &copy; 2024 Sipontren Inc. Copyright and all rights reserved
           </p>
         </footer>
       </div>

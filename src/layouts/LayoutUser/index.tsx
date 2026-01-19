@@ -6,11 +6,12 @@ import {
   type FC,
   type RefObject,
 } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useMatch } from "react-router-dom";
 import NavbarUser from "../../fragments/NavbarUser";
 import useWindowSize from "../../hooks/useWindowSize";
 import ButtonNavigasi from "../../components/ButtonNavigasi";
 import Footer from "../../fragments/Footer";
+import clsx from "clsx";
 
 const LayoutUser: FC = () => {
   // state
@@ -92,8 +93,16 @@ const LayoutUser: FC = () => {
     setShowNavbarList((prev) => !prev);
   }, [showNavbarList]);
 
+  // macth url
+  const admin = useMatch("/dashboard/calon-santri/edit/:id");
+
   return (
-    <div className="w-screen flex flex-col justify-start items-start overflow-hidden">
+    <div
+      className={clsx(
+        "w-screen flex flex-col justify-start items-start overflow-hidden",
+        admin && "hidden",
+      )}
+    >
       {/* header */}
       <NavbarUser
         ref={elementTop}
@@ -109,6 +118,7 @@ const LayoutUser: FC = () => {
         valueTop={valueTop}
         showNavbarList={showNavbarList}
         navbarListRef={navbarListRef}
+        handleClose={() => setShowNavbarList(false)}
       />
 
       {/* content */}
@@ -154,12 +164,14 @@ type NavbarListComponentProps = {
   valueTop: number;
   showNavbarList: boolean;
   navbarListRef: RefObject<HTMLDivElement | null>;
+  handleClose: () => void;
 };
 
 const NavbarListComponent: FC<NavbarListComponentProps> = ({
   valueTop,
   showNavbarList,
   navbarListRef,
+  handleClose,
 }) => {
   // currentPage
   const currentPage = useLocation().pathname;
@@ -179,6 +191,7 @@ const NavbarListComponent: FC<NavbarListComponentProps> = ({
             label={item.label}
             url={item.url}
             active={item.url === currentPage}
+            handleClose={handleClose}
           />
         );
       })}

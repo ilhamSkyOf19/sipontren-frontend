@@ -1,40 +1,43 @@
 import { memo, type FC } from "react";
 import HeaderSection from "../../../components/HeaderSection";
+import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 const SectionLayananPendidikan: FC = memo(() => {
   return (
-    <div className="w-full flex flex-col justify-start items-center pt-16 gap-12">
+    <section className="w-full flex flex-col justify-start items-center pt-16 gap-12">
       <HeaderSection
         judul={"Layanan Pendidikan"}
         ket={
           "Pilihan Pendidikan Berkualitas Pondok Pesantren Modern, Sekolah Menengah Pertama, dan Sekolah Menengah Atas Kami Hadir Untuk Mendukung Masa Depan Cemerlang Anda"
         }
       />
-      <div
-        className={`
+      <ParallaxGoTop>
+        <div
+          className={`
       w-screen flex flex-col justify-center items-center gap-7
       md:flex-row flex-wrap lg:px-16
       `}
-      >
-        <CardLayanan
-          textOne={"Pondok Pesantren"}
-          textTwo={"Modern"}
-          textKet={
-            "Pondok Pesantren Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"
-          }
-        />
-        <CardLayanan
-          textOne={"Sekolah Menengah"}
-          textTwo={"Pertama"}
-          textKet={"SMP Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"}
-        />
-        <CardLayanan
-          textOne={"Sekolah Menengah"}
-          textTwo={"Atas"}
-          textKet={"SMA Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"}
-        />
-      </div>
-    </div>
+        >
+          <CardLayanan
+            textOne={"Pondok Pesantren"}
+            textTwo={"Modern"}
+            textKet={
+              "Pondok Pesantren Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"
+            }
+          />
+          <CardLayanan
+            textOne={"Sekolah Menengah"}
+            textTwo={"Pertama"}
+            textKet={"SMP Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"}
+          />
+          <CardLayanan
+            textOne={"Sekolah Menengah"}
+            textTwo={"Atas"}
+            textKet={"SMA Muhammadiyah Al-Amin seputih Banyak - Lampung tengah"}
+          />
+        </div>
+      </ParallaxGoTop>
+    </section>
   );
 });
 

@@ -20,6 +20,8 @@ import BannerPage from "../pages/BannerPage";
 import InputBannerPage from "../pages/InputBannerPage";
 import PamfletPage from "../pages/PamfletPage";
 import InputPamfletPage from "../pages/InputPamfletPage";
+import FormulirPendaftaranPage from "../pages/FormulirPendaftaranPage";
+import SuccessPage from "../pages/SuccessPage";
 
 const route = createBrowserRouter([
   {
@@ -50,6 +52,14 @@ const route = createBrowserRouter([
         path: "/psb",
         element: <PsbPage />,
       },
+      {
+        path: "/formulir",
+        element: <FormulirPendaftaranPage />,
+      },
+      {
+        path: "/success",
+        element: <SuccessPage />,
+      },
     ],
   },
   {
@@ -65,6 +75,10 @@ const route = createBrowserRouter([
       {
         path: "calon-santri",
         element: <CalonSantriPage />,
+      },
+      {
+        path: "calon-santri/edit/:id",
+        element: <FormulirPendaftaranPage />,
       },
 
       // alumni

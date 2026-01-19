@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 import SectionBanner from "./SectionBanner";
 import SectionLayananPendidikan from "./SectionLayananPendidikan";
 import SectionTujuan from "./SectionTujuan";
@@ -8,6 +8,11 @@ import SectionBerita from "./SectionBerita";
 import SectionMaps from "./SectionMaps";
 
 const HomePage: FC = () => {
+  //   window top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <main className="flex flex-col justify-start items-center overflow-hidden">
       {/* section one */}

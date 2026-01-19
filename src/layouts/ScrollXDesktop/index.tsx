@@ -17,6 +17,9 @@ const ScrollXDesktop: FC<Props> = ({ children }) => {
       }}
     >
       <div className="flex flex-row py-12 pl-4  cursor-pointer gap-6">
+        {/* space */}
+        <div className="w-4 shrink-0 h-ful" />
+
         {children || ""}
 
         {/* space */}

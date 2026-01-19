@@ -21,17 +21,21 @@ function BoxInputDate<TFieldValues extends FieldValues = any>({
   // state value
   const [isValue, setIsValue] = useState<string>("");
 
-  // set value if old values is existing
-  useEffect(() => {
-    if (oldValue) {
-      setIsValue(formatDateID(new Date(oldValue)));
-    }
-  }, [oldValue]);
-
   // field
   const { field, fieldState } = controller;
 
   const refInputDate = useRef<HTMLInputElement>(null);
+
+  // set value if old values is existing
+  useEffect(() => {
+    if (field.value) {
+      setIsValue(formatDateID(new Date(field.value)));
+    } else if (oldValue) {
+      // hanya dipakai saat pertama kali
+      field.onChange(oldValue.toISOString());
+      setIsValue(formatDateID(new Date(oldValue)));
+    }
+  }, [field.value, oldValue]);
 
   return (
     <div className="w-full flex flex-col justify-start items-start">

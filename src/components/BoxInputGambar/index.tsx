@@ -3,6 +3,7 @@ import type { FieldValues, UseControllerReturn } from "react-hook-form";
 import clsx from "clsx";
 import ErrorMessageInput from "../ErrorMessageInput";
 import { Trash } from "lucide-react";
+import ModalContainer from "../ModalContainer";
 
 type Props<T extends FieldValues = any> = {
   label: string;
@@ -10,6 +11,7 @@ type Props<T extends FieldValues = any> = {
   controller: UseControllerReturn<T>;
   clearError?: () => void;
   fullPreview?: boolean;
+  formulirPendaftaran?: boolean;
 };
 
 function BoxInputGambar<TFieldValues extends FieldValues = any>({
@@ -18,7 +20,11 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
   required,
   clearError,
   fullPreview,
+  formulirPendaftaran,
 }: Props<TFieldValues>) {
+  // state modal
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
   // state value
   const [isPreview, setIsPreview] = useState<string>("");
 
@@ -83,10 +89,10 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
       <div
         className={clsx(
           "w-full flex flex-col justify-start items-start gap-1",
-          isPreview ? "my-6" : "mt-2",
+          isPreview && !formulirPendaftaran ? "my-6" : "mt-2",
         )}
       >
-        {isPreview ? (
+        {isPreview && !formulirPendaftaran && (
           <div
             className={clsx(
               "w-full flex justify-start items-center",
@@ -122,14 +128,43 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
               </button>
             </div>
           </div>
-        ) : (
-          !fieldState.error?.message && (
-            <span className="text-sm">Silahkan upload gambar</span>
-          )
+        )}
+
+        {/* ispreview & formulirPendaftaran */}
+        {isPreview && formulirPendaftaran && (
+          <button
+            type="button"
+            className="text-sm text-secondary-blue hover:underline transition-all duration-200 ease-in-out"
+            onClick={() => setIsOpenModal(true)}
+          >
+            Lihat Gambar yang diupload
+          </button>
+        )}
+
+        {!fieldState.error?.message && !isPreview && (
+          <span className="text-sm">Silahkan upload gambar</span>
         )}
       </div>
       {/* error message */}
       <ErrorMessageInput errorMessage={fieldState.error?.message} />
+
+      {/* modal */}
+      <ModalContainer active={isOpenModal} fullWidth={true}>
+        <div className="w-[90vw] max-h-[90vh] overflow-y-scroll">
+          <img src={isPreview} alt="preview" className="object-contain" />
+
+          {/* button close */}
+          <div className="w-full flex flex-row justify-center items-center absolute top-full">
+            <button
+              type="button"
+              className="text-primary-white text-lg capitalize"
+              onClick={() => setIsOpenModal(false)}
+            >
+              tutup
+            </button>
+          </div>
+        </div>
+      </ModalContainer>
     </div>
   );
 }

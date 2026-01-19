@@ -261,23 +261,25 @@ const CalonSantriPage: FC = () => {
             },
             {
               label: "Dokumen KK",
-              value: isModal.data?.foto_kk ? "ada" : "tidak ada",
+              value: isModal.data?.foto_kk ? "Tersedia" : "tidak tersedia",
             },
             {
               label: "Dokumen Akta Kelahiran",
-              value: isModal.data?.fc_akta_kelahiran ? "ada" : "tidak ada",
+              value: isModal.data?.fc_akta_kelahiran
+                ? "Tersedia"
+                : "tidak tersedia",
             },
             {
               label: "Dokumen KTP",
-              value: isModal.data?.fc_ktp ? "ada" : "tidak ada",
+              value: isModal.data?.fc_ktp ? "Tersedia" : "tidak tersedia",
             },
             {
               label: "Dokumen Foto Formal",
-              value: isModal.data?.foto_formal ? "ada" : "tidak ada",
+              value: isModal.data?.foto_formal ? "Tersedia" : "tidak tersedia",
             },
             {
               label: "Dokumen KIS/KIP",
-              value: isModal.data?.fc_kis_kip ? "ada" : "tidak ada",
+              value: isModal.data?.fc_kis_kip ? "Tersedia" : "tidak tersedia",
             },
           ]}
           handleClose={() => setIsModal({ active: false, data: undefined })}

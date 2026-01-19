@@ -1,5 +1,6 @@
 import SubJudulLeft from "../../../components/SubJudulLeft";
 import masjid from "../../../assets/fasilitas/masjid.png";
+import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 const SectionSejarah = () => {
   return (
@@ -46,12 +47,14 @@ const SectionSejarah = () => {
 
         {/* icon */}
         <div className="flex-3 h-full hidden flex-row justify-center items-center relative md:hidden lg:flex">
-          <img
-            src={masjid}
-            alt="masjid"
-            className="w-full object-contain absolute -top-64 -right-32 scale-x-[-1]"
-            loading="lazy"
-          />
+          <ParallaxGoTop>
+            <img
+              src={masjid}
+              alt="masjid"
+              className="w-full object-contain absolute -top-64 -right-32 scale-x-[-1]"
+              loading="lazy"
+            />
+          </ParallaxGoTop>
         </div>
       </div>
     </div>

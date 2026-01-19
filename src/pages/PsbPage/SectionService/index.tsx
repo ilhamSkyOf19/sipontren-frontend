@@ -1,5 +1,8 @@
 import ImageModel from "../../../components/ImageModel";
 import SubJudulLeft from "../../../components/SubJudulLeft";
+import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
+import ParallaxGoRight from "../../../fragments/ParallaxGoRight";
+import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 import ServiceInfo from "../ServiceInfo";
 
 const SectionService = () => {
@@ -9,8 +12,8 @@ const SectionService = () => {
         <div className="w-full flex-row justify-start items-center lg:hidden">
           <SubJudulLeft title="One Day, One Service" />
         </div>
-        <div className="w-full flex flex-col justify-start items-center mb-16 lg:flex-row lg:justify-between lg:items-end">
-          <div className="w-full flex flex-col justify-start items-start gap-6 pt-12 lg:order-2 lg:w-[80%] lg:justify-end lg:mb-7">
+        <div className="w-full flex flex-col justify-start items-center mb-16 lg:flex-row lg:justify-between lg:items-end lg:mt-10">
+          <ParallaxGoLeft customClass="w-full flex flex-col justify-start items-start gap-6 pt-12 lg:order-2 lg:w-[80%] lg:justify-end lg:mb-7">
             <div className="w-full flex-row justify-start items-center hidden md:hidden lg:flex lg:mb-12">
               <SubJudulLeft
                 title="One Day, One Service"
@@ -46,16 +49,19 @@ const SectionService = () => {
                 website atau whatsapp grup
               </p>
             </div>
-          </div>
-          <div className="w-full flex flex-col justify-start items-center lg:order-1">
-            <ImageModel bg={"primary-blue"} pages={true} />
-          </div>
+          </ParallaxGoLeft>
+
+          <ParallaxGoRight customClass="h-[40vh] w-full h-[40vh] flex flex-col justify-end items-center rounded-4xl overflow-hidden md:h-[65vh] lg:h-[70vh] lg:w-[90%] lg:order">
+            <ImageModel bg={"primary-yellow"} />
+          </ParallaxGoRight>
         </div>
         <div className="w-full h-12 bg-primary-blue rounded-lg md:h-16"></div>
       </div>
-      <div className="w-full flex flex-col justify-start items-start gap-6 pt-4">
-        <ServiceInfo />
-      </div>
+      <ParallaxGoTop>
+        <div className="w-full flex flex-col justify-start items-start gap-6 pt-4">
+          <ServiceInfo />
+        </div>
+      </ParallaxGoTop>
     </div>
   );
 };

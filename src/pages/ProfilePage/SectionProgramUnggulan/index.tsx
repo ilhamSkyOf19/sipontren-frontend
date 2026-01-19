@@ -1,12 +1,14 @@
 import type { FC } from "react";
 import thumbnailProfile from "../../../assets/thumbnails/thumbnail_profile.png";
 import SubJudulLeft from "../../../components/SubJudulLeft";
+import ParallaxGoRight from "../../../fragments/ParallaxGoRight";
+import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
 
 const SectionProgramUnggulan: FC = () => {
   return (
     <div className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-start py-12 px-4 lg:px-12 gap-10 lg:py-0 lg:h-[65vh]">
       <div className="w-full bg-transparent flex flex-row justify-start items-start lg:justify-between lg:items-center lg:h-full">
-        <div className="w-full flex flex-col justify-start items-start gap-8 lg:w-[50%]">
+        <ParallaxGoRight customClass="w-full flex flex-col justify-start items-start gap-8 lg:w-[50%]">
           <SubJudulLeft title={"Program Unggulan"} />
           <p className="text-sm text-primary-blue md:text-lg leading-6 md:leading-8 lg:mt-4 lg:leading-9">
             Ada beberapa program unggulan di Pontren Mu seperti{" "}
@@ -49,8 +51,8 @@ const SectionProgramUnggulan: FC = () => {
             </span>
             .
           </p>
-        </div>
-        <div className="w-full h-[30vh] hidden flex-col justify-end items-center rounded-4xl overflow-hidden md:h-[65vh] lg:h-full lg:w-[36%] lg:flex ">
+        </ParallaxGoRight>
+        <ParallaxGoLeft customClass="w-full h-[30vh] hidden flex-col justify-end items-center rounded-4xl overflow-hidden md:h-[65vh] lg:h-full lg:w-[36%] lg:flex">
           <div
             className={`w-[90%] h-52 flex flex-col justify-center items-center  rounded-3xl relative bg-primary-yellow md:w-[80%] md:h-112 lg:w-full lg:h-[65%] group`}
           >
@@ -60,7 +62,7 @@ const SectionProgramUnggulan: FC = () => {
               className="w-full absolute -bottom-1 group-hover:scale-105 transition-transform duration-300 ease-in-out"
             />
           </div>
-        </div>
+        </ParallaxGoLeft>
       </div>
     </div>
   );

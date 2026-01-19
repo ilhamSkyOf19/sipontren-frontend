@@ -56,7 +56,7 @@ const NavbarUser: FC<Props> = ({
       ref={ref}
       className={`flex flex-row justify-between items-center z-50 bg-secondary-blue w-full h-18 fixed transition duration-350 ease-in-out ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
-      } px-4 md:h-18 md:px-8 lg:h-14`}
+      } px-4 md:h-18 md:px-8 lg:h-16`}
     >
       {widthDevice < 400 && <IconArab width={90} />}
       {widthDevice > 400 && widthDevice <= 700 && <IconArab width={90} />}
@@ -131,7 +131,7 @@ const NavbarLinkTab: FC<NavbarLinkTabProps> = ({ link, text, active }) => {
       to={`/${link}`}
       className={clsx(
         `text-lg text-white relative before:w-full before:h-1 before:bg-yellow-300 before:absolute before:bottom-0 before:left-0 before:origin-left before:scale-x-0 before:transition-all before:duration-300 hover:before:scale-x-100 `,
-        active ? "before:scale-x-100" : "before:scale-x-0"
+        active ? "before:scale-x-100" : "before:scale-x-0",
       )}
     >
       {text}
@@ -158,7 +158,7 @@ const NavbarLinkTabDesktop: FC<NavbarLinkTabDesktopProps> = ({
   return (
     <Link
       to={`/${link}`}
-      className={`text-lg text-white relative transition-all duration-700 ease-in-out hover:bg-primary-yellow  lg:text-xs lg:py-2 lg:px-4 lg:rounded-2xl lg:font-semibold ${
+      className={`text-lg text-white relative transition-all duration-500 ease-in-out hover:bg-primary-yellow lg:text-xs lg:py-2.5 lg:px-4 lg:rounded-full lg:font-semibold ${
         active ? "bg-primary-yellow" : "bg-transparent"
       }`}
     >

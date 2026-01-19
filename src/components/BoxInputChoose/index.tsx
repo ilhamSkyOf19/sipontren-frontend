@@ -13,6 +13,7 @@ type Props<T extends FieldValues = any> = {
   defaultValue?: string;
   hAuto?: boolean;
   placeholder: string;
+  scrollHide?: boolean;
 };
 
 export default function BoxInputChoose<T extends FieldValues = any>({
@@ -22,6 +23,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
   label,
   hAuto,
   placeholder,
+  scrollHide,
 }: Props<T>) {
   // state choose angkatan
   const [value, setValue] = useState<string>("");
@@ -66,7 +68,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
         <input
           type="text"
           name={field.name}
-          id="angkatan"
+          id={field.name}
           value={
             value === "laki_laki"
               ? "Laki-laki"
@@ -99,9 +101,10 @@ export default function BoxInputChoose<T extends FieldValues = any>({
       <div
         ref={modalRef}
         className={clsx(
-          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] z-10 overflow-hidden overflow-y-auto transition-all duration-300 ease-in-out",
+          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] z-10 overflow-hidden transition-all duration-300 ease-in-out",
           hAuto ? "h-auto" : "h-50",
           isOpenModal ? "max-h-50" : "max-h-0",
+          scrollHide ? "scrollbar-hide" : "overflow-y-auto",
         )}
       >
         {chooseList.map((item, index) => (

@@ -8,7 +8,7 @@ import type { FilterData, ResponseData } from "../types/type";
 export class StudentService {
   // create
   static async create(
-    req: FormData
+    req: FormData,
   ): Promise<ResponseData<ResponseStudentType | null>> {
     // get response
     const response = await AXIOS.post("/student/create", req, {
@@ -48,7 +48,7 @@ export class StudentService {
   static async detail(id: number): Promise<ResponseData<ResponseStudentType>> {
     // get response
     const response = await AXIOS.get(`/student/detail/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
     // return
     return response;
@@ -56,8 +56,8 @@ export class StudentService {
 
   // update
   static async update(
+    id: number,
     req: FormData,
-    id: number
   ): Promise<ResponseData<ResponseStudentType>> {
     // get response
     const response = await AXIOS.patch(`/student/update/${id}`, req, {
@@ -75,7 +75,7 @@ export class StudentService {
   static async delete(id: number): Promise<ResponseData<ResponseStudentType>> {
     // get response
     const response = await AXIOS.delete(`/student/delete/${id}`).then(
-      (res) => res.data
+      (res) => res.data,
     );
 
     // return

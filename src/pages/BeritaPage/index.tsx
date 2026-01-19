@@ -83,7 +83,7 @@ const BeritaPage: FC = () => {
     <main className="w-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4 pb-12">
       {/* header */}
       <HeaderDashboard
-        title="Data Berit dan Artikel"
+        title="Data Berita dan Artikel"
         subTitle="Pusat pengelolaan data berita dan artikel."
         tanggal={true}
       />

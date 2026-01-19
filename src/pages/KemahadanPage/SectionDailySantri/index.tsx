@@ -1,10 +1,11 @@
 import SubJudulCenter from "../../../components/SubJudulCenter";
 import pamflet from "../../../assets/pamflet/pamflet-4.jpg";
 import type { FC } from "react";
+import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 const DailySantri: FC = () => {
   return (
-    <div className="w-full py-12">
+    <section className="w-full py-12">
       <div className="w-full flex flex-col justify-start items-center px-2 gap-16 md:px-10">
         <div className="flex justify-center items-center w-full lg:w-[60%]">
           <SubJudulCenter
@@ -14,10 +15,12 @@ const DailySantri: FC = () => {
           />
         </div>
         <div className="w-full px-3 lg:w-[45%]">
-          <img src={pamflet} alt="" loading="lazy" />
+          <ParallaxGoTop>
+            <img src={pamflet} alt="" loading="lazy" />
+          </ParallaxGoTop>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

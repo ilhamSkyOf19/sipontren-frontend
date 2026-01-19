@@ -12,18 +12,6 @@
   --color-primary-green: #00cc00;
   --color-primary-red: #ff3333;
   --color-primary-yellow: oklch(85.2% 0.199 91.936);
-
-  ---animate-bounce-slow: myBounce 2s ease-in-out infinite;
-  /* bounce  */
-  @keyframes myBounce {
-    30% {
-      transform: translateY(0);
-    }
-    ,
-    50% {
-      transform: translateY(-30%);
-    }
-  }
 }
 /* Untuk semua elemen, termasuk body dan html */
 .scrollbar-hidden {
@@ -115,7 +103,7 @@ input:-webkit-autofill:active {
     opacity: 0;
   }
   60% {
-    transform: translateY(-10px);
+    transform: translateY(-15px);
     opacity: 1;
   }
   80% {
@@ -142,7 +130,7 @@ input:-webkit-autofill:active {
 }
 
 .animate-slide-up {
-  animation: slide-up 0.5s ease-out forwards;
+  animation: slide-up 0.8s ease-out forwards;
 }
 
 /* animation from hidden*/
@@ -177,7 +165,7 @@ input:-webkit-autofill:active {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
+  animation: fade-in 0.8s ease-out forwards;
 }
 
 /* animate slide up */

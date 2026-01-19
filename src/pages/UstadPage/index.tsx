@@ -154,7 +154,7 @@ const UstadPage: FC = () => {
               value: isModal.data?.name || "-",
             },
             {
-              label: "Tanggal Lahir",
+              label: "Jenis Kelamin",
               value:
                 isModal.data?.jenis_kelamin === "laki_laki"
                   ? "Laki-Laki"
@@ -171,7 +171,7 @@ const UstadPage: FC = () => {
             {
               label: "Tanggal Lahir",
               value: isModal.data?.tanggal_lahir
-                ? formatDateID(new Date())
+                ? formatDateID(new Date(isModal.data?.tanggal_lahir))
                 : "-",
             },
             {

@@ -17,10 +17,10 @@ const Footer: FC<FooterProps> = ({ widthDevice }) => {
               widthDevice > 0 && widthDevice <= 760
                 ? 100
                 : widthDevice > 760 && widthDevice < 1024
-                ? 100
-                : widthDevice > 1024
-                ? 140
-                : 100
+                  ? 100
+                  : widthDevice > 1024
+                    ? 140
+                    : 100
             }
           />
           <div className="flex flex-col gap-2">
@@ -92,12 +92,12 @@ const Footer: FC<FooterProps> = ({ widthDevice }) => {
           <div className="flex flex-col gap-7 mb-4 lg:flex-1 lg:flex-row lg:justify-end">
             <PusatBantuan
               title={"Bantuan"}
-              link={["faq", "", "", ""]}
-              text={["FAQ", "Hubungi Kami", "+62 822-7821-9515"]}
+              link={["faq", "whatsapp", "whatsapp"]}
+              text={["FAQ", "Hubungi Kami", "085896890881"]}
             />
             <PusatBantuan
               title={"Layanan Kami"}
-              link={["", "", "", ""]}
+              link={["profile", "psb", "berita"]}
               text={[
                 "Profil Pesantren",
                 "Penerimaan Santri Baru",
@@ -106,7 +106,7 @@ const Footer: FC<FooterProps> = ({ widthDevice }) => {
             />
             <PusatBantuan
               title={"Informasi Penting"}
-              link={["", "", "", ""]}
+              link={["psb", "psb", "psb"]}
               text={["Jam Kerja", "Biaya Pendidikan", "Pendaftaran"]}
             />
           </div>

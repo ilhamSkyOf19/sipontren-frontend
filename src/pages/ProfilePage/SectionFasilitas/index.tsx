@@ -6,6 +6,7 @@ import SubJudulCenter from "../../../components/SubJudulCenter";
 import ScrollXNonDesktop from "../../../layouts/ScrollXNonDesktop";
 import CardFasilitas from "../../../components/CardFasilitas";
 import NoData from "../../../components/NoData";
+import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 // Props
 type Props = {
@@ -24,21 +25,52 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
 
   return (
     <div className="w-full min-h-[50vh] flex flex-col justify-start items-start pt-2 pb-8 gap-10 bg-transparent lg:py-20 lg:gap-20 lg:items-center">
-      {widthDevice < 1024 && (
-        <div className="w-full flex flex-row justify-start items-start px-4">
-          <SubJudulLeft title={"Fasilitas"} px={7} />
+      <ParallaxGoTop>
+        <div className="w-full flex flex-row justify-start items-start lg:hidden">
+          <SubJudulLeft title={"Fasilitas"} px={4} />
         </div>
-      )}
-      {widthDevice > 1024 && <SubJudulCenter title={"Fasilitas"} />}
-      {widthDevice < 1024 ? (
-        isLoading ? (
-          <div className="w-full flex flex-row justify-center items-center">
-            <span>loading</span>
+        {widthDevice > 1024 && <SubJudulCenter title={"Fasilitas"} />}
+        {widthDevice < 1024 ? (
+          isLoading ? (
+            <div className="w-full h-full flex justify-start items-start px-4 gap-4">
+              {/* loading skeleton */}
+              {Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="w-[70%] bg-gray-300 animate-pulse rounded-xl flex flex-col justify-between items-center overflow-hidden shrink-0 md:w-[70%] lg:w-xs h-54 lg:h-80 md:h-100"
+                />
+              ))}
+            </div>
+          ) : dataFasilitas?.success &&
+            dataFasilitas.data &&
+            dataFasilitas.data.data.length > 0 ? (
+            <ScrollXNonDesktop gap={6}>
+              {dataFasilitas.data.data.map((item, _index) => (
+                <CardFasilitas
+                  key={item.id}
+                  img={item.images}
+                  nama={item.fasilitas}
+                  deskripsi={item.keterangan}
+                />
+              ))}
+            </ScrollXNonDesktop>
+          ) : (
+            <NoData />
+          )
+        ) : isLoading ? (
+          <div className="w-full h-full flex justify-start items-start px-4 gap-4">
+            {/* loading skeleton */}
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div
+                key={index}
+                className="w-[70%] bg-gray-300 animate-pulse rounded-xl flex flex-col justify-between items-center overflow-hidden shrink-0 md:w-[70%] lg:w-xs h-54 lg:h-80 md:h-100"
+              />
+            ))}
           </div>
         ) : dataFasilitas?.success &&
           dataFasilitas.data &&
           dataFasilitas.data.data.length > 0 ? (
-          <ScrollXNonDesktop gap={6}>
+          <ScrollXNonDesktop>
             {dataFasilitas.data.data.map((item, _index) => (
               <CardFasilitas
                 key={item.id}
@@ -50,30 +82,11 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
           </ScrollXNonDesktop>
         ) : (
           <NoData />
-        )
-      ) : isLoading ? (
-        <div className="w-full flex flex-row justify-center items-center">
-          <span>loading</span>
-        </div>
-      ) : dataFasilitas?.success &&
-        dataFasilitas.data &&
-        dataFasilitas.data.data.length > 0 ? (
-        <ScrollXNonDesktop>
-          {dataFasilitas.data.data.map((item, _index) => (
-            <CardFasilitas
-              key={item.id}
-              img={item.images}
-              nama={item.fasilitas}
-              deskripsi={item.keterangan}
-            />
-          ))}
-        </ScrollXNonDesktop>
-      ) : (
-        <NoData />
-      )}
+        )}
 
-      {/* space */}
-      <div className="w-4 shrink-0 h-ful" />
+        {/* space */}
+        <div className="w-4 shrink-0 h-ful" />
+      </ParallaxGoTop>
     </div>
   );
 };

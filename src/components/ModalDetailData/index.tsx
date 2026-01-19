@@ -79,7 +79,7 @@ const ModalDetailData: FC<Props> = ({
   return (
     <div
       className={clsx(
-        "w-[90vw] flex flex-col justify-start items-center py-8 px-8 overflow-y-scroll overflow-hidden scrollbar-hidden relative lg:w-[40vw]",
+        "w-[90vw] flex flex-col justify-start items-center py-8 px-4 overflow-y-scroll overflow-hidden scrollbar-hidden relative lg:w-[40vw] lg:px-8",
         size === "sm" ? "h-[50]" : "h-[90vh]",
       )}
     >
@@ -172,11 +172,11 @@ type ComponentDataProps = {
 const ComponentData: FC<ComponentDataProps> = ({ label, value }) => {
   return (
     <div className="w-full flex flex-row justify-start items-start gap-2">
-      <div className="flex-1 flex flex-row justify-between items-start">
+      <div className="flex-2 flex flex-row justify-between items-start">
         <p className="text-sm lg:text-base font-medium capitalize">{label}</p>
         <p className="text-sm lg:text-base font-medium">:</p>
       </div>
-      <p className="flex-1 text-sm lg:text-base">{value}</p>
+      <p className="flex-3 lg:flex-2 text-sm lg:text-base">{value}</p>
     </div>
   );
 };

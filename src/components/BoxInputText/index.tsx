@@ -11,8 +11,10 @@ type Props = {
   errorMessage?: string;
   max: number;
   register: UseFormRegisterReturn;
+  numeric?: boolean;
 };
 const BoxInputText: FC<Props> = ({
+  numeric,
   label,
   name,
   placeholder,
@@ -27,12 +29,9 @@ const BoxInputText: FC<Props> = ({
   return (
     <div className="w-full flex flex-col justify-start items-start">
       {/* label */}
-      <label
-        htmlFor={name}
-        className="w-full text-base relative flex flex-row justify-between items-center"
-      >
+      <div className="w-full text-base relative flex flex-row justify-between items-center">
         <div className="flex-2 relative">
-          <span>{label}</span>
+          <label htmlFor={name}>{label}</label>
 
           <span className="absolute -top-1 ml-1 text-primary-red">
             {required && "*"}
@@ -43,7 +42,7 @@ const BoxInputText: FC<Props> = ({
         <span className="text-xs">
           {isValue.length}/{max}
         </span>
-      </label>
+      </div>
 
       <div
         className={clsx(
@@ -53,13 +52,34 @@ const BoxInputText: FC<Props> = ({
       >
         <input
           {...register}
-          type="text"
+          type={"text"}
           name={name}
           id={name}
-          onChange={(e) => setIsValue(e.target.value)}
+          pattern={numeric ? "[0-9]*" : undefined}
+          inputMode={numeric ? "numeric" : undefined}
           placeholder={placeholder}
           className="w-full h-full border-none outline-none text-base placeholder:text-sm"
           maxLength={max}
+          onChange={(e) => {
+            let value = e.target.value;
+
+            if (numeric) {
+              value = value.replace(/[^0-9]/g, "");
+
+              // cegah angka negatif
+              if (Number(value) < 0) {
+                value = "0";
+              }
+
+              e.target.value = value;
+            }
+
+            // set value
+            setIsValue(value);
+
+            // set register
+            register.onChange(e);
+          }}
         />
       </div>
 

@@ -1,23 +1,18 @@
 import type { FC } from "react";
 import ImageModel from "../../../components/ImageModel";
-
-// props
-type Props = {
-  widthDevice: number;
-};
-const SectionVisiMisi: FC<Props> = ({ widthDevice }) => {
+import ParallaxGoRight from "../../../fragments/ParallaxGoRight";
+import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
+const SectionVisiMisi: FC = () => {
   return (
     <div className="w-full min-h-screen bg-primary-blue flex flex-col justify-start items-center py-12 px-4 gap-12 lg:px-10 lg:pt-8 lg:pb-20 lg:justify-between">
       <p className="text-3xl font-semibold text-white relative before:absolute before:w-full before:h-0.75 before:bg-primary-yellow before:-bottom-2 before:left-0 md:text-4xl lg:hidden">
         Visi & Misi
       </p>
       <div className="w-full flex flex-col justify-center items-center gap-12 lg:flex-row-reverse lg:gap-20">
-        <div className="w-full flex flex-col justify-start item-start gap-12 lg:w-[50%] lg:gap-6">
-          {widthDevice > 1024 && (
-            <p className="text-lg font-semibold text-white relative before:absolute before:w-[20%] before:h-0.75 before:bg-primary-yellow before:-bottom-2 mb-4">
-              Visi & Misi
-            </p>
-          )}
+        <ParallaxGoLeft customClass="w-full flex flex-col justify-start item-start gap-12 lg:w-[50%] lg:gap-6">
+          <p className="text-lg font-semibold text-white relative before:absolute before:w-[20%] before:h-0.75 before:bg-primary-yellow before:-bottom-2 mb-4 hidden lg:flex">
+            Visi & Misi
+          </p>
           <div className="w-full flex flex-col justify-start items-end gap-4 lg:items-start">
             <p className="text-primary-blue py-2 px-14 bg-white text-xl font-semibold rounded-xl md:text-2xl lg:text-sm lg:px-8 lg:py-1 lg:rounded-lg">
               Visi
@@ -64,8 +59,11 @@ const SectionVisiMisi: FC<Props> = ({ widthDevice }) => {
               </li>
             </ol>
           </div>
-        </div>
-        <ImageModel bg={"primary-yellow"} />
+        </ParallaxGoLeft>
+
+        <ParallaxGoRight customClass="h-[40vh] w-full h-[40vh] flex flex-col justify-end items-center rounded-4xl overflow-hidden md:h-[65vh] lg:h-[70vh] lg:w-[50%]">
+          <ImageModel bg={"primary-yellow"} />
+        </ParallaxGoRight>
       </div>
     </div>
   );
