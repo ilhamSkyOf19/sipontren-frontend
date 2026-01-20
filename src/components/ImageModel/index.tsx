@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import thumbnailProfile from "../../assets/thumbnails/thumbnail_profile.png";
+import thumbnailProfile from "../../assets/thumbnails/thumbnail_profile.webp";
 
 // Props
 type Props = {

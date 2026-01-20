@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import thumbnailProfile from "../../../assets/thumbnails/thumbnail_profile.png";
+import thumbnailProfile from "../../../assets/thumbnails/thumbnail_profile.webp";
 import { memo, type FC } from "react";
 import IconArab from "../../../components/IconArab";
 import ParallaxGoTop from "../../../fragments/ParallaxGoTop";

@@ -14,9 +14,9 @@ import person5 from "../../assets/ekstrakulikuler/person-5.png";
 import person6 from "../../assets/ekstrakulikuler/tapak_suci.png";
 import personKokam from "../../assets/ekstrakulikuler/person-kokam.webp";
 import personPaskibra from "../../assets/ekstrakulikuler/person-paskibra.webp";
-import logo1 from "../../assets/icons/logo-1.png";
-import logo2 from "../../assets/icons/logo-2.png";
-import logo3 from "../../assets/icons/logo-3.png";
+import logo1 from "../../assets/icons/logo-1.webp";
+import logo2 from "../../assets/icons/logo-2.webp";
+import logo3 from "../../assets/icons/logo-3.webp";
 import { useMemo, type FC } from "react";
 import { memo } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
@@ -65,7 +65,7 @@ const CardEkstrakulikuler: FC<Props> = ({
       logo2: logo2,
       logo3: logo3,
     }),
-    []
+    [],
   );
 
   const window = useWindowSize().width;

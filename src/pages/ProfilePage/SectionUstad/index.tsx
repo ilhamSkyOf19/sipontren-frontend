@@ -25,7 +25,7 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
   });
 
   return (
-    <div className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-center py-12 gap-14">
+    <section className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-center py-12 gap-14">
       <ParallaxGoTop>
         <SubJudulCenter title="Profile Asatid/Ustadzah" />
         {widthDevice < 1024 ? (
@@ -80,7 +80,7 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
           </div>
         )}
       </ParallaxGoTop>
-    </div>
+    </section>
   );
 };
 

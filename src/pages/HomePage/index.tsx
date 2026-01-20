@@ -6,6 +6,7 @@ import SectionKegiatanSantri from "./SectionKegiatanSantri";
 import useWindowSize from "../../hooks/useWindowSize";
 import SectionBerita from "./SectionBerita";
 import SectionMaps from "./SectionMaps";
+import Seo from "../../components/Seo";
 
 const HomePage: FC = () => {
   //   window top
@@ -14,25 +15,57 @@ const HomePage: FC = () => {
   }, []);
 
   return (
-    <main className="flex flex-col justify-start items-center overflow-hidden">
-      {/* section one */}
-      <SectionBanner />
+    <>
+      <Seo
+        path="/"
+        title="Pondok Pesantren Al-Amin Seputih Banyak – Lampung Tengah"
+        description="Website resmi Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak, Lampung Tengah. Menyediakan informasi program pendidikan, kegiatan santri, pendaftaran, dan berita terkini."
+        keywords="pondok pesantren al-amin, pesantren seputih banyak, pesantren lampung tengah, kegiatan santri, pendaftaran santri"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          name: "Pondok Pesantren Muhammadiyah Al-Amin",
+          alternateName: "Ponpes Al-Amin Seputih Banyak",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Seputih Banyak",
+            addressRegion: "Lampung Tengah",
+            addressCountry: "ID",
+          },
+          description:
+            "Pondok Pesantren Muhammadiyah Al-Amin di Seputih Banyak Lampung Tengah menyediakan pendidikan Islam terpadu, program tahfidz, kegiatan ekstrakurikuler, dan layanan pendaftaran santri baru.",
+          makesOffer: [
+            {
+              "@type": "EducationalOccupationalProgram",
+              name: "Program Pendidikan dan Pembinaan Santri",
+              description:
+                "Program pendidikan formal, tahfidz, ekstrakurikuler, dan pembinaan karakter santri.",
+            },
+          ],
+        }}
+      />
 
-      {/* section two */}
-      <SectionLayananPendidikan />
+      {/* content */}
+      <main className="flex flex-col justify-start items-center overflow-hidden">
+        {/* section one */}
+        <SectionBanner />
 
-      {/* section three */}
-      <SectionTujuan />
+        {/* section two */}
+        <SectionLayananPendidikan />
 
-      {/* section four */}
-      <SectionKegiatanSantri width={useWindowSize().width} />
+        {/* section three */}
+        <SectionTujuan />
 
-      {/* section five */}
-      <SectionBerita width={useWindowSize().width} />
+        {/* section four */}
+        <SectionKegiatanSantri width={useWindowSize().width} />
 
-      {/* section six */}
-      <SectionMaps />
-    </main>
+        {/* section five */}
+        <SectionBerita width={useWindowSize().width} />
+
+        {/* section six */}
+        <SectionMaps />
+      </main>
+    </>
   );
 };
 

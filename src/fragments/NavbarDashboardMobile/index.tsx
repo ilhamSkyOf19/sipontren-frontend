@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import React, { useState, type FC } from "react";
 import useClickOutside from "../../hooks/useClickOutSide";
-import logo from "../../assets/icons/file_thumb.png";
+import logo from "../../assets/icons/file_thumb.webp";
 import { Link, useLocation } from "react-router-dom";
 
 // navigation

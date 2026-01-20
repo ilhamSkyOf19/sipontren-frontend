@@ -4,7 +4,7 @@ import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 const SectionMaps: FC = () => {
   return (
-    <div className="w-full h-auto flex flex-col justify-start items-center py-12 gap-12">
+    <section className="w-full h-auto flex flex-col justify-start items-center py-12 gap-12">
       {/* header */}
       <HeaderSection
         judul="Lokasi & Profile"
@@ -36,7 +36,7 @@ const SectionMaps: FC = () => {
           </div>
         </div>
       </ParallaxGoTop>
-    </div>
+    </section>
   );
 };
 

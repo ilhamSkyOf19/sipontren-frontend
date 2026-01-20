@@ -24,7 +24,7 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
   });
 
   return (
-    <div className="w-full min-h-[50vh] flex flex-col justify-start items-start pt-2 pb-8 gap-10 bg-transparent lg:py-20 lg:gap-20 lg:items-center">
+    <section className="w-full min-h-[50vh] flex flex-col justify-start items-start pt-2 pb-8 gap-10 bg-transparent lg:py-20 lg:gap-20 lg:items-center">
       <ParallaxGoTop>
         <div className="w-full flex flex-row justify-start items-start lg:hidden">
           <SubJudulLeft title={"Fasilitas"} px={4} />
@@ -87,7 +87,7 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
         {/* space */}
         <div className="w-4 shrink-0 h-ful" />
       </ParallaxGoTop>
-    </div>
+    </section>
   );
 };
 

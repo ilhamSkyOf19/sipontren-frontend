@@ -23,6 +23,7 @@ import clsx from "clsx";
 import HeaderDashboard from "../../components/HeaderDashboard";
 import ButtonBack from "../../components/ButtonBack";
 import closedIcon from "../../assets/icons/closed.webp";
+import Seo from "../../components/Seo";
 
 // list jenis sekolah
 const jenisSekolahList: string[] = ["SD", "SMP", "SMA"];
@@ -207,321 +208,350 @@ const FormulirPendaftaranPage: FC = () => {
 
   // render
   return (
-    <main
-      className={clsx(
-        "w-full flex flex-col justify-start items-center overflow-hidden",
-        !admin ? "h-full" : "pb-16",
-      )}
-    >
-      {!psbOpen ? (
-        <div className="w-full h-screen flex flex-col justify-center items-center px-2 lg:w-auto">
-          <div className="relative w-full flex flex-col justify-center items-center gap-4">
-            <h3 className="text-3xl text-secondary-blue font-semibold text-center lg:text-5xl">
-              Mohon Maaf
-            </h3>
-            <p className="text-base text-primary-blue text-center">
-              Pendaftaran Santri Baru telah{" "}
-              <span className="py-1 px-4 bg-secondary-blue rounded-sm text-white font-medium">
-                ditutup
-              </span>{" "}
-              , Silahkan hubungi kontak kami.
-            </p>
+    <>
+      <Seo
+        path="/formulir"
+        title="Formulir Pendaftaran Santri Ponpes Al-Amin Seputih Banyak"
+        description="Isi formulir pendaftaran santri baru Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak. Layanan pendaftaran online cepat dan aman, untuk calon santri."
+        keywords="formulir pendaftaran santri, psb ponpes al-amin, daftar santri seputih banyak"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          name: "Pondok Pesantren Muhammadiyah Al-Amin",
+          alternateName: "Ponpes Al-Amin Seputih Banyak",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Seputih Banyak",
+            addressRegion: "Lampung Tengah",
+            addressCountry: "ID",
+          },
+          hasCourse: [
+            {
+              "@type": "Course",
+              name: "Formulir Pendaftaran Santri Baru",
+              description:
+                "Formulir resmi pendaftaran santri baru di Pondok Pesantren Muhammadiyah Al-Amin, lengkap dan online.",
+            },
+          ],
+        }}
+      />
 
-            {/* img */}
-            <img
-              src={closedIcon}
-              alt="icon close"
-              className="w-24 absolute right-14 top-full lg:w-48 animate-fade-in"
-            />
+      <main
+        className={clsx(
+          "w-full flex flex-col justify-start items-center overflow-hidden",
+          !admin ? "h-full" : "pb-16",
+        )}
+      >
+        {psbOpen ? (
+          <div className="w-full h-screen flex flex-col justify-center items-center px-2 lg:w-auto">
+            <div className="relative w-full flex flex-col justify-center items-center gap-4">
+              <h3 className="text-3xl text-secondary-blue font-semibold text-center lg:text-5xl">
+                Mohon Maaf
+              </h3>
+              <p className="text-base text-primary-blue text-center">
+                Pendaftaran Santri Baru telah{" "}
+                <span className="py-1 px-4 bg-secondary-blue rounded-sm text-white font-medium">
+                  ditutup
+                </span>{" "}
+                , Silahkan hubungi kontak kami.
+              </p>
+
+              {/* img */}
+              <img
+                src={closedIcon}
+                alt="icon close"
+                className="w-24 absolute right-14 top-full lg:w-48 animate-fade-in"
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          {!admin && (
-            <HeaderPage
-              whiteText1={`Formulir`}
-              whiteText2="Pendaftaran Santri Baru"
-              YellowText="Pondok Pesantren Muhammadiyah Al-Amin"
-              deskripsi="Silakan lengkapi formulir pendaftaran dengan data yang valid dan sesuai identitas calon santri. Informasi yang Anda kirim akan digunakan untuk proses verifikasi dan penerimaan di Pondok Pesantren Muhammadiyah Al-Amin."
-            />
-          )}
-
-          <div
-            className={clsx(
-              "w-full flex flex-col justify-start items-start px-4  min-h-screen",
-              !admin && "py-12",
+        ) : (
+          <>
+            {!admin && (
+              <HeaderPage
+                whiteText1="Formulir Pendaftaran"
+                whiteText2="Ponpes Al-Amin"
+                YellowText="Seputih Banyak - Lampung Tengah"
+                deskripsi="Halaman resmi pengisian formulir pendaftaran santri baru Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak. Isi data lengkap dan submit online."
+              />
             )}
-          >
-            {/* header page for mobile*/}
-            <div className="w-full flex flex-row justify-start items-start lg:hidden">
-              {admin ? (
-                <HeaderDashboard
-                  title="Edit Data Calon Santri"
-                  subTitle="Silahkan ubah sesuai dengan identitas calon santri"
-                  tanggal={true}
-                />
-              ) : (
-                <SubJudulLeft title="Formulir Pendaftaran " />
+
+            <div
+              className={clsx(
+                "w-full flex flex-col justify-start items-start px-4  min-h-screen lg:py-16",
+                admin && "py-12",
               )}
-            </div>
-
-            {/* header page for desktop */}
-            <div className="w-full flex-row justify-start items-start hidden lg:flex lg:px-4">
-              <SubJudulCenter title="Formulir Pendaftaran " />
-            </div>
-
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col justify-start items-start mt-12 lg:grid lg:grid-cols-3 lg:gap-4 lg:px-4"
             >
-              {/* choose jenis sekolah */}
-              <BoxInputChoose<CreateStudentType | UpdateStudentType>
-                label="Jenis Sekolah"
-                chooseList={jenisSekolahList}
-                required
-                controller={fieldsController.jenisSekolah}
-                defaultValue={
-                  dataStudent?.success ? dataStudent?.data.jenis_sekolah : ""
-                }
-                placeholder="Pilih Jenis Sekolah"
-                hAuto={true}
-                scrollHide={true}
-              />
-
-              {/* nik */}
-              <BoxInputText
-                register={register("nik")}
-                label="NIK"
-                name="nik"
-                placeholder="Masukkan NIK ..."
-                required
-                errorMessage={errors.nik?.message}
-                max={16}
-                numeric={true}
-              />
-
-              {/* nisn */}
-              <BoxInputText
-                register={register("nisn")}
-                label="NISN"
-                name="nisn"
-                placeholder="Masukkan NISN ..."
-                required
-                errorMessage={errors.nisn?.message}
-                max={10}
-                numeric={true}
-              />
-
-              {/* nama lengkap */}
-              <BoxInputText
-                register={register("nama_lengkap")}
-                label="Nama Lengkap"
-                name="nama_lengkap"
-                placeholder="Masukkan Nama Lengkap ..."
-                required
-                errorMessage={errors.nama_lengkap?.message}
-                max={50}
-              />
-
-              {/* choose jenis kelamin */}
-              <BoxInputChoose<CreateStudentType | UpdateStudentType>
-                label="Jenis Kelamin"
-                chooseList={["laki_laki", "perempuan"]}
-                required
-                controller={fieldsController.jenisKelamin}
-                defaultValue={
-                  dataStudent?.success ? dataStudent?.data.jenis_kelamin : ""
-                }
-                placeholder="Pilih Jenis Kelamin"
-                hAuto={true}
-                scrollHide={true}
-              />
-
-              {/* usia */}
-              <BoxInputNumber
-                register={register("usia")}
-                label="Usia"
-                name="usia"
-                placeholder="Masukkan usia ..."
-                required
-                errorMessage={errors.usia?.message}
-                max={20}
-              />
-
-              {/* tempat lahir */}
-              <BoxInputText
-                register={register("tempat_lahir")}
-                label="Tempat Lahir"
-                name="tempat_lahir"
-                placeholder="Masukkan Tempat Lahir ..."
-                required
-                errorMessage={errors.tempat_lahir?.message}
-                max={100}
-              />
-
-              {/* tanggal lahir */}
-              <BoxInputDate<CreateUstadType | UpdateStudentType>
-                controller={fieldsController.tanggalLahir}
-                label="Tanggal Lahir"
-                required={true}
-                oldValue={
-                  dataStudent?.success
-                    ? new Date(dataStudent?.data?.tanggal_lahir)
-                    : undefined
-                }
-              />
-
-              {/* alamat */}
-              <BoxInputText
-                register={register("alamat")}
-                label="Alamat"
-                name="alamat"
-                placeholder="Masukkan Alamat ..."
-                required
-                errorMessage={errors.alamat?.message}
-                max={150}
-              />
-
-              {/* anak ke */}
-              <BoxInputNumber
-                register={register("anak_ke")}
-                label="Anak Ke"
-                name="anak_ke"
-                placeholder="Masukkan anak ke ..."
-                required
-                errorMessage={errors.anak_ke?.message}
-                max={20}
-              />
-
-              {/* jumlah saudara */}
-              <BoxInputNumber
-                register={register("jumlah_saudara")}
-                label="Jumlah Saudara"
-                name="jumlah_saudara"
-                placeholder="Masukkan jumlah saudara ..."
-                required
-                errorMessage={errors.jumlah_saudara?.message}
-                max={20}
-              />
-
-              {/* asal sekolah */}
-              <BoxInputText
-                register={register("asal_sekolah")}
-                label="Asal Sekolah"
-                name="asal_sekolah"
-                placeholder="Masukkan Asal Sekolah ..."
-                required
-                errorMessage={errors.asal_sekolah?.message}
-                max={150}
-              />
-
-              {/* alamat sekolah asal */}
-              <BoxInputText
-                register={register("alamat_sekolah_asal")}
-                label="Alamat Sekolah Asal"
-                name="alamat_sekolah_asal"
-                placeholder="Masukkan Alamat Sekolah Asal ..."
-                required
-                errorMessage={errors.alamat_sekolah_asal?.message}
-                max={150}
-              />
-
-              {/* nama lengkap ayah*/}
-              <BoxInputText
-                register={register("nama_lengkap_ayah")}
-                label="Nama Lengkap Ayah"
-                name="nama_lengkap_ayah"
-                placeholder="Masukkan Nama Lengkap Ayah ..."
-                required
-                errorMessage={errors.nama_lengkap_ayah?.message}
-                max={50}
-              />
-
-              {/* nama lengkap ibu*/}
-              <BoxInputText
-                register={register("nama_lengkap_ibu")}
-                label="Nama Lengkap Ibu"
-                name="nama_lengkap_ibu"
-                placeholder="Masukkan Nama Lengkap Ibu ..."
-                required
-                errorMessage={errors.nama_lengkap_ibu?.message}
-                max={50}
-              />
-
-              {/* nama lengkap wali*/}
-              <BoxInputText
-                register={register("nama_lengkap_wali")}
-                label="Nama Lengkap Wali (Optional)"
-                name="nama_lengkap_wali"
-                placeholder="Masukkan Nama Lengkap Wali ..."
-                errorMessage={errors.nama_lengkap_wali?.message}
-                max={50}
-              />
-
-              {/* nik */}
-              <BoxInputText
-                register={register("no_telepon")}
-                label="No Telepon / Whatsapp"
-                name="no_telepon"
-                placeholder="Masukkan No Telepon ..."
-                required
-                errorMessage={errors.no_telepon?.message}
-                max={14}
-                numeric={true}
-              />
-
-              {/* space */}
-              <div className="w-full hidden lg:flex" />
-
-              {imageFields.map((item) => (
-                <BoxInputGambar<CreateStudentType | UpdateStudentType>
-                  key={item.key}
-                  label={item.label}
-                  controller={
-                    fieldsController[
-                      item.key === "foto_formal"
-                        ? "fotoFormal"
-                        : item.key === "fc_kis_kip"
-                          ? "fcKis"
-                          : item.key === "fc_akta_kelahiran"
-                            ? "fcAkta"
-                            : item.key === "fc_ktp"
-                              ? "fcKtp"
-                              : "fotoKK"
-                    ]
-                  }
-                  required={false}
-                  formulirPendaftaran={true}
-                  clearError={() => clearErrors(item.key)}
-                />
-              ))}
-
-              {/* space */}
-              <div className="w-full hidden lg:flex" />
-
-              {/* button submit */}
-              <div
-                className={clsx(
-                  "w-full mt-6 flex flex-row justify-start items-center lg:col-span-3",
-                  admin && "gap-4",
+              {/* header page for mobile*/}
+              <div className="w-full flex flex-row justify-start items-start lg:hidden">
+                {admin ? (
+                  <HeaderDashboard
+                    title="Edit Data Calon Santri"
+                    subTitle="Silahkan ubah sesuai dengan identitas calon santri"
+                    tanggal={true}
+                  />
+                ) : (
+                  <SubJudulLeft title="Formulir Pendaftaran " />
                 )}
-              >
-                {/* button back */}
-                {admin && <ButtonBack link="/dashboard/calon-santri" />}
-
-                {/* space */}
-                <div className="w-full hidden lg:flex" />
-
-                <ButtonSubmit label="Submit" loading={isPending} />
-
-                {/* space */}
-                <div className="w-full hidden lg:flex" />
               </div>
-            </form>
-          </div>
-        </>
-      )}
-    </main>
+
+              {/* header page for desktop */}
+              <div className="w-full flex-row justify-start items-start hidden lg:flex lg:px-4">
+                <SubJudulCenter title="Formulir Pendaftaran " />
+              </div>
+
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="w-full flex flex-col justify-start items-start mt-12 lg:grid lg:grid-cols-3 lg:gap-4 lg:px-4"
+              >
+                {/* choose jenis sekolah */}
+                <BoxInputChoose<CreateStudentType | UpdateStudentType>
+                  label="Jenis Sekolah"
+                  chooseList={jenisSekolahList}
+                  required
+                  controller={fieldsController.jenisSekolah}
+                  defaultValue={
+                    dataStudent?.success ? dataStudent?.data.jenis_sekolah : ""
+                  }
+                  placeholder="Pilih Jenis Sekolah"
+                  hAuto={true}
+                  scrollHide={true}
+                />
+
+                {/* nik */}
+                <BoxInputText
+                  register={register("nik")}
+                  label="NIK"
+                  name="nik"
+                  placeholder="Masukkan NIK ..."
+                  required
+                  errorMessage={errors.nik?.message}
+                  max={16}
+                  numeric={true}
+                />
+
+                {/* nisn */}
+                <BoxInputText
+                  register={register("nisn")}
+                  label="NISN"
+                  name="nisn"
+                  placeholder="Masukkan NISN ..."
+                  required
+                  errorMessage={errors.nisn?.message}
+                  max={10}
+                  numeric={true}
+                />
+
+                {/* nama lengkap */}
+                <BoxInputText
+                  register={register("nama_lengkap")}
+                  label="Nama Lengkap"
+                  name="nama_lengkap"
+                  placeholder="Masukkan Nama Lengkap ..."
+                  required
+                  errorMessage={errors.nama_lengkap?.message}
+                  max={50}
+                />
+
+                {/* choose jenis kelamin */}
+                <BoxInputChoose<CreateStudentType | UpdateStudentType>
+                  label="Jenis Kelamin"
+                  chooseList={["laki_laki", "perempuan"]}
+                  required
+                  controller={fieldsController.jenisKelamin}
+                  defaultValue={
+                    dataStudent?.success ? dataStudent?.data.jenis_kelamin : ""
+                  }
+                  placeholder="Pilih Jenis Kelamin"
+                  hAuto={true}
+                  scrollHide={true}
+                />
+
+                {/* usia */}
+                <BoxInputNumber
+                  register={register("usia")}
+                  label="Usia"
+                  name="usia"
+                  placeholder="Masukkan usia ..."
+                  required
+                  errorMessage={errors.usia?.message}
+                  max={20}
+                />
+
+                {/* tempat lahir */}
+                <BoxInputText
+                  register={register("tempat_lahir")}
+                  label="Tempat Lahir"
+                  name="tempat_lahir"
+                  placeholder="Masukkan Tempat Lahir ..."
+                  required
+                  errorMessage={errors.tempat_lahir?.message}
+                  max={100}
+                />
+
+                {/* tanggal lahir */}
+                <BoxInputDate<CreateUstadType | UpdateStudentType>
+                  controller={fieldsController.tanggalLahir}
+                  label="Tanggal Lahir"
+                  required={true}
+                  oldValue={
+                    dataStudent?.success
+                      ? new Date(dataStudent?.data?.tanggal_lahir)
+                      : undefined
+                  }
+                />
+
+                {/* alamat */}
+                <BoxInputText
+                  register={register("alamat")}
+                  label="Alamat"
+                  name="alamat"
+                  placeholder="Masukkan Alamat ..."
+                  required
+                  errorMessage={errors.alamat?.message}
+                  max={150}
+                />
+
+                {/* anak ke */}
+                <BoxInputNumber
+                  register={register("anak_ke")}
+                  label="Anak Ke"
+                  name="anak_ke"
+                  placeholder="Masukkan anak ke ..."
+                  required
+                  errorMessage={errors.anak_ke?.message}
+                  max={20}
+                />
+
+                {/* jumlah saudara */}
+                <BoxInputNumber
+                  register={register("jumlah_saudara")}
+                  label="Jumlah Saudara"
+                  name="jumlah_saudara"
+                  placeholder="Masukkan jumlah saudara ..."
+                  required
+                  errorMessage={errors.jumlah_saudara?.message}
+                  max={20}
+                />
+
+                {/* asal sekolah */}
+                <BoxInputText
+                  register={register("asal_sekolah")}
+                  label="Asal Sekolah"
+                  name="asal_sekolah"
+                  placeholder="Masukkan Asal Sekolah ..."
+                  required
+                  errorMessage={errors.asal_sekolah?.message}
+                  max={150}
+                />
+
+                {/* alamat sekolah asal */}
+                <BoxInputText
+                  register={register("alamat_sekolah_asal")}
+                  label="Alamat Sekolah Asal"
+                  name="alamat_sekolah_asal"
+                  placeholder="Masukkan Alamat Sekolah Asal ..."
+                  required
+                  errorMessage={errors.alamat_sekolah_asal?.message}
+                  max={150}
+                />
+
+                {/* nama lengkap ayah*/}
+                <BoxInputText
+                  register={register("nama_lengkap_ayah")}
+                  label="Nama Lengkap Ayah"
+                  name="nama_lengkap_ayah"
+                  placeholder="Masukkan Nama Lengkap Ayah ..."
+                  required
+                  errorMessage={errors.nama_lengkap_ayah?.message}
+                  max={50}
+                />
+
+                {/* nama lengkap ibu*/}
+                <BoxInputText
+                  register={register("nama_lengkap_ibu")}
+                  label="Nama Lengkap Ibu"
+                  name="nama_lengkap_ibu"
+                  placeholder="Masukkan Nama Lengkap Ibu ..."
+                  required
+                  errorMessage={errors.nama_lengkap_ibu?.message}
+                  max={50}
+                />
+
+                {/* nama lengkap wali*/}
+                <BoxInputText
+                  register={register("nama_lengkap_wali")}
+                  label="Nama Lengkap Wali (Optional)"
+                  name="nama_lengkap_wali"
+                  placeholder="Masukkan Nama Lengkap Wali ..."
+                  errorMessage={errors.nama_lengkap_wali?.message}
+                  max={50}
+                />
+
+                {/* nik */}
+                <BoxInputText
+                  register={register("no_telepon")}
+                  label="No Telepon / Whatsapp"
+                  name="no_telepon"
+                  placeholder="Masukkan No Telepon ..."
+                  required
+                  errorMessage={errors.no_telepon?.message}
+                  max={14}
+                  numeric={true}
+                />
+
+                {/* space */}
+                <div className="w-full hidden lg:flex" />
+
+                {imageFields.map((item) => (
+                  <BoxInputGambar<CreateStudentType | UpdateStudentType>
+                    key={item.key}
+                    label={item.label}
+                    controller={
+                      fieldsController[
+                        item.key === "foto_formal"
+                          ? "fotoFormal"
+                          : item.key === "fc_kis_kip"
+                            ? "fcKis"
+                            : item.key === "fc_akta_kelahiran"
+                              ? "fcAkta"
+                              : item.key === "fc_ktp"
+                                ? "fcKtp"
+                                : "fotoKK"
+                      ]
+                    }
+                    required={false}
+                    formulirPendaftaran={true}
+                    clearError={() => clearErrors(item.key)}
+                  />
+                ))}
+
+                {/* space */}
+                <div className="w-full hidden lg:flex" />
+
+                {/* button submit */}
+                <div
+                  className={clsx(
+                    "w-full mt-6 flex flex-row justify-start items-center lg:col-span-3",
+                    admin && "gap-4",
+                  )}
+                >
+                  {/* button back */}
+                  {admin && <ButtonBack link="/dashboard/calon-santri" />}
+
+                  {/* space */}
+                  <div className="w-full hidden lg:flex" />
+
+                  <ButtonSubmit label="Submit" loading={isPending} />
+
+                  {/* space */}
+                  <div className="w-full hidden lg:flex" />
+                </div>
+              </form>
+            </div>
+          </>
+        )}
+      </main>
+    </>
   );
 };
 

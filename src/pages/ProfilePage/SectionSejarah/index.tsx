@@ -4,7 +4,7 @@ import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 
 const SectionSejarah = () => {
   return (
-    <div className="w-full min-h-[40vh] flex flex-col justify-start items-start py-8 px-4 gap-8 md:min-h-[30vh] lg:min-h-[60vh] lg:py-20 overflow-hidden">
+    <section className="w-full min-h-[40vh] flex flex-col justify-start items-start py-8 px-4 gap-8 md:min-h-[30vh] lg:min-h-[60vh] lg:py-20 overflow-hidden">
       {/* title */}
       <SubJudulLeft title={"Sejarah"} />
 
@@ -57,7 +57,7 @@ const SectionSejarah = () => {
           </ParallaxGoTop>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

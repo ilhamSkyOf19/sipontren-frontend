@@ -8,6 +8,7 @@ import SectionFasilitas from "./SectionFasilitas";
 import SectionPrestasi from "./SectionPrestasi";
 import SectionUstad from "./SectionUstad";
 import SectionAlumni from "./SectionAlumni";
+import Seo from "../../components/Seo";
 
 const ProfilePage: FC = () => {
   // Window Size
@@ -19,21 +20,32 @@ const ProfilePage: FC = () => {
   }, []);
 
   return (
-    <main className="w-full h-full flex flex-col justify-start items-center overflow-hidden">
-      <HeaderPage
-        whiteText1={`Pondok Pesantren`}
-        whiteText2="Muhammadiyah Al-Amin"
-        YellowText="Seputih Banyak - Lampung Tengah"
-        deskripsi="Pesantren ini berdiri sebagai salah satu upaya Muhammadiyah untuk mencetak generasi muda yang berakhlak mulia, memiliki wawasan keislaman yang mendalam, serta mampu berkontribusi dalam pembangunan masyarakat."
+    <>
+      {/* seo */}
+      <Seo
+        path="/profile"
+        title="Profil Pondok Pesantren Al-Amin Seputih Banyak – Lampung Tengah"
+        description="Profil Pondok Pesantren Muhammadiyah Al-Amin di Seputih Banyak Lampung Tengah. Program tahfidz, pendidikan Islam terpadu, dan pembinaan karakter santri."
+        keywords="profil ponpes al amin, pesantren seputih banyak, pesantren lampung tengah"
       />
-      <SectionSejarah />
-      <SectionVisiMisi />
-      <SectionProgramUnggulan />
-      <SectionFasilitas widthDevice={widthDevice} />
-      <SectionPrestasi />
-      <SectionUstad widthDevice={widthDevice} />
-      <SectionAlumni widthDevice={widthDevice} />
-    </main>
+
+      {/* content */}
+      <main className="w-full h-full flex flex-col justify-start items-center overflow-hidden">
+        <HeaderPage
+          whiteText1={`Pondok Pesantren`}
+          whiteText2="Muhammadiyah Al-Amin"
+          YellowText="Seputih Banyak - Lampung Tengah"
+          deskripsi="Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak adalah lembaga pendidikan Islam di Lampung Tengah yang memadukan kurikulum pesantren, tahfidz Al-Qur’an, dan pendidikan karakter. Menjadi pilihan utama masyarakat Seputih Banyak dan sekitarnya untuk membentuk santri berakhlak, berilmu, serta siap melanjutkan ke jenjang pendidikan tinggi."
+        />
+        <SectionSejarah />
+        <SectionVisiMisi />
+        <SectionProgramUnggulan />
+        <SectionFasilitas widthDevice={widthDevice} />
+        <SectionPrestasi />
+        <SectionUstad widthDevice={widthDevice} />
+        <SectionAlumni widthDevice={widthDevice} />
+      </main>
+    </>
   );
 };
 

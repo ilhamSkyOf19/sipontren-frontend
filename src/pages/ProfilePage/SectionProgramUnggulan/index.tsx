@@ -1,12 +1,12 @@
 import type { FC } from "react";
-import thumbnailProfile from "../../../assets/thumbnails/thumbnail_profile.png";
+import thumbnailProfile from "../../../assets/thumbnails/thumbnail_profile.webp";
 import SubJudulLeft from "../../../components/SubJudulLeft";
 import ParallaxGoRight from "../../../fragments/ParallaxGoRight";
 import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
 
 const SectionProgramUnggulan: FC = () => {
   return (
-    <div className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-start py-12 px-4 lg:px-12 gap-10 lg:py-0 lg:h-[65vh]">
+    <section className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-start py-12 px-4 lg:px-12 gap-10 lg:py-0 lg:h-[65vh]">
       <div className="w-full bg-transparent flex flex-row justify-start items-start lg:justify-between lg:items-center lg:h-full">
         <ParallaxGoRight customClass="w-full flex flex-col justify-start items-start gap-8 lg:w-[50%]">
           <SubJudulLeft title={"Program Unggulan"} />
@@ -64,7 +64,7 @@ const SectionProgramUnggulan: FC = () => {
           </div>
         </ParallaxGoLeft>
       </div>
-    </div>
+    </section>
   );
 };
 

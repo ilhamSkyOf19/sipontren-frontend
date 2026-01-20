@@ -26,7 +26,7 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
   });
 
   return (
-    <div className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-center py-12 gap-14">
+    <section className="w-full min-h-[40vh] bg-transparent flex flex-col justify-start items-center py-12 gap-14">
       <ParallaxGoTop>
         <SubJudulCenter title="Apa Kata Lulusan" />
         {widthDevice < 1024 ? (
@@ -79,7 +79,7 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
           <NoData />
         )}
       </ParallaxGoTop>
-    </div>
+    </section>
   );
 };
 

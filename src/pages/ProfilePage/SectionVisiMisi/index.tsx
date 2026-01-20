@@ -4,7 +4,7 @@ import ParallaxGoRight from "../../../fragments/ParallaxGoRight";
 import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
 const SectionVisiMisi: FC = () => {
   return (
-    <div className="w-full min-h-screen bg-primary-blue flex flex-col justify-start items-center py-12 px-4 gap-12 lg:px-10 lg:pt-8 lg:pb-20 lg:justify-between">
+    <section className="w-full min-h-screen bg-primary-blue flex flex-col justify-start items-center py-12 px-4 gap-12 lg:px-10 lg:pt-8 lg:pb-20 lg:justify-between">
       <p className="text-3xl font-semibold text-white relative before:absolute before:w-full before:h-0.75 before:bg-primary-yellow before:-bottom-2 before:left-0 md:text-4xl lg:hidden">
         Visi & Misi
       </p>
@@ -65,7 +65,7 @@ const SectionVisiMisi: FC = () => {
           <ImageModel bg={"primary-yellow"} />
         </ParallaxGoRight>
       </div>
-    </div>
+    </section>
   );
 };
 
