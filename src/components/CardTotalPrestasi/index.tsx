@@ -16,7 +16,7 @@ const CardTotalPrestasi: FC<Props> = ({ jumlah = 0, tingkat }) => {
   return (
     <div
       ref={ref}
-      className="w-[40%] h-[29vh] flex flex-col justify-center items-center shrink-0 gap-2 lg:flex-1 lg:h-[42vh]"
+      className="w-[40%] h-[29vh] flex flex-col justify-center items-center shrink-0 gap-1 lg:flex-1 lg:h-[42vh]"
     >
       <div
         className="w-full h-[22vh] flex justify-center items-center lg:w-[130%] lg:h-full"
@@ -39,9 +39,9 @@ const CardTotalPrestasi: FC<Props> = ({ jumlah = 0, tingkat }) => {
       {/* button view */}
       <Link
         to="/profile"
-        className="py-1.5 px-8 bg-secondary-blue hover:bg-primary-blue transition-all duration-200 ease-in-out rounded-lg text-white font-medium text-sm lg:py-2 lg:text-base"
+        className="py-1.5 px-8 transition-all duration-200 ease-in-out rounded-lg text-secondary-blue hover:underline font-medium text-sm lg:text-sm -mt-2"
       >
-        Lihat
+        selengkapnya
       </Link>
     </div>
   );

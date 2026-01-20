@@ -11,7 +11,7 @@ const SectionSejarah = () => {
       {/* content */}
       <div className="w-full flex flex-col justify-start items-start lg:flex-row">
         {/* text */}
-        <p className="text-base font-medium flex-2 lg:text-lg leading-8">
+        <p className="text-sm font-medium flex-2 lg:text-lg leading-8">
           Pondok Pesantren Muhammadiyah (
           <span className="bg-primary-blue text-white px-1 rounded font-medium">
             PontrenMu

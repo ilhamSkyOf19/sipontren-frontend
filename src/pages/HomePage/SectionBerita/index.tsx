@@ -51,7 +51,7 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
               type="button"
               onClick={() => setFilter(item)}
               className={clsx(
-                "text-sm font-semibold capitalize py-2.5 px-5 rounded-lg",
+                "text-xs font-semibold capitalize py-2.5 px-5 rounded-lg",
                 item === filter
                   ? "bg-secondary-blue text-white"
                   : "bg-white text-secondary-blue shadow-[0_0px_4px_rgba(0,0,0,0.25)] hover:bg-black/5 transition-all ease-in-out duration-200",

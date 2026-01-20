@@ -11,16 +11,17 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/jpg"];
 
 export class AlumniValidation {
+  private static onlyStringSchema = (msg: string, max: number = 50) =>
+    z
+      .string(`${msg} harus diisi`)
+      .trim()
+      .min(1, `${msg} harus diisi`)
+      .max(max, `${msg} Maksimal ${max} karakter`)
+      .regex(/^[a-zA-Z\s'.-]+$/, `${msg} hanya boleh berisi huruf`);
+
   static readonly CREATE = z
     .object({
-      name: z
-        .string()
-        .trim()
-        .min(3, { message: "Nama minimal 3 karakter" })
-        .max(50, { message: "Nama maksimal 50 karakter" })
-        .regex(/^[a-zA-Z\s'.-]+$/, {
-          message: "Nama hanya boleh berisi huruf dan tanda umum ( ' . - )",
-        }),
+      name: this.onlyStringSchema("Nama", 50),
 
       angkatan: z
         .string("Angkatan harus diisi")

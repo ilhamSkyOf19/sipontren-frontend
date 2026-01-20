@@ -22,8 +22,20 @@ import PamfletPage from "../pages/PamfletPage";
 import InputPamfletPage from "../pages/InputPamfletPage";
 import FormulirPendaftaranPage from "../pages/FormulirPendaftaranPage";
 import SuccessPage from "../pages/SuccessPage";
+import LoginPage from "../pages/LoginPage";
+import { AuthService } from "../services/auth.service";
+import DashboardPage from "../pages/DashboardPage";
+import ErrorNetwork from "../pages/ErrorNetworkPage";
 
 const route = createBrowserRouter([
+  {
+    path: "/error-network",
+    element: <ErrorNetwork />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element: <LayoutUser />,
@@ -64,11 +76,14 @@ const route = createBrowserRouter([
   },
   {
     path: "/dashboard",
+    // loader: async () => {
+    //   return await AuthService.cekAuth();
+    // },
     element: <LayoutDashboard />,
     children: [
       {
         index: true,
-        element: <p>dashboard</p>,
+        element: <DashboardPage />,
       },
 
       // calon santri

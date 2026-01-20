@@ -277,7 +277,7 @@ const FormulirPendaftaranPage: FC = () => {
 
             <div
               className={clsx(
-                "w-full flex flex-col justify-start items-start px-4  min-h-screen lg:py-16",
+                "w-full flex flex-col justify-start items-start px-4 py-14 min-h-screen lg:py-16",
                 admin && "py-12",
               )}
             >

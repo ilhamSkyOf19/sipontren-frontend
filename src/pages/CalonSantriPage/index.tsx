@@ -15,12 +15,13 @@ import { useSearchParams } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { handleActionDelete } from "../../utils/sweetalert/delete";
 import NoData from "../../components/NoData";
+import Swal from "sweetalert2";
 
 const CalonSantriPage: FC = () => {
   // query client
   const queryClient = useQueryClient();
 
-  // search
+  // search params
   const [searchParams, setSearchParams] = useSearchParams();
 
   // state jenis kelamin
@@ -116,6 +117,42 @@ const CalonSantriPage: FC = () => {
     });
   };
 
+  // handle download
+  const handleDownloadFiles = async () => {
+    try {
+      if (!isModal.data) return;
+
+      await StudentService.downloadFile(
+        [
+          isModal.data?.fc_akta_kelahiran,
+          isModal.data?.fc_kis_kip,
+          isModal.data?.fc_ktp,
+          isModal.data?.foto_formal,
+          isModal.data?.foto_kk,
+          "file2.pdf",
+        ],
+        `dokumen-${isModal.data?.nama_lengkap}`,
+      );
+
+      // notification
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "File berhasil diunduh",
+        showConfirmButton: false,
+        timer: 1800,
+        timerProgressBar: true,
+        customClass: {
+          container: "swal-z",
+        },
+        padding: "7px 12px",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <main className="w-full h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4">
       {/* header */}
@@ -194,6 +231,8 @@ const CalonSantriPage: FC = () => {
       {/* modal */}
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
+          handleDownload={() => handleDownloadFiles()}
+          download={true}
           linkUpdate={`/dashboard/calon-santri/edit/${isModal.data?.id || 0}`}
           handleDelete={() => handleDelete(isModal.data?.id || 0)}
           data={[

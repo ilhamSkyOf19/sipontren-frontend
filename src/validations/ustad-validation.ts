@@ -9,13 +9,18 @@ const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/jpg"];
 
 export class UstadValidation {
   // ================= CREATE =================
+
+  private static onlyStringSchema = (msg: string, max: number = 50) =>
+    z
+      .string(`${msg} harus diisi`)
+      .trim()
+      .min(1, `${msg} harus diisi`)
+      .max(max, `${msg} Maksimal ${max} karakter`)
+      .regex(/^[a-zA-Z\s'.-]+$/, `${msg} hanya boleh berisi huruf`);
+
   static readonly CREATE = z
     .object({
-      name: z
-        .string("nama harus diisi")
-        .trim()
-        .min(3, "nama minimal 3 karakter")
-        .max(50, "nama maksimal 50 karakter"),
+      name: this.onlyStringSchema("Nama", 50),
 
       jenis_kelamin: z.enum(
         ["laki_laki", "perempuan"],
@@ -67,12 +72,7 @@ export class UstadValidation {
   // ================= UPDATE =================
   static readonly UPDATE = z
     .object({
-      name: z
-        .string()
-        .trim()
-        .min(3, "nama minimal 3 karakter")
-        .max(50, "nama maksimal 50 karakter")
-        .optional(),
+      name: this.onlyStringSchema("Nama", 50).optional(),
 
       jenis_kelamin: z
         .enum(["laki_laki", "perempuan"], "jenis kelamin harus diisi")

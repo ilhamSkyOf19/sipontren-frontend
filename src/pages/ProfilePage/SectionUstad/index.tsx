@@ -30,7 +30,7 @@ const SectionUstad: FC<Props> = ({ widthDevice }) => {
         <SubJudulCenter title="Profile Asatid/Ustadzah" />
         {widthDevice < 1024 ? (
           isLoading ? (
-            <div className="w-full h-full flex flex-row justify-start items-center px-4 gap-4">
+            <div className="w-full h-full flex flex-row justify-start items-center px-4 gap-4 mt-12">
               {Array.from({ length: 2 }).map((_, index) => (
                 <div
                   key={index}

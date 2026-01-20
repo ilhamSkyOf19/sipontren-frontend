@@ -43,8 +43,21 @@ export type UpdateStudentType = Partial<
 >;
 
 // Response type
-export type ResponseStudentType = Omit<IStudent, "tanggal_lahir"> & {
+export type ResponseStudentType = Omit<
+  IStudent,
+  | "tanggal_lahir"
+  | "foto_formal"
+  | "fc_akta_kelahiran"
+  | "foto_kk"
+  | "fc_ktp"
+  | "fc_kis_kip"
+> & {
   tanggal_lahir: Date;
+  foto_formal: string;
+  fc_akta_kelahiran: string;
+  foto_kk: string;
+  fc_ktp: string;
+  fc_kis_kip: string;
 };
 
 export type ResponseStudentWithMetaType = {

@@ -1,15 +1,12 @@
 import clsx from "clsx";
-import { Calendar, ChevronDown, Search, UsersRound } from "lucide-react";
-import { useRef, useState, type FC, type RefObject } from "react";
-import {
-  formatDateID,
-  formatDateNumber,
-  getTodayLocal,
-  isValidDate,
-} from "../../utils/utils";
+import { Calendar, ChevronDown, Search } from "lucide-react";
+import { useRef, useState, type FC } from "react";
+import { formatDateID, getTodayLocal, isValidDate } from "../../utils/utils";
 import { useSearchParams } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutSide";
 import ButtonAddText from "../ButtonAddText";
+import FilterJenisKelamin from "../FilterJenisKelamin";
+import BoxInputDateFilter from "../BoxInputDateFilter";
 
 // time
 
@@ -141,88 +138,18 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
         {/* filter jenis kelamin */}
         <div className="relative h-full">
           {handleFilterJenisKelamin && (
-            <>
-              <button
-                ref={refButtonJenisKelamin}
-                onClick={() =>
-                  setIsModalJenisKelamin((prev) => ({
-                    ...prev,
-                    active: !prev.active,
-                  }))
-                }
-                type="button"
-                className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
-              >
-                <UsersRound size={24} />
-                <span className="text-sm font-medium text-left hidden lg:block">
-                  {isModalJenisKelamin.jenisKelamin
-                    ? isModalJenisKelamin.jenisKelamin === "laki_laki"
-                      ? "Laki-laki"
-                      : "Perempuan"
-                    : "Jenis Kelamin"}
-                </span>
-
-                <ChevronDown
-                  size={24}
-                  className={clsx(
-                    "transition-transform duration-200 ease-in-out",
-                    isModalJenisKelamin.active ? "-rotate-180" : "rotate-0",
-                  )}
-                />
-              </button>
-
-              {/* modal jenis kelamin */}
-              <div
-                ref={refFilterJenisKelamin}
-                className={clsx(
-                  " w-[40vw] bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-40",
-                  isModalJenisKelamin.active
-                    ? "max-h-43"
-                    : "max-h-0 shadow-none",
-                )}
-              >
-                {/* choose laki laki */}
-                <button
-                  type="button"
-                  onClick={() => handleJenisKelamin("laki_laki")}
-                  className={clsx(
-                    "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
-                    isModalJenisKelamin.jenisKelamin === "laki_laki" &&
-                      "bg-primary-black/10",
-                  )}
-                >
-                  <span className="text-sm font-medium w-full text-center">
-                    Laki-laki
-                  </span>
-                </button>
-
-                {/* choose perempuan */}
-                <button
-                  type="button"
-                  onClick={() => handleJenisKelamin("perempuan")}
-                  className={clsx(
-                    "w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out",
-                    isModalJenisKelamin.jenisKelamin === "perempuan" &&
-                      "bg-primary-black/10",
-                  )}
-                >
-                  <span className="text-sm font-medium w-full text-center">
-                    Perempuan
-                  </span>
-                </button>
-
-                {/* choose reset */}
-                <button
-                  type="button"
-                  onClick={() => handleJenisKelamin(undefined)}
-                  className="w-full flex flex-row justify-start items-center gap-2 px-4 py-3 hover:bg-primary-black/10 transition-all duration-200 ease-in-out"
-                >
-                  <span className="text-sm font-medium w-full text-center">
-                    Reset
-                  </span>
-                </button>
-              </div>
-            </>
+            <FilterJenisKelamin
+              handleButtonJenisKelamin={() =>
+                setIsModalJenisKelamin((prev) => ({
+                  ...prev,
+                  active: !prev.active,
+                }))
+              }
+              refButtonJenisKelamin={refButtonJenisKelamin}
+              refModalJenisKelamin={refFilterJenisKelamin}
+              isModalJenisKelamin={isModalJenisKelamin}
+              handleJenisKelamin={handleJenisKelamin}
+            />
           )}
         </div>
 
@@ -291,14 +218,14 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                   {/* date */}
                   <div className="w-full flex flex-col gap-4 md:flex-row justify-start items-center md:gap-1">
                     {/* date from */}
-                    <BoxInputDate
+                    <BoxInputDateFilter
                       type="from"
                       refInput={refInputDateFrom}
                       handleDate={handleSetDate}
                       label={from ?? ""}
                       to={to ?? ""}
                     />
-                    <BoxInputDate
+                    <BoxInputDateFilter
                       type="to"
                       refInput={refInputDateTo}
                       handleDate={handleSetDate}
@@ -330,63 +257,6 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
         </div>
       </div>
     </div>
-  );
-};
-
-// box input date
-type BoxInputDateProps = {
-  type: "from" | "to";
-  refInput: RefObject<HTMLInputElement | null>;
-  handleDate: (type: "from" | "to", date: string) => void;
-  label: string;
-  to?: string;
-  from?: string;
-};
-const BoxInputDate: FC<BoxInputDateProps> = ({
-  handleDate,
-  label,
-  refInput,
-  type,
-  to,
-  from,
-}) => {
-  return (
-    <button
-      type="button"
-      onClick={() => refInput.current?.showPicker()}
-      className="w-full flex flex-col justify-start items-start gap-1"
-    >
-      <span className="flex-1 font-medium text-xs capitalize">
-        {type === "from" ? "dari" : "sampai"}
-      </span>
-      {/* input date */}
-      <div className="w-full h-8 border border-primary-blue flex items-center px-2 gap-2 py-5 rounded-sm relative">
-        <input
-          ref={refInput}
-          type="date"
-          className="absolute opacity-0"
-          onChange={(e) => {
-            const value = e.target.value;
-            if (!value) return;
-            handleDate(type, getTodayLocal(new Date(value)));
-          }}
-          max={to ? to : getTodayLocal()}
-          min={from && from}
-        />
-
-        {/* icon */}
-        <div className="z-20">
-          <Calendar size={18} />
-        </div>
-
-        {/* label */}
-        <div className="flex-1 h-8 z-20 flex flex-row justify-start items-center">
-          <span className="text-xs font-medium z-20">
-            {formatDateNumber(label ? new Date(label) : new Date())}
-          </span>
-        </div>
-      </div>
-    </button>
   );
 };
 

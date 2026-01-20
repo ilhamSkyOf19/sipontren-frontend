@@ -11,6 +11,7 @@ type Props = {
   }[];
   handleClose: () => void;
   handleDelete: () => void;
+  handleDownload?: () => void;
   size?: "sm" | "lg";
   linkUpdate: string;
   img?: string;
@@ -27,6 +28,7 @@ const ModalDetailData: FC<Props> = ({
   img,
   pathImg,
   download,
+  handleDownload,
 }) => {
   //   // call hoks
   //   const { deleteSuratMasukWithRefresh } = useDeleteSuratMasuk();
@@ -142,10 +144,10 @@ const ModalDetailData: FC<Props> = ({
           />
 
           {/* download */}
-          {download && (
+          {download && handleDownload && (
             <ButtonAction
               label="download"
-              handleClick={() => {}}
+              handleClick={() => handleDownload()}
               color="bg-gray-400"
               icon={<Download size={20} className="text-primary-white" />}
             />

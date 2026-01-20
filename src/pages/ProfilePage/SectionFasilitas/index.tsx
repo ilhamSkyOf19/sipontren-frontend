@@ -32,7 +32,7 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
         {widthDevice > 1024 && <SubJudulCenter title={"Fasilitas"} />}
         {widthDevice < 1024 ? (
           isLoading ? (
-            <div className="w-full h-full flex justify-start items-start px-4 gap-4">
+            <div className="w-full h-full flex justify-start items-start px-4 mt-12 gap-4">
               {/* loading skeleton */}
               {Array.from({ length: 2 }).map((_, index) => (
                 <div

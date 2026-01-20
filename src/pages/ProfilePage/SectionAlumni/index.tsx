@@ -31,7 +31,7 @@ const SectionAlumni: FC<Props> = ({ widthDevice }) => {
         <SubJudulCenter title="Apa Kata Lulusan" />
         {widthDevice < 1024 ? (
           isLoading ? (
-            <div className="w-full flex flex-row justify-start items-start gap-4 px-4">
+            <div className="w-full flex flex-row justify-start items-start gap-4 px-4 mt-12">
               {Array.from({ length: 1 }).map((_, index) => (
                 <div
                   key={index}

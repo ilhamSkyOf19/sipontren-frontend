@@ -19,7 +19,7 @@ export class StudentValidation {
       .trim()
       .min(1, `${msg} harus diisi`)
       .max(max, `${msg} Maksimal ${max} karakter`)
-      .regex(/^[a-zA-Z\s]+$/, `${msg} hanya boleh berisi huruf`);
+      .regex(/^[a-zA-Z\s'.-]+$/, `${msg} hanya boleh berisi huruf`);
 
   private static stringSchema = (msg: string, max: number = 255) =>
     z

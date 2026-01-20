@@ -71,7 +71,6 @@ export class StudentService {
   }
 
   // delete
-
   static async delete(id: number): Promise<ResponseData<ResponseStudentType>> {
     // get response
     const response = await AXIOS.delete(`/student/delete/${id}`).then(
@@ -80,5 +79,31 @@ export class StudentService {
 
     // return
     return response;
+  }
+
+  // download file
+  static async downloadFile(files: string[], fileName: string) {
+    if (!fileName) fileName = "download.zip"; // default
+
+    const response = await AXIOS.post(
+      "/student/download-files",
+      { files },
+      { responseType: "blob" },
+    );
+
+    const url = window.URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = url;
+
+    // pastikan nama file berakhiran .zip
+    link.setAttribute(
+      "download",
+      fileName.endsWith(".zip") ? fileName : `${fileName}.zip`,
+    );
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
   }
 }

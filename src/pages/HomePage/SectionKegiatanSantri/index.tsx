@@ -61,6 +61,9 @@ const SectionKegiatanSantri: FC<Props> = ({ width }) => {
                 id={item.id}
               />
             ))}
+
+            {/* space */}
+            <div className="w-1 shrink-0 h-ful" />
           </ScrollXNonDesktop>
         )}
       </section>

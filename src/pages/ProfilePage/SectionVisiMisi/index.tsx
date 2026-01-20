@@ -5,7 +5,7 @@ import ParallaxGoLeft from "../../../fragments/ParallaxGoLeft";
 const SectionVisiMisi: FC = () => {
   return (
     <section className="w-full min-h-screen bg-primary-blue flex flex-col justify-start items-center py-12 px-4 gap-12 lg:px-10 lg:pt-8 lg:pb-20 lg:justify-between">
-      <p className="text-3xl font-semibold text-white relative before:absolute before:w-full before:h-0.75 before:bg-primary-yellow before:-bottom-2 before:left-0 md:text-4xl lg:hidden">
+      <p className="text-2xl font-semibold text-white relative before:absolute before:w-full before:h-0.75 before:bg-primary-yellow before:-bottom-2 before:left-0 md:text-4xl lg:hidden">
         Visi & Misi
       </p>
       <div className="w-full flex flex-col justify-center items-center gap-12 lg:flex-row-reverse lg:gap-20">

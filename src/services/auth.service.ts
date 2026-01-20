@@ -1,8 +1,10 @@
-import AXIOS from "../lib/axios";
+import AXIOS from "../libs/axios";
+import type { LoginType, PayloadType } from "../models/user-model";
+import type { ResponseData, ResponseMessage } from "../types/type";
 
 export class AuthService {
   // login
-  static async login(req) {
+  static async login(req: LoginType): Promise<ResponseData<string>> {
     // get response
     const response = await AXIOS.post("/auth/login", req, {
       withCredentials: true,
@@ -13,12 +15,12 @@ export class AuthService {
   }
 
   // get auth
-  static async cekAuth() {
+  static async cekAuth(): Promise<ResponseData<PayloadType>> {
     // get response
     const response = await AXIOS.post(
       "/auth/cek",
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     ).then((res) => res.data);
 
     // return
@@ -26,14 +28,14 @@ export class AuthService {
   }
 
   // logout
-  static async logout() {
+  static async logout(): Promise<ResponseMessage> {
     // get response
     const response = await AXIOS.post(
       "/auth/logout",
       {},
       {
         withCredentials: true,
-      }
+      },
     ).then((res) => res.data);
 
     // return
