@@ -95,3 +95,9 @@ export function formatPhoneWA(num: string) {
   // pola: +62 858-9689-0881
   return clean.replace(/^(62)(\d{3})(\d{4})(\d+)$/, "+$1 $2-$3-$4");
 }
+
+// format number
+export const formatNumberID = (value: number | null | undefined): string => {
+  if (value === null || value === undefined) return "";
+  return value.toLocaleString("id-ID");
+};

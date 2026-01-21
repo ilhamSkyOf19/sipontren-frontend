@@ -150,7 +150,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
 
       {/* modal */}
       <ModalContainer active={isOpenModal} fullWidth={true}>
-        <div className="w-[90vw] max-h-[90vh] overflow-y-scroll">
+        <div className="w-[90vw] max-h-[90vh] overflow-y-scroll overflow-x-scroll scrollbar-hidden flex flex-col justify-center items-center">
           <img src={isPreview} alt="preview" className="object-contain" />
 
           {/* button close */}

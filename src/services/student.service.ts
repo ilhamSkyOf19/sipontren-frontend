@@ -81,6 +81,16 @@ export class StudentService {
     return response;
   }
 
+  // get count
+  static async getCount(): Promise<
+    ResponseData<{ laki_laki: number; perempuan: number }>
+  > {
+    // get response
+    const response = await AXIOS.get("/student/count").then((res) => res.data);
+
+    return response;
+  }
+
   // download file
   static async downloadFile(files: string[], fileName: string) {
     if (!fileName) fileName = "download.zip"; // default

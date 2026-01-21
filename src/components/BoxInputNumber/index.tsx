@@ -56,21 +56,27 @@ const BoxInputNumber: FC<Props> = ({
           id={name}
           placeholder={placeholder}
           className="w-full h-full border-none outline-none text-base placeholder:text-sm"
+          min={0}
           max={max}
+          onKeyDown={(e) => {
+            // Cegah minus & e (scientific notation)
+            if (["-", "e", "E"].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
           onChange={(e) => {
             let value: number | "" =
               e.target.value === "" ? "" : Number(e.target.value);
 
-            // CEGAH LEBIH DARI MAX
-            if (typeof value === "number" && value > max) {
-              value = max;
-              e.target.value = String(max);
+            // Cegah NaN & negatif
+            if (typeof value === "number") {
+              if (value < 0) value = 0;
+              if (value > max) value = max;
+
+              e.target.value = String(value);
             }
 
-            // set value
             setIsValue(value);
-
-            // set value register
             register.onChange(e);
           }}
         />

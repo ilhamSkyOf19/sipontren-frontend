@@ -8,12 +8,23 @@ import {
   Newspaper,
   UsersRound,
   Venus,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import BoxInputDateFilter from "../../components/BoxInputDateFilter";
-import { formatDateID } from "../../utils/utils";
+import { formatDateID, formatNumberID } from "../../utils/utils";
 import useClickOutside from "../../hooks/useClickOutSide";
 import clsx from "clsx";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { DashboardService } from "../../services/dashboard.service";
+import { StudentService } from "../../services/student.service";
+import ModalContainer from "../../components/ModalContainer";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { UpdateJumlahAlumniType } from "../../models/jumlahAlumni";
+import { JumlahAlumniValidation } from "../../validations/jumlahAlumni-validation";
+import BoxInputNumber from "../../components/BoxInputNumber";
+import ButtonSubmit from "../../components/ButtonSubmit";
 
 const DashboardPage: FC = () => {
   // notification
@@ -33,152 +44,8 @@ const DashboardPage: FC = () => {
         {/* card 1 */}
         <CardStudent />
 
-        {/* ustad */}
-        <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
-          <HeaderTitle
-            icon={<UsersRound size={28} className="text-secondary-blue" />}
-            title="Data Ustad"
-          />
-          <div className="w-full h-full flex flex-col justify-between items-start">
-            {/* total data */}
-            <TotalData lakiLaki={120} perempuan={230} />
-
-            {/* action */}
-            <div className="w-full flex flex-row justify-start items-start gap-3">
-              <Link
-                to={"/dashboard/ustad"}
-                className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
-              >
-                selengkapnya
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* data alumni */}
-        <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
-          <HeaderTitle
-            icon={<UsersRound size={28} className="text-secondary-blue" />}
-            title="Data Alumni"
-          />
-          <div className="w-full h-full flex flex-col justify-between items-start">
-            {/* total data */}
-            <TotalData lakiLaki={120} perempuan={230} />
-
-            {/* action */}
-            <div className="w-full flex flex-row justify-start items-start gap-3">
-              <Link
-                to={"/dashboard/alumni"}
-                className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
-              >
-                selengkapnya
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* data berita */}
-        <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
-          <HeaderTitle
-            icon={<UsersRound size={28} className="text-secondary-blue" />}
-            title="Data Alumni"
-          />
-          <div className="w-full h-full flex flex-col justify-between items-start">
-            {/* total data */}
-            <div className="w-full flex flex-col justify-start items-start mt-4">
-              {/* total */}
-              <h4 className="font-medium text-primary-black text-base">
-                Total Data :
-              </h4>
-
-              <div className="w-full h-20 lg:h-28 mt-3 flex flex-row justify-start items-center gap-3">
-                {/* laki laki */}
-                <div className="w-full h-full bg-primary-white shadow-[0_4px_10px_0_rgba(0,0,0,0.1)] rounded-md hover:-translate-y-1 transition-all ease-in-out duration-300 flex flex-col justify-start items-start p-3">
-                  {/* title */}
-                  <div className="w-full flex flex-row justify-between items-center">
-                    <p className="text-xs lg:text-sm text-primary-black font-medium">
-                      Berita
-                    </p>
-
-                    {/* icon */}
-                    <Newspaper
-                      size={24}
-                      className="text-gray-400 hidden lg:block"
-                    />
-                  </div>
-
-                  {/* total data */}
-                  <span className="text-2xl lg:text-3xl font-semibold text-secondary-blue lg:mt-3">
-                    120
-                  </span>
-                </div>
-
-                {/* perempuan */}
-                <div className="w-full h-full bg-primary-white shadow-[0_4px_10px_0_rgba(0,0,0,0.1)] rounded-md hover:-translate-y-1 transition-all ease-in-out duration-300 flex flex-col justify-start items-start p-3">
-                  {/* title */}
-                  <div className="w-full flex flex-row justify-between items-center">
-                    <p className="text-xs lg:text-sm text-primary-black font-medium">
-                      Artikel
-                    </p>
-
-                    {/* icon */}
-                    <Newspaper
-                      size={24}
-                      className="text-secondary-blue hidden lg:block"
-                    />
-                  </div>
-
-                  {/* total data */}
-                  <span className="text-2xl lg:text-3xl font-semibold text-secondary-blue lg:mt-3">
-                    140
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* action */}
-            <div className="w-full flex flex-row justify-start items-start gap-3">
-              <Link
-                to={"/dashboard/alumni"}
-                className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
-              >
-                selengkapnya
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* fasilitas */}
-        <div className="lg:col-span-1 lg:row-span-1 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
-          <HeaderTitle
-            icon={<Building2 size={28} className="text-secondary-blue" />}
-            title="Fasilitas"
-          />
-          <div className="w-full h-full flex flex-col justify-between items-start">
-            <div className="w-full flex flex-row justify-start items-start gap-3">
-              <h4 className="font-medium text-primary-black text-base mt-4">
-                Total Fasilitas :
-              </h4>
-
-              <div className="flex flex-row justify-start items-end ">
-                <h4 className="font-bold text-3xl mt-2 mb-6 text-secondary-blue">
-                  6
-                </h4>
-
-                <span className="mb-6 text-sm text-primary-black lg:hidden">
-                  / fasilitas
-                </span>
-              </div>
-            </div>
-
-            <Link
-              to={"/dashboard/ustad"}
-              className="py-1.5 px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
-            >
-              selengkapnya
-            </Link>
-          </div>
-        </div>
+        {/* card ustad , alumni, berita */}
+        <CardUstadAlumniBerita />
 
         {/* activate psb */}
         <ActivePsb />
@@ -189,6 +56,12 @@ const DashboardPage: FC = () => {
 
 // card student
 const CardStudent: FC = () => {
+  // get query
+  const { data: dataDashboard, isPending } = useQuery({
+    queryKey: ["studentCount"],
+    queryFn: () => StudentService.getCount(),
+  });
+
   return (
     <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5">
       {/* header */}
@@ -225,8 +98,305 @@ const CardStudent: FC = () => {
       </div>
 
       {/* total data */}
-      <TotalData lakiLaki={120} perempuan={230} />
+      <TotalData
+        lakiLaki={
+          (isPending
+            ? "0"
+            : dataDashboard?.success &&
+              formatNumberID(dataDashboard?.data?.laki_laki)) || "0"
+        }
+        perempuan={
+          (isPending
+            ? "0"
+            : dataDashboard?.success &&
+              formatNumberID(dataDashboard?.data?.perempuan)) || "0"
+        }
+      />
     </div>
+  );
+};
+
+// card ustad , alumni berita
+const CardUstadAlumniBerita: FC = () => {
+  // query client
+  const queryClient = useQueryClient();
+  // state modal update
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // query
+  const { data: dataDashboard, isLoading } = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: () => DashboardService.read(),
+    refetchOnWindowFocus: false,
+  });
+
+  // use form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Omit<UpdateJumlahAlumniType, "id">>({
+    resolver: zodResolver(JumlahAlumniValidation.UPDATE),
+  });
+
+  // use mutation
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (data: Omit<UpdateJumlahAlumniType, "id">) => {
+      return DashboardService.jumlahAlumniUpdate(data);
+    },
+    onSuccess: () => {
+      setIsModalOpen(false);
+
+      // refetch
+      queryClient.refetchQueries({
+        queryKey: ["dashboard"],
+      });
+
+      reset();
+    },
+    onError: () => {
+      setIsModalOpen(false);
+    },
+  });
+
+  // handle on submit
+  const onSubmit = async (data: Omit<UpdateJumlahAlumniType, "id">) => {
+    try {
+      // update
+      await mutateAsync(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // cek
+  if (!dataDashboard?.success) return;
+
+  return (
+    <>
+      {/* ustad */}
+      <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
+        <HeaderTitle
+          icon={<UsersRound size={28} className="text-secondary-blue" />}
+          title="Data Ustad"
+        />
+        <div className="w-full h-full flex flex-col justify-between items-start">
+          {/* total data */}
+          <TotalData
+            lakiLaki={
+              isLoading
+                ? "0"
+                : formatNumberID(dataDashboard?.data?.ustad.laki_laki) || "0"
+            }
+            perempuan={
+              isLoading
+                ? "0"
+                : formatNumberID(dataDashboard?.data?.ustad.perempuan) || "0"
+            }
+          />
+
+          {/* action */}
+          <div className="w-full flex flex-row justify-start items-start gap-3">
+            <Link
+              to={"/dashboard/ustad"}
+              className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
+            >
+              selengkapnya
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* data alumni */}
+      <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
+        <HeaderTitle
+          icon={<UsersRound size={28} className="text-secondary-blue" />}
+          title="Data Alumni"
+        />
+        <div className="w-full h-full flex flex-col justify-between items-start">
+          {/* total data */}
+          <TotalData
+            lakiLaki={
+              formatNumberID(dataDashboard.data?.jumlahAlumni.laki_laki) || "0"
+            }
+            perempuan={
+              formatNumberID(dataDashboard.data?.jumlahAlumni.perempuan) || "0"
+            }
+          />
+
+          {/* action */}
+          <div className="w-full flex flex-row justify-start items-start gap-3">
+            <Link
+              to={"/dashboard/alumni"}
+              className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
+            >
+              selengkapnya
+            </Link>
+
+            {/* button modal for set data alumni */}
+            <button
+              type="button"
+              className="py-1.5 px-4 bg-primary-green rounded-sm mt-4 text-xs lg:text-sm text-primary-white relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-primary-black/20 before:opacity-0 hover:before:opacity-100  before:transition-all before:ease-in-out before:duration-300"
+              onClick={() => setIsModalOpen(true)}
+            >
+              update data
+            </button>
+          </div>
+        </div>
+
+        {/* modal update data  */}
+        <ModalContainer active={isModalOpen} fullWidth={true}>
+          <div className="w-[90vw] lg:w-[30vw] lg:h-[50vh] h-auto flex flex-col justify-start items-start py-7 lg:pt-6 px-8 relative">
+            {/* button close  */}
+            <button
+              type="button"
+              className="absolute right-2 top-2"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <X size={24} className="text-primary-black" />
+            </button>
+            {/* header */}
+            <div className="w-full flex flex-col justify-start items-center pb-2 border-b-2 border-primary-black">
+              <h4 className="text-primary-black text-base lg:text-lg font-semibold">
+                Update Jumlah Alumni
+              </h4>
+            </div>
+
+            {/* form */}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full flex flex-col justify-start items-start mt-4"
+            >
+              {/* input laki laki */}
+              <BoxInputNumber
+                register={register("laki_laki")}
+                label="Jumlah Laki-laki"
+                placeholder="Masukan jumlah laki-laki ..."
+                name="laki_laki"
+                max={999999}
+                errorMessage={errors.laki_laki?.message}
+              />
+              {/* input perempuan */}
+              <BoxInputNumber
+                register={register("perempuan")}
+                label="Jumlah Perempuan"
+                placeholder="Masukan jumlah perempuan ..."
+                name="perempuan"
+                max={999999}
+                errorMessage={errors.perempuan?.message}
+              />
+
+              {/* button submit */}
+              <ButtonSubmit label="SUBMIT" loading={isPending} />
+            </form>
+          </div>
+        </ModalContainer>
+      </div>
+
+      {/* data berita */}
+      <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
+        <HeaderTitle
+          icon={<UsersRound size={28} className="text-secondary-blue" />}
+          title="Data Berita & Artikel"
+        />
+        <div className="w-full h-full flex flex-col justify-between items-start">
+          {/* total data */}
+          <div className="w-full flex flex-col justify-start items-start mt-4">
+            {/* total */}
+            <h4 className="font-medium text-primary-black text-base">
+              Total Data :
+            </h4>
+
+            <div className="w-full h-20 lg:h-28 mt-3 flex flex-row justify-start items-center gap-3">
+              {/* berita */}
+              <div className="w-full h-full bg-primary-white shadow-[0_4px_10px_0_rgba(0,0,0,0.1)] rounded-md hover:-translate-y-1 transition-all ease-in-out duration-300 flex flex-col justify-start items-start p-3">
+                {/* title */}
+                <div className="w-full flex flex-row justify-between items-center">
+                  <p className="text-xs lg:text-sm text-primary-black font-medium">
+                    Berita
+                  </p>
+
+                  {/* icon */}
+                  <Newspaper
+                    size={24}
+                    className="text-gray-400 hidden lg:block"
+                  />
+                </div>
+
+                {/* total data */}
+                <span className="text-2xl lg:text-3xl font-semibold text-secondary-blue lg:mt-3">
+                  {formatNumberID(dataDashboard?.data?.berita.berita) || 0}
+                </span>
+              </div>
+
+              {/* artikel */}
+              <div className="w-full h-full bg-primary-white shadow-[0_4px_10px_0_rgba(0,0,0,0.1)] rounded-md hover:-translate-y-1 transition-all ease-in-out duration-300 flex flex-col justify-start items-start p-3">
+                {/* title */}
+                <div className="w-full flex flex-row justify-between items-center">
+                  <p className="text-xs lg:text-sm text-primary-black font-medium">
+                    Artikel
+                  </p>
+
+                  {/* icon */}
+                  <Newspaper
+                    size={24}
+                    className="text-secondary-blue hidden lg:block"
+                  />
+                </div>
+
+                {/* total data */}
+                <span className="text-2xl lg:text-3xl font-semibold text-secondary-blue lg:mt-3">
+                  {formatNumberID(dataDashboard?.data?.berita.artikel) || 0}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* action */}
+          <div className="w-full flex flex-row justify-start items-start gap-3">
+            <Link
+              to={"/dashboard/berita-artikel"}
+              className="py-1.5 px-4 bg-secondary-blue rounded-sm mt-4 text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
+            >
+              selengkapnya
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* fasilitas */}
+      <div className="lg:col-span-1 lg:row-span-1 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between items-start pb-4">
+        <HeaderTitle
+          icon={<Building2 size={28} className="text-secondary-blue" />}
+          title="Fasilitas"
+        />
+        <div className="w-full h-full flex flex-col justify-between items-start">
+          <div className="w-full flex flex-row justify-start items-start gap-3">
+            <h4 className="font-medium text-primary-black text-base mt-2">
+              Total Fasilitas :
+            </h4>
+
+            <div className="flex flex-row justify-start items-end ">
+              <h4 className="font-bold text-3xl mt-2 mb-6 text-secondary-blue">
+                {formatNumberID(dataDashboard?.data?.fasilitas) || 0}
+              </h4>
+
+              <span className="mb-6 text-sm text-primary-black lg:hidden">
+                / fasilitas
+              </span>
+            </div>
+          </div>
+
+          <Link
+            to={"/dashboard/fasilitas"}
+            className="py-1.5 px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white hover:bg-primary-blue transition-all ease-in-out duration-300"
+          >
+            selengkapnya
+          </Link>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -447,8 +617,8 @@ const HeaderTitle: FC<HeaderTitleProps> = ({ icon, title }) => {
 
 // total data
 type TotalDataProps = {
-  lakiLaki: number;
-  perempuan: number;
+  lakiLaki: string;
+  perempuan: string;
 };
 const TotalData: FC<TotalDataProps> = ({ lakiLaki, perempuan }) => {
   return (

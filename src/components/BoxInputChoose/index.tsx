@@ -101,7 +101,7 @@ export default function BoxInputChoose<T extends FieldValues = any>({
       <div
         ref={modalRef}
         className={clsx(
-          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] z-10 overflow-hidden transition-all duration-300 ease-in-out",
+          "absolute top-19 right-2 left-2 rounded-md flex flex-col justify-start items-start bg-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] z-30 overflow-hidden transition-all duration-300 ease-in-out",
           hAuto ? "h-auto" : "h-50",
           isOpenModal ? "max-h-50" : "max-h-0",
           scrollHide ? "scrollbar-hide" : "overflow-y-auto",
