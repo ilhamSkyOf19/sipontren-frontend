@@ -10,7 +10,7 @@ import {
   Venus,
   X,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 import BoxInputDateFilter from "../../components/BoxInputDateFilter";
 import { formatDateID, formatNumberID } from "../../utils/utils";
 import useClickOutside from "../../hooks/useClickOutSide";
@@ -25,6 +25,9 @@ import type { UpdateJumlahAlumniType } from "../../models/jumlahAlumni";
 import { JumlahAlumniValidation } from "../../validations/jumlahAlumni-validation";
 import BoxInputNumber from "../../components/BoxInputNumber";
 import ButtonSubmit from "../../components/ButtonSubmit";
+import { PendaftaranService } from "../../services/pendaftaran.service";
+import type { CreatePendaftaranType } from "../../models/pendaftaran-model";
+import loadingWhite from "../../assets/animation/loading-white.svg";
 
 const DashboardPage: FC = () => {
   // notification
@@ -402,11 +405,22 @@ const CardUstadAlumniBerita: FC = () => {
 
 // card active psb
 const ActivePsb: FC = () => {
+  // query client
+  const queryClient = useQueryClient();
+
   // state modal perode date
   const [isModalPeriode, setIsModalPeriode] = useState<boolean>(false);
 
   // state periode
-  const [periode, setPeriode] = useState<string>("");
+  const [periode, setPeriode] = useState<{
+    id: number;
+    periode: string;
+    aktif: boolean;
+  }>({
+    id: 0,
+    periode: "",
+    aktif: false,
+  });
 
   // // ref input
   const refInputDateFrom = useRef<HTMLInputElement>(null);
@@ -422,12 +436,19 @@ const ActivePsb: FC = () => {
     to: "",
   });
 
+  // use query
+  const { data: dataPeriode, isLoading } = useQuery({
+    queryKey: ["pendaftaran"],
+    queryFn: () => PendaftaranService.read(),
+    refetchOnWindowFocus: false,
+  });
+
   // handle set date from
   const handleSetDate = (type: "from" | "to", value: string) => {
     if (type === "from") {
-      setIsDate({ ...isDate, from: value });
+      setIsDate({ ...isDate, from: new Date(value).toISOString() });
     } else {
-      setIsDate({ ...isDate, to: value });
+      setIsDate({ ...isDate, to: new Date(value).toISOString() });
     }
   };
 
@@ -438,6 +459,83 @@ const ActivePsb: FC = () => {
       setIsModalPeriode(false);
     },
   });
+
+  // use mutation create
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (data: CreatePendaftaranType) => {
+      return PendaftaranService.create(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["pendaftaran"],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  // handle mutate
+  const handleMutate = async () => {
+    try {
+      // cek
+      if (isDate.from && isDate.to) {
+        await mutateAsync({
+          dari: isDate.from,
+          sampai: isDate.to,
+        });
+      } else return;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // use mutation update
+  const { mutateAsync: mutateUpdate, isPending: isPendingUpdate } = useMutation(
+    {
+      mutationFn: (data: { aktif: boolean }) => {
+        return PendaftaranService.updateAktif(periode.id, data.aktif);
+      },
+      onSuccess: (data) => {
+        if (!data.success) return;
+        // refetch
+        queryClient.invalidateQueries({
+          queryKey: ["pendaftaran"],
+        });
+
+        // close modal
+        setIsModalPeriode(false);
+
+        // reset periode
+        setPeriode({
+          id: data.data.id,
+          periode: "",
+          aktif: data.data.aktif,
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+  );
+
+  // handle mutate
+  const handleMutateUpdateAktif = async () => {
+    try {
+      // cek
+      if (periode.id === 0) return;
+
+      // update
+      await mutateUpdate({ aktif: !periode.aktif });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // periode aktif
+  const periodeAktif =
+    dataPeriode?.success &&
+    dataPeriode?.data.find((item) => item.aktif === true);
 
   return (
     <div className="col-span-1 row-span-2 lg:col-span-3 lg:row-span-4 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between lg:justify-start items-start pb-4">
@@ -472,9 +570,14 @@ const ActivePsb: FC = () => {
           {/* button submut */}
           <button
             type="button"
-            className="text-white py-1.5 px-4 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300"
+            className="text-white h-8 w-32 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300 flex flex-row justify-center items-center"
+            onClick={() => handleMutate()}
           >
-            buat periode
+            {isPending ? (
+              <img src={loadingWhite} alt="loading" className="w-6" />
+            ) : (
+              <span>buat periode</span>
+            )}
           </button>
         </div>
 
@@ -503,9 +606,7 @@ const ActivePsb: FC = () => {
                 <Calendar size={18} className="text-secondary-blue" />
 
                 {/* label */}
-                <span className="text-xs font-medium">
-                  {periode ? formatDateID(new Date(periode)) : "Pilih Periode"}
-                </span>
+                <span className="text-xs font-medium">Pilih Periode</span>
               </button>
 
               {/* modal periode */}
@@ -517,57 +618,48 @@ const ActivePsb: FC = () => {
                 )}
               >
                 {/* button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPeriode(formatDateID(new Date()));
-                    setIsModalPeriode(false);
-                  }}
-                  className="py-4 px-3 w-full flex flex-row justify-between items-center hover:bg-gray-200 transition-all ease-in-out duration-300"
-                >
-                  {/* label 1 */}
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                  <span className="text-xs font-medium">-</span>
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPeriode(formatDateID(new Date()));
-                    setIsModalPeriode(false);
-                  }}
-                  className="py-4 px-3 w-full flex flex-row justify-between items-center hover:bg-gray-200 transition-all ease-in-out duration-300"
-                >
-                  {/* label 1 */}
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                  <span className="text-xs font-medium">-</span>
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPeriode(formatDateID(new Date()));
-                    setIsModalPeriode(false);
-                  }}
-                  className="py-4 px-3 w-full flex flex-row justify-between items-center hover:bg-gray-200 transition-all ease-in-out duration-300"
-                >
-                  {/* label 1 */}
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                  <span className="text-xs font-medium">-</span>
-                  <span className="text-xs font-medium">
-                    {formatDateID(new Date())}
-                  </span>
-                </button>
+                {isLoading ? (
+                  <div className="w-full h-full flex flex-col justify-start items-start gap-1">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="w-full h-12 bg-gray-300 animate-pulse"
+                      />
+                    ))}
+                  </div>
+                ) : dataPeriode?.success && dataPeriode.data.length > 0 ? (
+                  dataPeriode.data.map((item, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setPeriode({
+                          id: item.id,
+                          periode: `${formatDateID(new Date(item.dari))} - ${formatDateID(new Date(item.sampai))}`,
+                          aktif: item.aktif,
+                        });
+                        setIsModalPeriode(false);
+                      }}
+                      className={clsx(
+                        "py-4 px-3 w-full flex flex-row justify-between items-center hover:bg-gray-200 transition-all ease-in-out duration-300",
+                        periode.id === item.id && "bg-gray-200",
+                      )}
+                    >
+                      {/* label 1 */}
+                      <span className="text-xs font-medium">
+                        {formatDateID(new Date(item.dari))}
+                      </span>
+                      <span className="text-xs font-medium">-</span>
+                      <span className="text-xs font-medium">
+                        {formatDateID(new Date(item.sampai))}
+                      </span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="w-full h-full flex flex-col justify-center items-center">
+                    <p className="text-xs text-center">Tidak ada periode</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -575,23 +667,52 @@ const ActivePsb: FC = () => {
             <button
               type="button"
               className={clsx(
-                "mt-4 text-sm py-1.5 px-4 bg-secondary-blue text-white rounded-md",
-                periode ? "flex" : "hidden",
+                "text-white h-8 w-32 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300 flex flex-row justify-center items-center mt-4",
+                periode.id === 0 ? "hidden" : "flex",
               )}
+              onClick={() => handleMutateUpdateAktif()}
             >
-              Aktifkan
+              {isPendingUpdate ? (
+                <img src={loadingWhite} alt="loading" className="w-6" />
+              ) : dataPeriode?.success &&
+                dataPeriode.data.find((item) => item.id === periode.id)
+                  ?.aktif ? (
+                <span>Non Aktifkan</span>
+              ) : (
+                <span>Aktifkan</span>
+              )}
             </button>
           </div>
 
           {/* label */}
-          <div className="lg:flex-1 w-full mt-12 lg:mt-0 h-full flex flex-col justify-center items-center">
-            {/* h3 */}
-            <h3 className="text-lg font-medium text-secondary-blue">
-              Pendaftaran Ditutup
-            </h3>
-            <span className="text-xs text-primary-black text-center">
-              Silahkan aktifkan pendaftaran untuk memulai pendaftaran santri
-            </span>
+          <div className="lg:flex-1 w-full mt-12 lg:mt-0 h-full flex flex-col justify-center items-center my-4 lg:my-0">
+            {dataPeriode?.success && periodeAktif ? (
+              <>
+                <span className="text-sm lg:text-sm font-medium text-primary-black">
+                  {`${formatDateID(new Date(periodeAktif.dari))} - ${formatDateID(
+                    new Date(periodeAktif.sampai),
+                  )}`}
+                </span>
+
+                <h3 className="text-lg font-medium text-secondary-blue">
+                  Pendaftaran Dibuka
+                </h3>
+
+                <span className="text-xs text-primary-black text-center">
+                  Pendaftaran santri untuk periode ini sedang dibuka
+                </span>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-medium text-secondary-blue">
+                  Pendaftaran Ditutup
+                </h3>
+
+                <span className="text-xs text-primary-black text-center">
+                  Silahkan aktifkan pendaftaran untuk memulai pendaftaran santri
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
