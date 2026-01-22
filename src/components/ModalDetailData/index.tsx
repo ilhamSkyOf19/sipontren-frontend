@@ -30,51 +30,6 @@ const ModalDetailData: FC<Props> = ({
   download,
   handleDownload,
 }) => {
-  //   // call hoks
-  //   const { deleteSuratMasukWithRefresh } = useDeleteSuratMasuk();
-  //   const { deleteSuratKeluarWithRefresh } = useDeleteSuratKeluar();
-
-  //   // handle delete
-  //   const handleDelete = async (id: number) => {
-  //     // delete
-  //     const response =
-  //       type === "suratMasuk"
-  //         ? await deleteSuratMasukWithRefresh(id)
-  //         : await deleteSuratKeluarWithRefresh(id);
-
-  //     // cek
-  //     if (!response) return;
-
-  //     // close
-  //     return handleClose();
-  //   };
-
-  //   // use mutation
-  //   const { mutateAsync } = useMutation({
-  //     mutationFn: (data: string[]) => {
-  //       if (type === "suratKeluar") {
-  //         return SuratKeluarService.downloadFile(data);
-  //       } else {
-  //         return SuratMasukService.downloadFile(data);
-  //       }
-  //     },
-  //     onSuccess: () => {
-  //       console.log("success download");
-  //     },
-  //     onError: () => {
-  //       console.log("error");
-  //     },
-  //   });
-
-  //   // handle download
-  //   const handleDownload = async (data: string[]) => {
-  //     try {
-  //       await mutateAsync(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
   // navigate
   const navigate = useNavigate();
 

@@ -15,7 +15,12 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import BoxInputDateFilter from "../../components/BoxInputDateFilter";
-import { formatDateID, formatNumberID, isValidDate } from "../../utils/utils";
+import {
+  downloadExcel,
+  formatDateID,
+  formatNumberID,
+  isValidDate,
+} from "../../utils/utils";
 import useClickOutside from "../../hooks/useClickOutSide";
 import clsx from "clsx";
 import {
@@ -112,6 +117,12 @@ const CardStudent: FC = () => {
   // destruct
   const [dataStudent, dataPeriode] = data;
 
+  const handleExport = async () => {
+    if (!from || !to) return;
+    const res = await StudentService.downloadExcel(from, to);
+    downloadExcel(res.data, "data-siswa");
+  };
+
   return (
     <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5">
       {/* header */}
@@ -128,8 +139,9 @@ const CardStudent: FC = () => {
             <button
               type="button"
               className="text-sm bg-[#12501A] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+              onClick={() => handleExport()}
             >
-              CLSX
+              Excel
             </button>
             {/* button pdf */}
             <button

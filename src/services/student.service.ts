@@ -122,4 +122,18 @@ export class StudentService {
     link.remove();
     window.URL.revokeObjectURL(url);
   }
+
+  // download excel
+  static async downloadExcel(from: string, to: string) {
+    // call api
+    const response = await AXIOS.get("/student/download-excel", {
+      params: {
+        from,
+        to,
+      },
+      responseType: "blob",
+    });
+
+    return response;
+  }
 }
