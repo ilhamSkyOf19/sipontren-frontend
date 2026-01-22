@@ -6,7 +6,7 @@ export const handleActionDelete = async (
   options?: {
     successMessage?: string;
     errorMessage?: string;
-  }
+  },
 ): Promise<boolean> => {
   const result = await Swal.fire({
     title: "Yakin ingin menghapus?",
@@ -17,39 +17,37 @@ export const handleActionDelete = async (
     cancelButtonText: "Batal",
     confirmButtonColor: "#d33",
     width: 400,
+
+    // loader
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+      try {
+        return await deleteService(id);
+      } catch (error) {
+        Swal.showValidationMessage("Gagal menghapus data");
+        return false;
+      }
+    },
+
+    allowOutsideClick: () => !Swal.isLoading(),
     customClass: {
       container: "swal-z",
     },
   });
 
-  if (!result.isConfirmed) return false;
+  if (!result.isConfirmed || !result.value) return false;
 
-  try {
-    const response = await deleteService(id);
+  await Swal.fire({
+    icon: "success",
+    title: "Berhasil",
+    text: options?.successMessage ?? "Data berhasil dihapus",
+    timer: 1500,
+    width: 400,
+    showConfirmButton: false,
+    customClass: {
+      container: "swal-z",
+    },
+  });
 
-    await Swal.fire({
-      icon: "success",
-      title: "Berhasil",
-      text: options?.successMessage ?? "Data berhasil dihapus",
-      timer: 1500,
-      width: 400,
-      showConfirmButton: false,
-      customClass: {
-        container: "swal-z",
-      },
-    });
-
-    return response ? true : false;
-  } catch (error) {
-    await Swal.fire({
-      icon: "error",
-      title: "Gagal",
-      text: options?.errorMessage ?? "Data gagal dihapus",
-      customClass: {
-        container: "swal-z",
-      },
-    });
-
-    return false;
-  }
+  return true;
 };

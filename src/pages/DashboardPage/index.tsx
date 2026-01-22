@@ -4,18 +4,26 @@ import HeaderDashboard from "../../components/HeaderDashboard";
 import {
   Building2,
   Calendar,
+  ChevronDown,
   Mars,
   Newspaper,
+  Pencil,
+  Trash,
   UsersRound,
   Venus,
   X,
 } from "lucide-react";
-import { data, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BoxInputDateFilter from "../../components/BoxInputDateFilter";
-import { formatDateID, formatNumberID } from "../../utils/utils";
+import { formatDateID, formatNumberID, isValidDate } from "../../utils/utils";
 import useClickOutside from "../../hooks/useClickOutSide";
 import clsx from "clsx";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { DashboardService } from "../../services/dashboard.service";
 import { StudentService } from "../../services/student.service";
 import ModalContainer from "../../components/ModalContainer";
@@ -28,6 +36,10 @@ import ButtonSubmit from "../../components/ButtonSubmit";
 import { PendaftaranService } from "../../services/pendaftaran.service";
 import type { CreatePendaftaranType } from "../../models/pendaftaran-model";
 import loadingWhite from "../../assets/animation/loading-white.svg";
+import { UseFilter } from "../../hooks/useFilter";
+import NoData from "../../components/NoData";
+import { handleActionDelete } from "../../utils/sweetalert/delete";
+import Swal from "sweetalert2";
 
 const DashboardPage: FC = () => {
   // notification
@@ -43,7 +55,7 @@ const DashboardPage: FC = () => {
       />
 
       {/* content grid bento */}
-      <div className="w-full min-h-screen grid grid-cols-1 grid-rows-4 lg:h-[110vh] lg:grid-cols-4 mt-8 gap-6">
+      <div className="w-full min-h-screen grid grid-cols-1 lg:h-[110vh] lg:grid-cols-4 mt-8 gap-6">
         {/* card 1 */}
         <CardStudent />
 
@@ -59,11 +71,46 @@ const DashboardPage: FC = () => {
 
 // card student
 const CardStudent: FC = () => {
-  // get query
-  const { data: dataDashboard, isPending } = useQuery({
-    queryKey: ["studentCount"],
-    queryFn: () => StudentService.getCount(),
+  // state modal perode date
+  const [isModalPeriode, setIsModalPeriode] = useState<boolean>(false);
+
+  // state periode
+  const [periodeId, setPeriodeId] = useState<number>(0);
+
+  // // ref date
+  const refPeriode = useRef<HTMLInputElement>(null);
+  const refButtonPeriode = useRef<HTMLButtonElement>(null);
+
+  // state from & to
+  const { from, to, handleFilter } = UseFilter();
+
+  // click out side
+  useClickOutside({
+    refs: [refPeriode, refButtonPeriode],
+    onOutsideClick: () => {
+      setIsModalPeriode(false);
+    },
   });
+
+  // get query
+  const data = useQueries({
+    queries: [
+      {
+        queryKey: ["studentCount", from, to],
+        queryFn: () => StudentService.getCount(from, to),
+        enabled:
+          from !== "" && to !== "" && isValidDate(from) && isValidDate(to),
+      },
+      {
+        queryKey: ["pendaftaran"],
+        queryFn: () => PendaftaranService.read(),
+        refetchOnWindowFocus: false,
+      },
+    ],
+  });
+
+  // destruct
+  const [dataStudent, dataPeriode] = data;
 
   return (
     <div className="col-span-1 row-span-1 lg:col-span-2 lg:row-span-2 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5">
@@ -74,45 +121,146 @@ const CardStudent: FC = () => {
       />
 
       {/* action  */}
-      <div className="w-full flex flex-row justify-col lg:justify-between items-center gap-2 h-9 lg:h-11 mt-4">
-        <div className="w-full h-full flex flex-row justify-start items-start gap-2">
-          {/* button download */}
+      <div className="w-full flex flex-col justify-start items-start gap-4">
+        <div className="w-full flex flex-row justify-col lg:justify-between items-center gap-2 h-9 lg:h-11 mt-4 flex-wrap">
+          <div className="w-full h-full flex flex-row justify-start items-start gap-2">
+            {/* button download */}
+            <button
+              type="button"
+              className="text-sm bg-[#12501A] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+            >
+              CLSX
+            </button>
+            {/* button pdf */}
+            <button
+              type="button"
+              className="text-sm bg-[#d22e2e] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+            >
+              PDF
+            </button>
+
+            <Link
+              to={"/dashboard/ustad"}
+              className="h-full px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white flex flex-col justify-center items-center hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+            >
+              selengkapnya
+            </Link>
+
+            {/* filer periode */}
+          </div>
+        </div>
+
+        <div className="relative w-full flex flex-row justify-start items-center gap-4">
           <button
+            ref={refButtonPeriode}
+            onClick={() => setIsModalPeriode((prev) => !prev)}
             type="button"
-            className="text-sm bg-[#12501A] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+            className={clsx(
+              "py-2 rounded-md px-2 lg:px-4 flex flex-row justify-start items-center bg-primary-white shadow-[0_4px_10px_2px_rgba(0,0,0,0.07)] gap-2 mt-2  transition-transform ease-in-out duration-300 shrink-0",
+              isModalPeriode ? "-translate-y-0.5" : "hover:-translate-y-0.5",
+            )}
           >
-            CLSX
-          </button>
-          {/* button pdf */}
-          <button
-            type="button"
-            className="text-sm bg-[#d22e2e] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
-          >
-            PDF
+            {/* icon */}
+            <Calendar size={18} className="text-secondary-blue" />
+
+            {/* label */}
+            {from && to ? (
+              <>
+                <span className="text-xs font-medium">
+                  {isValidDate(from) ? formatDateID(new Date(from)) : "-"}
+                </span>
+                <span className="text-xs font-medium">-</span>
+                <span className="text-xs font-medium">
+                  {isValidDate(to) ? formatDateID(new Date(to)) : "-"}
+                </span>
+              </>
+            ) : (
+              <span className="text-xs font-medium">Pilih Periode</span>
+            )}
+
+            {/* icon arrow down */}
+            <ChevronDown
+              size={20}
+              className={clsx(
+                "text-secondary-blue",
+                isModalPeriode ? "rotate-180" : "rotate-0",
+              )}
+            />
           </button>
 
-          <Link
-            to={"/dashboard/ustad"}
-            className="h-full px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white flex flex-col justify-center items-center hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
+          {/* modal periode */}
+          <div
+            ref={refPeriode}
+            className={clsx(
+              "w-62 h-36 rounded-md bg-primary-white shadow-[0_0_10px_1px_rgba(0,0,0,0.07)] absolute left-0 top-[105%] overflow-hidden transition-all ease-in-out duration-300 z-10 overflow-y-scroll scrollbar-hidden",
+              isModalPeriode ? "max-h-36 " : "max-h-0 ",
+            )}
           >
-            selengkapnya
-          </Link>
+            {/* button */}
+            {dataPeriode.isLoading ? (
+              <div className="w-full h-full flex flex-col justify-start items-start gap-1">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-12 bg-gray-300 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : dataPeriode?.data?.success &&
+              dataPeriode.data.data.length > 0 ? (
+              dataPeriode.data.data.map((item, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => {
+                    handleFilter({
+                      from: item.dari.toString(),
+                      to: item.sampai.toString(),
+                    });
+
+                    // set periode id
+                    setPeriodeId(item.id);
+
+                    // close modal
+                    setIsModalPeriode(false);
+                  }}
+                  className={clsx(
+                    "py-4 px-3 w-full flex flex-row justify-between items-center hover:bg-gray-200 transition-all ease-in-out duration-300",
+                    periodeId === item.id && "bg-gray-200",
+                  )}
+                >
+                  {/* label 1 */}
+                  <span className="text-xs font-medium">
+                    {formatDateID(new Date(item.dari))}
+                  </span>
+                  <span className="text-xs font-medium">-</span>
+                  <span className="text-xs font-medium">
+                    {formatDateID(new Date(item.sampai))}
+                  </span>
+                </button>
+              ))
+            ) : (
+              <div className="w-full h-full flex flex-col justify-center items-center">
+                <p className="text-xs text-center">Tidak ada periode</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* total data */}
       <TotalData
         lakiLaki={
-          (isPending
+          (dataStudent.isLoading
             ? "0"
-            : dataDashboard?.success &&
-              formatNumberID(dataDashboard?.data?.laki_laki)) || "0"
+            : dataStudent.data?.success &&
+              formatNumberID(dataStudent.data?.data?.laki_laki)) || "-"
         }
         perempuan={
-          (isPending
+          (dataStudent.isLoading
             ? "0"
-            : dataDashboard?.success &&
-              formatNumberID(dataDashboard?.data?.perempuan)) || "0"
+            : dataStudent.data?.success &&
+              formatNumberID(dataStudent.data?.data?.perempuan)) || "-"
         }
       />
     </div>
@@ -255,7 +403,7 @@ const CardUstadAlumniBerita: FC = () => {
             <button
               type="button"
               className="absolute right-2 top-2"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => isPending === false && setIsModalOpen(false)}
             >
               <X size={24} className="text-primary-black" />
             </button>
@@ -408,6 +556,13 @@ const ActivePsb: FC = () => {
   // query client
   const queryClient = useQueryClient();
 
+  // state modal periode
+  const [isModalPreviewDataPeriode, setIsModalPreviewDataPeriode] =
+    useState<boolean>(false);
+
+  // state error message
+  const [isErrorAktif, setIsErrorAktif] = useState<boolean>(false);
+
   // state modal perode date
   const [isModalPeriode, setIsModalPeriode] = useState<boolean>(false);
 
@@ -466,6 +621,22 @@ const ActivePsb: FC = () => {
       return PendaftaranService.create(data);
     },
     onSuccess: () => {
+      // notifikasi
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Periode berhasil dibuat",
+        showConfirmButton: false,
+        timer: 1800,
+        timerProgressBar: true,
+        customClass: {
+          container: "swal-z",
+        },
+        padding: "7px 12px",
+      });
+
+      // refetch
       queryClient.invalidateQueries({
         queryKey: ["pendaftaran"],
       });
@@ -503,18 +674,36 @@ const ActivePsb: FC = () => {
           queryKey: ["pendaftaran"],
         });
 
-        // close modal
-        setIsModalPeriode(false);
-
         // reset periode
-        setPeriode({
-          id: data.data.id,
-          periode: "",
+        setPeriode((prev) => ({
+          ...prev,
           aktif: data.data.aktif,
+          id: data.data.id,
+        }));
+
+        // notifikasi
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "success",
+          title: `Berhasil ${data.data.aktif === true ? "aktif" : "non aktif"}`,
+          showConfirmButton: false,
+          timer: 1800,
+          timerProgressBar: true,
+          customClass: {
+            container: "swal-z",
+          },
+          padding: "7px 12px",
         });
+
+        // set error aktif
+        setIsErrorAktif(false);
       },
       onError: (error) => {
         console.log(error);
+
+        // set error aktif
+        setIsErrorAktif(true);
       },
     },
   );
@@ -537,6 +726,31 @@ const ActivePsb: FC = () => {
     dataPeriode?.success &&
     dataPeriode?.data.find((item) => item.aktif === true);
 
+  // mutate delete
+  const { mutateAsync: mutateDelete, isPending: isPendingDelete } = useMutation(
+    {
+      mutationFn: (id: number) => PendaftaranService.delete(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["pendaftaran"],
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    },
+  );
+
+  // use delete
+  const handleDeleteData = async (id: number) => {
+    try {
+      // delete
+      await handleActionDelete(id, mutateDelete);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="col-span-1 row-span-2 lg:col-span-3 lg:row-span-4 bg-primary-white shadow-[0_0_10px_0_rgba(0,0,0,0.1)] rounded-2xl py-3 px-5 flex flex-col justify-between lg:justify-start items-start pb-4">
       {/* header title */}
@@ -546,7 +760,7 @@ const ActivePsb: FC = () => {
       />
 
       <div className="w-full h-full flex flex-col  lg:flex-row justify-end items-start lg:items-center mt-4 lg:gap-12 gap-4">
-        <div className="w-full h-full lg:flex-1 flex flex-col justify-start items-start gap-4">
+        <div className="w-full h-full lg:flex-1 flex flex-col justify-start items-start gap-3">
           <div className="w-full flex flex-row justify-start items-center gap-4">
             <BoxInputDateFilter
               type="from"
@@ -568,17 +782,29 @@ const ActivePsb: FC = () => {
           </div>
 
           {/* button submut */}
-          <button
-            type="button"
-            className="text-white h-8 w-32 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300 flex flex-row justify-center items-center"
-            onClick={() => handleMutate()}
-          >
-            {isPending ? (
-              <img src={loadingWhite} alt="loading" className="w-6" />
-            ) : (
-              <span>buat periode</span>
-            )}
-          </button>
+          <div className="w-full flex flex-row justify-start items-center gap-4">
+            <button
+              disabled={isPending}
+              type="button"
+              className="text-white h-8 w-32 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300 flex flex-row justify-center items-center"
+              onClick={() => handleMutate()}
+            >
+              {isPending ? (
+                <img src={loadingWhite} alt="loading" className="w-6" />
+              ) : (
+                <span>buat periode</span>
+              )}
+            </button>
+
+            {/* button preview */}
+            <button
+              type="button"
+              className="text-primary-black h-8 w-32 bg-gray-300 text-sm rounded-sm capitalize hover:bg-gray-400 transition-all ease-in-out duration-300 flex flex-row justify-center items-center"
+              onClick={() => setIsModalPreviewDataPeriode(true)}
+            >
+              <span>Lihat Periode</span>
+            </button>
+          </div>
         </div>
 
         {/* action */}
@@ -606,7 +832,24 @@ const ActivePsb: FC = () => {
                 <Calendar size={18} className="text-secondary-blue" />
 
                 {/* label */}
-                <span className="text-xs font-medium">Pilih Periode</span>
+                <div className="w-full flex flex-row justify-start items-center">
+                  {periode.periode ? (
+                    <span className="text-xs font-medium">
+                      {periode.periode}
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium">Pilih Periode</span>
+                  )}
+
+                  {/* icon */}
+                  <ChevronDown
+                    size={20}
+                    className={clsx(
+                      "text-secondary-blue",
+                      isModalPeriode ? "rotate-180" : "rotate-0",
+                    )}
+                  />
+                </div>
               </button>
 
               {/* modal periode */}
@@ -665,6 +908,7 @@ const ActivePsb: FC = () => {
 
             {/* button active */}
             <button
+              disabled={isPendingUpdate}
               type="button"
               className={clsx(
                 "text-white h-8 w-32 bg-secondary-blue text-sm rounded-sm capitalize hover:bg-primary-blue transition-all ease-in-out duration-300 flex flex-row justify-center items-center mt-4",
@@ -688,6 +932,14 @@ const ActivePsb: FC = () => {
           <div className="lg:flex-1 w-full mt-12 lg:mt-0 h-full flex flex-col justify-center items-center my-4 lg:my-0">
             {dataPeriode?.success && periodeAktif ? (
               <>
+                {/* error message */}
+                {isErrorAktif && (
+                  <span className="text-xs mb-2 text-red-500">
+                    Periode sedang aktif
+                  </span>
+                )}
+
+                {/* date */}
                 <span className="text-sm lg:text-sm font-medium text-primary-black">
                   {`${formatDateID(new Date(periodeAktif.dari))} - ${formatDateID(
                     new Date(periodeAktif.sampai),
@@ -716,6 +968,83 @@ const ActivePsb: FC = () => {
           </div>
         </div>
       </div>
+
+      {/* modal periode */}
+      <ModalContainer active={isModalPreviewDataPeriode} fullWidth={true}>
+        <div className="w-[90vw] lg:w-[50vw] lg:h-[80vh] py-4 px-6 flex flex-col justify-start items-start relative bg-primary-white rounded-3xl overflow-y-scroll scrollbar-hidden">
+          {/* button close  */}
+          <button
+            type="button"
+            className="absolute right-3 top-2"
+            onClick={() => setIsModalPreviewDataPeriode(false)}
+          >
+            <X size={28} className="text-primary-black" />
+          </button>
+          {/* header */}
+          <div className="w-full flex flex-col justify-start items-center pb-3 border-b-2 border-primary-black">
+            <h1 className="text-2xl font-medium text-primary-black">
+              Data Periode
+            </h1>
+          </div>
+
+          {/* content */}
+          <div className="w-full flex flex-col justify-start items-start mt-4">
+            {/* header */}
+            <div className="px-4 w-full h-12 bg-gray-300 shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] rounded-md flex flex-row justify-start items-center mb-4">
+              {/* number */}
+              <span className="flex-1 text-base font-semibold">No</span>
+              <span className="flex-2 text-base font-semibold">Dari</span>
+              <span className="flex-2 text-base font-semibold">Sampai</span>
+              <span className="flex-2 text-base font-semibold">Status</span>
+              <span className="flex-1 text-base font-semibold ">Action</span>
+            </div>
+
+            {/* card data  */}
+            <div className="w-full flex flex-col justify-start items-start gap-3">
+              {dataPeriode?.success && dataPeriode.data.length > 0 ? (
+                dataPeriode.data.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="px-4 w-full h-12 bg-primary-white shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] rounded-md flex flex-row justify-start items-center"
+                  >
+                    {/* number */}
+                    <span className="flex-1 text-sm">{index + 1}</span>
+                    <span className="flex-2 text-sm">
+                      {formatDateID(new Date(item.dari))}
+                    </span>
+                    <span className="flex-2 text-sm">
+                      {formatDateID(new Date(item.sampai))}
+                    </span>
+                    <span className="flex-2 text-sm">
+                      {item.aktif ? "aktif" : "non aktif"}
+                    </span>
+                    <div className="flex-1 flex flex-row justify-start items-center gap-1">
+                      {/* icon update */}
+                      <button
+                        type="button"
+                        className="p-1.5 bg-primary-blue rounded-sm"
+                      >
+                        <Pencil size={14} className="text-white" />
+                      </button>
+                      {/* icon delete */}
+                      <button
+                        disabled={isPendingDelete}
+                        type="button"
+                        className="p-1.5 bg-primary-red rounded-sm"
+                        onClick={() => handleDeleteData(item.id)}
+                      >
+                        <Trash size={14} className="text-white" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <NoData />
+              )}
+            </div>
+          </div>
+        </div>
+      </ModalContainer>
     </div>
   );
 };

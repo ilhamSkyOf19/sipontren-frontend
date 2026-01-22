@@ -3,7 +3,7 @@ import type {
   CreatePendaftaranType,
   ResponsePendaftaranType,
 } from "../models/pendaftaran-model";
-import type { ResponseData } from "../types/type";
+import type { ResponseData, ResponseMessage } from "../types/type";
 
 export class PendaftaranService {
   // create
@@ -37,6 +37,16 @@ export class PendaftaranService {
     }).then((res) => res.data);
 
     // return
+    return response;
+  }
+
+  // delete
+  static async delete(id: number): Promise<ResponseMessage> {
+    // response
+    const response = await AXIOS.delete(`/pendaftaran/delete/${id}`).then(
+      (res) => res.data,
+    );
+
     return response;
   }
 }

@@ -82,11 +82,17 @@ export class StudentService {
   }
 
   // get count
-  static async getCount(): Promise<
-    ResponseData<{ laki_laki: number; perempuan: number }>
-  > {
+  static async getCount(
+    from: string,
+    to: string,
+  ): Promise<ResponseData<{ laki_laki: number; perempuan: number }>> {
     // get response
-    const response = await AXIOS.get("/student/count").then((res) => res.data);
+    const response = await AXIOS.get("/student/count", {
+      params: {
+        from,
+        to,
+      },
+    }).then((res) => res.data);
 
     return response;
   }
