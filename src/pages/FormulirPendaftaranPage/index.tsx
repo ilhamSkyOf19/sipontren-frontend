@@ -9,7 +9,7 @@ import type {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 import { StudentValidation } from "../../validations/student-validation";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { StudentService } from "../../services/student.service";
 import SubJudulLeft from "../../components/SubJudulLeft";
 import SubJudulCenter from "../../components/SubJudulCenter";
@@ -24,6 +24,8 @@ import HeaderDashboard from "../../components/HeaderDashboard";
 import ButtonBack from "../../components/ButtonBack";
 import closedIcon from "../../assets/icons/closed.webp";
 import Seo from "../../components/Seo";
+import { PendaftaranService } from "../../services/pendaftaran.service";
+import { formatDateID, isValidDate } from "../../utils/utils";
 
 // list jenis sekolah
 const jenisSekolahList: string[] = ["SD", "SMP", "SMA"];
@@ -78,13 +80,30 @@ const FormulirPendaftaranPage: FC = () => {
   };
 
   //   get student
-  const { data: dataStudent } = useQuery({
-    queryKey: ["studentForDashboard", id],
-    queryFn: () => {
-      return StudentService.detail(+id!);
-    },
-    enabled: typeof id === "string" && !isNaN(+id) && admin !== null && psbOpen,
+  const data = useQueries({
+    queries: [
+      // data student
+      {
+        queryKey: ["studentForDashboard", id],
+        queryFn: () => {
+          return StudentService.detail(+id!);
+        },
+        enabled:
+          typeof id === "string" && !isNaN(+id) && admin !== null && psbOpen,
+      },
+
+      // get aktif
+      {
+        queryKey: ["pendaftaran"],
+        queryFn: () => {
+          return PendaftaranService.getAktif();
+        },
+      },
+    ],
   });
+
+  // desturcu query
+  const [dataStudent, dataAktif] = data;
 
   //   mutation
   const { mutateAsync, isPending } = useMutation({
@@ -116,8 +135,8 @@ const FormulirPendaftaranPage: FC = () => {
 
   //   set value
   useEffect(() => {
-    if (id && dataStudent?.success) {
-      const d = dataStudent.data;
+    if (id && dataStudent?.data?.success) {
+      const d = dataStudent.data.data;
 
       reset({
         jenis_sekolah: d.jenis_sekolah,
@@ -139,7 +158,7 @@ const FormulirPendaftaranPage: FC = () => {
         nama_lengkap_wali: d.nama_lengkap_wali ?? "",
       });
     }
-  }, [id, dataStudent?.success, reset]);
+  }, [id, dataStudent?.data?.success, reset]);
 
   // handle submit
   const onSubmit = async (data: CreateStudentType | UpdateStudentType) => {
@@ -238,11 +257,13 @@ const FormulirPendaftaranPage: FC = () => {
 
       <main
         className={clsx(
-          "w-full flex flex-col justify-start items-center overflow-hidden",
+          "w-full flex flex-col justify-start items-center overflow-hidden bg-primary-white",
           !admin ? "h-full" : "pb-16",
         )}
       >
-        {psbOpen ? (
+        {dataAktif.isLoading ? (
+          <p>loading</p>
+        ) : !dataAktif.data?.success ? (
           <div className="w-full h-screen flex flex-col justify-center items-center px-2 lg:w-auto">
             <div className="relative w-full flex flex-col justify-center items-center gap-4">
               <h3 className="text-3xl text-secondary-blue font-semibold text-center lg:text-5xl">
@@ -265,290 +286,319 @@ const FormulirPendaftaranPage: FC = () => {
             </div>
           </div>
         ) : (
-          <>
-            {!admin && (
-              <HeaderPage
-                whiteText1="Formulir Pendaftaran"
-                whiteText2="Ponpes Al-Amin"
-                YellowText="Seputih Banyak - Lampung Tengah"
-                deskripsi="Halaman resmi pengisian formulir pendaftaran santri baru Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak. Isi data lengkap dan submit online."
-              />
-            )}
-
-            <div
-              className={clsx(
-                "w-full flex flex-col justify-start items-start px-4 py-14 min-h-screen lg:py-16",
-                admin && "py-12",
+          dataAktif.data.success &&
+          dataAktif.data.data && (
+            <>
+              {!admin && (
+                <HeaderPage
+                  whiteText1="Formulir Pendaftaran"
+                  whiteText2="Ponpes Al-Amin"
+                  YellowText="Seputih Banyak - Lampung Tengah"
+                  deskripsi="Halaman resmi pengisian formulir pendaftaran santri baru Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak. Isi data lengkap dan submit online."
+                />
               )}
-            >
-              {/* header page for mobile*/}
-              <div className="w-full flex flex-row justify-start items-start lg:hidden">
-                {admin ? (
-                  <HeaderDashboard
-                    title="Edit Data Calon Santri"
-                    subTitle="Silahkan ubah sesuai dengan identitas calon santri"
-                    tanggal={true}
-                  />
-                ) : (
-                  <SubJudulLeft title="Formulir Pendaftaran " />
+
+              <div
+                className={clsx(
+                  "w-full flex flex-col justify-start items-start px-4 py-14 min-h-screen lg:py-16",
+                  admin && "py-12",
                 )}
-              </div>
-
-              {/* header page for desktop */}
-              <div className="w-full flex-row justify-start items-start hidden lg:flex lg:px-4">
-                <SubJudulCenter title="Formulir Pendaftaran " />
-              </div>
-
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="w-full flex flex-col justify-start items-start mt-12 lg:grid lg:grid-cols-3 lg:gap-4 lg:px-4"
               >
-                {/* choose jenis sekolah */}
-                <BoxInputChoose<CreateStudentType | UpdateStudentType>
-                  label="Jenis Sekolah"
-                  chooseList={jenisSekolahList}
-                  required
-                  controller={fieldsController.jenisSekolah}
-                  defaultValue={
-                    dataStudent?.success ? dataStudent?.data.jenis_sekolah : ""
-                  }
-                  placeholder="Pilih Jenis Sekolah"
-                  hAuto={true}
-                  scrollHide={true}
-                />
-
-                {/* nik */}
-                <BoxInputText
-                  register={register("nik")}
-                  label="NIK"
-                  name="nik"
-                  placeholder="Masukkan NIK ..."
-                  required
-                  errorMessage={errors.nik?.message}
-                  max={16}
-                  numeric={true}
-                />
-
-                {/* nisn */}
-                <BoxInputText
-                  register={register("nisn")}
-                  label="NISN"
-                  name="nisn"
-                  placeholder="Masukkan NISN ..."
-                  required
-                  errorMessage={errors.nisn?.message}
-                  max={10}
-                  numeric={true}
-                />
-
-                {/* nama lengkap */}
-                <BoxInputText
-                  register={register("nama_lengkap")}
-                  label="Nama Lengkap"
-                  name="nama_lengkap"
-                  placeholder="Masukkan Nama Lengkap ..."
-                  required
-                  errorMessage={errors.nama_lengkap?.message}
-                  max={50}
-                />
-
-                {/* choose jenis kelamin */}
-                <BoxInputChoose<CreateStudentType | UpdateStudentType>
-                  label="Jenis Kelamin"
-                  chooseList={["laki_laki", "perempuan"]}
-                  required
-                  controller={fieldsController.jenisKelamin}
-                  defaultValue={
-                    dataStudent?.success ? dataStudent?.data.jenis_kelamin : ""
-                  }
-                  placeholder="Pilih Jenis Kelamin"
-                  hAuto={true}
-                  scrollHide={true}
-                />
-
-                {/* usia */}
-                <BoxInputNumber
-                  register={register("usia")}
-                  label="Usia"
-                  name="usia"
-                  placeholder="Masukkan usia ..."
-                  required
-                  errorMessage={errors.usia?.message}
-                  max={20}
-                />
-
-                {/* tempat lahir */}
-                <BoxInputText
-                  register={register("tempat_lahir")}
-                  label="Tempat Lahir"
-                  name="tempat_lahir"
-                  placeholder="Masukkan Tempat Lahir ..."
-                  required
-                  errorMessage={errors.tempat_lahir?.message}
-                  max={100}
-                />
-
-                {/* tanggal lahir */}
-                <BoxInputDate<CreateUstadType | UpdateStudentType>
-                  controller={fieldsController.tanggalLahir}
-                  label="Tanggal Lahir"
-                  required={true}
-                  oldValue={
-                    dataStudent?.success
-                      ? new Date(dataStudent?.data?.tanggal_lahir)
-                      : undefined
-                  }
-                />
-
-                {/* alamat */}
-                <BoxInputText
-                  register={register("alamat")}
-                  label="Alamat"
-                  name="alamat"
-                  placeholder="Masukkan Alamat ..."
-                  required
-                  errorMessage={errors.alamat?.message}
-                  max={150}
-                />
-
-                {/* anak ke */}
-                <BoxInputNumber
-                  register={register("anak_ke")}
-                  label="Anak Ke"
-                  name="anak_ke"
-                  placeholder="Masukkan anak ke ..."
-                  required
-                  errorMessage={errors.anak_ke?.message}
-                  max={20}
-                />
-
-                {/* jumlah saudara */}
-                <BoxInputNumber
-                  register={register("jumlah_saudara")}
-                  label="Jumlah Saudara"
-                  name="jumlah_saudara"
-                  placeholder="Masukkan jumlah saudara ..."
-                  required
-                  errorMessage={errors.jumlah_saudara?.message}
-                  max={20}
-                />
-
-                {/* asal sekolah */}
-                <BoxInputText
-                  register={register("asal_sekolah")}
-                  label="Asal Sekolah"
-                  name="asal_sekolah"
-                  placeholder="Masukkan Asal Sekolah ..."
-                  required
-                  errorMessage={errors.asal_sekolah?.message}
-                  max={150}
-                />
-
-                {/* alamat sekolah asal */}
-                <BoxInputText
-                  register={register("alamat_sekolah_asal")}
-                  label="Alamat Sekolah Asal"
-                  name="alamat_sekolah_asal"
-                  placeholder="Masukkan Alamat Sekolah Asal ..."
-                  required
-                  errorMessage={errors.alamat_sekolah_asal?.message}
-                  max={150}
-                />
-
-                {/* nama lengkap ayah*/}
-                <BoxInputText
-                  register={register("nama_lengkap_ayah")}
-                  label="Nama Lengkap Ayah"
-                  name="nama_lengkap_ayah"
-                  placeholder="Masukkan Nama Lengkap Ayah ..."
-                  required
-                  errorMessage={errors.nama_lengkap_ayah?.message}
-                  max={50}
-                />
-
-                {/* nama lengkap ibu*/}
-                <BoxInputText
-                  register={register("nama_lengkap_ibu")}
-                  label="Nama Lengkap Ibu"
-                  name="nama_lengkap_ibu"
-                  placeholder="Masukkan Nama Lengkap Ibu ..."
-                  required
-                  errorMessage={errors.nama_lengkap_ibu?.message}
-                  max={50}
-                />
-
-                {/* nama lengkap wali*/}
-                <BoxInputText
-                  register={register("nama_lengkap_wali")}
-                  label="Nama Lengkap Wali (Optional)"
-                  name="nama_lengkap_wali"
-                  placeholder="Masukkan Nama Lengkap Wali ..."
-                  errorMessage={errors.nama_lengkap_wali?.message}
-                  max={50}
-                />
-
-                {/* nik */}
-                <BoxInputText
-                  register={register("no_telepon")}
-                  label="No Telepon / Whatsapp"
-                  name="no_telepon"
-                  placeholder="Masukkan No Telepon ..."
-                  required
-                  errorMessage={errors.no_telepon?.message}
-                  max={14}
-                  numeric={true}
-                />
-
-                {/* space */}
-                <div className="w-full hidden lg:flex" />
-
-                {imageFields.map((item) => (
-                  <BoxInputGambar<CreateStudentType | UpdateStudentType>
-                    key={item.key}
-                    label={item.label}
-                    controller={
-                      fieldsController[
-                        item.key === "foto_formal"
-                          ? "fotoFormal"
-                          : item.key === "fc_kis_kip"
-                            ? "fcKis"
-                            : item.key === "fc_akta_kelahiran"
-                              ? "fcAkta"
-                              : item.key === "fc_ktp"
-                                ? "fcKtp"
-                                : "fotoKK"
-                      ]
-                    }
-                    required={false}
-                    formulirPendaftaran={true}
-                    clearError={() => clearErrors(item.key)}
-                  />
-                ))}
-
-                {/* space */}
-                <div className="w-full hidden lg:flex" />
-
-                {/* button submit */}
-                <div
-                  className={clsx(
-                    "w-full mt-6 flex flex-row justify-start items-center lg:col-span-3",
-                    admin && "gap-4",
+                {/* header page for mobile*/}
+                <div className="w-full flex flex-row justify-start items-start lg:hidden">
+                  {admin ? (
+                    <HeaderDashboard
+                      title="Edit Data Calon Santri"
+                      subTitle="Silahkan ubah sesuai dengan identitas calon santri"
+                      tanggal={true}
+                    />
+                  ) : (
+                    <div className="w-full flex flex-row justify-between items-center">
+                      <SubJudulLeft title="Formulir Pendaftaran" />
+                    </div>
                   )}
-                >
-                  {/* button back */}
-                  {admin && <ButtonBack link="/dashboard/calon-santri" />}
-
-                  {/* space */}
-                  <div className="w-full hidden lg:flex" />
-
-                  <ButtonSubmit label="Submit" loading={isPending} />
-
-                  {/* space */}
-                  <div className="w-full hidden lg:flex" />
                 </div>
-              </form>
-            </div>
-          </>
+
+                {/* header page for desktop */}
+                <div className="w-full flex-row justify-between items-start hidden lg:flex lg:px-4">
+                  <SubJudulCenter title="Formulir Pendaftaran " />
+
+                  {/* periode */}
+                  <div className="py-3 px-4 gap-4 bg-primary-white rounded-md border border-secondary-blue flex flex-row justify-start items-center">
+                    <p className="text-xs lg:text-base font-medium text-secondary-blue">
+                      Periode :
+                    </p>
+                    <p className="text-sm font-semibold text-primary-black">
+                      <span className="text-sm font-medium">
+                        {isValidDate(dataAktif.data.data.dari.toString())
+                          ? formatDateID(new Date(dataAktif.data.data.dari))
+                          : "-"}
+                      </span>
+                      <span className="text-sm font-medium mx-1.5">-</span>
+                      <span className="text-sm font-medium">
+                        {isValidDate(dataAktif.data.data.sampai.toString())
+                          ? formatDateID(new Date(dataAktif.data.data.sampai))
+                          : "-"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="w-full flex flex-col justify-start items-start mt-12 lg:grid lg:grid-cols-3 lg:gap-4 lg:px-4"
+                >
+                  {/* choose jenis sekolah */}
+                  <BoxInputChoose<CreateStudentType | UpdateStudentType>
+                    label="Jenis Sekolah"
+                    chooseList={jenisSekolahList}
+                    required
+                    controller={fieldsController.jenisSekolah}
+                    defaultValue={
+                      dataStudent?.data?.success
+                        ? dataStudent?.data?.data.jenis_sekolah
+                        : ""
+                    }
+                    placeholder="Pilih Jenis Sekolah"
+                    hAuto={true}
+                    scrollHide={true}
+                  />
+
+                  {/* nik */}
+                  <BoxInputText
+                    register={register("nik")}
+                    label="NIK"
+                    name="nik"
+                    placeholder="Masukkan NIK ..."
+                    required
+                    errorMessage={errors.nik?.message}
+                    max={16}
+                    numeric={true}
+                  />
+
+                  {/* nisn */}
+                  <BoxInputText
+                    register={register("nisn")}
+                    label="NISN"
+                    name="nisn"
+                    placeholder="Masukkan NISN ..."
+                    required
+                    errorMessage={errors.nisn?.message}
+                    max={10}
+                    numeric={true}
+                  />
+
+                  {/* nama lengkap */}
+                  <BoxInputText
+                    register={register("nama_lengkap")}
+                    label="Nama Lengkap"
+                    name="nama_lengkap"
+                    placeholder="Masukkan Nama Lengkap ..."
+                    required
+                    errorMessage={errors.nama_lengkap?.message}
+                    max={50}
+                  />
+
+                  {/* choose jenis kelamin */}
+                  <BoxInputChoose<CreateStudentType | UpdateStudentType>
+                    label="Jenis Kelamin"
+                    chooseList={["laki_laki", "perempuan"]}
+                    required
+                    controller={fieldsController.jenisKelamin}
+                    defaultValue={
+                      dataStudent?.data?.success
+                        ? dataStudent?.data?.data.jenis_kelamin
+                        : ""
+                    }
+                    placeholder="Pilih Jenis Kelamin"
+                    hAuto={true}
+                    scrollHide={true}
+                  />
+
+                  {/* usia */}
+                  <BoxInputNumber
+                    register={register("usia")}
+                    label="Usia"
+                    name="usia"
+                    placeholder="Masukkan usia ..."
+                    required
+                    errorMessage={errors.usia?.message}
+                    max={20}
+                  />
+
+                  {/* tempat lahir */}
+                  <BoxInputText
+                    register={register("tempat_lahir")}
+                    label="Tempat Lahir"
+                    name="tempat_lahir"
+                    placeholder="Masukkan Tempat Lahir ..."
+                    required
+                    errorMessage={errors.tempat_lahir?.message}
+                    max={100}
+                  />
+
+                  {/* tanggal lahir */}
+                  <BoxInputDate<CreateUstadType | UpdateStudentType>
+                    controller={fieldsController.tanggalLahir}
+                    label="Tanggal Lahir"
+                    required={true}
+                    oldValue={
+                      dataStudent?.data?.success
+                        ? new Date(dataStudent?.data?.data?.tanggal_lahir)
+                        : undefined
+                    }
+                  />
+
+                  {/* alamat */}
+                  <BoxInputText
+                    register={register("alamat")}
+                    label="Alamat"
+                    name="alamat"
+                    placeholder="Masukkan Alamat ..."
+                    required
+                    errorMessage={errors.alamat?.message}
+                    max={150}
+                  />
+
+                  {/* anak ke */}
+                  <BoxInputNumber
+                    register={register("anak_ke")}
+                    label="Anak Ke"
+                    name="anak_ke"
+                    placeholder="Masukkan anak ke ..."
+                    required
+                    errorMessage={errors.anak_ke?.message}
+                    max={20}
+                  />
+
+                  {/* jumlah saudara */}
+                  <BoxInputNumber
+                    register={register("jumlah_saudara")}
+                    label="Jumlah Saudara"
+                    name="jumlah_saudara"
+                    placeholder="Masukkan jumlah saudara ..."
+                    required
+                    errorMessage={errors.jumlah_saudara?.message}
+                    max={20}
+                  />
+
+                  {/* asal sekolah */}
+                  <BoxInputText
+                    register={register("asal_sekolah")}
+                    label="Asal Sekolah"
+                    name="asal_sekolah"
+                    placeholder="Masukkan Asal Sekolah ..."
+                    required
+                    errorMessage={errors.asal_sekolah?.message}
+                    max={150}
+                  />
+
+                  {/* alamat sekolah asal */}
+                  <BoxInputText
+                    register={register("alamat_sekolah_asal")}
+                    label="Alamat Sekolah Asal"
+                    name="alamat_sekolah_asal"
+                    placeholder="Masukkan Alamat Sekolah Asal ..."
+                    required
+                    errorMessage={errors.alamat_sekolah_asal?.message}
+                    max={150}
+                  />
+
+                  {/* nama lengkap ayah*/}
+                  <BoxInputText
+                    register={register("nama_lengkap_ayah")}
+                    label="Nama Lengkap Ayah"
+                    name="nama_lengkap_ayah"
+                    placeholder="Masukkan Nama Lengkap Ayah ..."
+                    required
+                    errorMessage={errors.nama_lengkap_ayah?.message}
+                    max={50}
+                  />
+
+                  {/* nama lengkap ibu*/}
+                  <BoxInputText
+                    register={register("nama_lengkap_ibu")}
+                    label="Nama Lengkap Ibu"
+                    name="nama_lengkap_ibu"
+                    placeholder="Masukkan Nama Lengkap Ibu ..."
+                    required
+                    errorMessage={errors.nama_lengkap_ibu?.message}
+                    max={50}
+                  />
+
+                  {/* nama lengkap wali*/}
+                  <BoxInputText
+                    register={register("nama_lengkap_wali")}
+                    label="Nama Lengkap Wali (Optional)"
+                    name="nama_lengkap_wali"
+                    placeholder="Masukkan Nama Lengkap Wali ..."
+                    errorMessage={errors.nama_lengkap_wali?.message}
+                    max={50}
+                  />
+
+                  {/* nik */}
+                  <BoxInputText
+                    register={register("no_telepon")}
+                    label="No Telepon / Whatsapp"
+                    name="no_telepon"
+                    placeholder="Masukkan No Telepon ..."
+                    required
+                    errorMessage={errors.no_telepon?.message}
+                    max={14}
+                    numeric={true}
+                  />
+
+                  {/* space */}
+                  <div className="w-full hidden lg:flex" />
+
+                  {imageFields.map((item) => (
+                    <BoxInputGambar<CreateStudentType | UpdateStudentType>
+                      key={item.key}
+                      label={item.label}
+                      controller={
+                        fieldsController[
+                          item.key === "foto_formal"
+                            ? "fotoFormal"
+                            : item.key === "fc_kis_kip"
+                              ? "fcKis"
+                              : item.key === "fc_akta_kelahiran"
+                                ? "fcAkta"
+                                : item.key === "fc_ktp"
+                                  ? "fcKtp"
+                                  : "fotoKK"
+                        ]
+                      }
+                      required={false}
+                      formulirPendaftaran={true}
+                      clearError={() => clearErrors(item.key)}
+                    />
+                  ))}
+
+                  {/* space */}
+                  <div className="w-full hidden lg:flex" />
+
+                  {/* button submit */}
+                  <div
+                    className={clsx(
+                      "w-full mt-6 flex flex-row justify-start items-center lg:col-span-3",
+                      admin && "gap-4",
+                    )}
+                  >
+                    {/* button back */}
+                    {admin && <ButtonBack link="/dashboard/calon-santri" />}
+
+                    {/* space */}
+                    <div className="w-full hidden lg:flex" />
+
+                    <ButtonSubmit label="Submit" loading={isPending} />
+
+                    {/* space */}
+                    <div className="w-full hidden lg:flex" />
+                  </div>
+                </form>
+              </div>
+            </>
+          )
         )}
       </main>
     </>

@@ -40,6 +40,17 @@ export class PendaftaranService {
     return response;
   }
 
+  // get aktif
+  static async getAktif(): Promise<ResponseData<ResponsePendaftaranType>> {
+    // response
+    const response = await AXIOS.get(`/pendaftaran/cek-aktif`).then(
+      (res) => res.data,
+    );
+
+    // return
+    return response;
+  }
+
   // delete
   static async delete(id: number): Promise<ResponseMessage> {
     // response

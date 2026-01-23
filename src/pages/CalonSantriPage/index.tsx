@@ -24,10 +24,16 @@ const CalonSantriPage: FC = () => {
   // search params
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // state jenis sekolah
+  const [jenisSekolah, setJenisSekolah] = useState<
+    "SD" | "SMP" | "SMA" | undefined
+  >(undefined);
+
   // state jenis kelamin
   const [jenisKelamin, setJenisKelamin] = useState<
     "laki_laki" | "perempuan" | undefined
   >(undefined);
+
   // use filter
   const { handleFilter, page, from, to } = UseFilter();
   //  use search
@@ -54,6 +60,13 @@ const CalonSantriPage: FC = () => {
     jenisKelamin: "laki_laki" | "perempuan" | undefined,
   ) => {
     setJenisKelamin(jenisKelamin);
+  };
+
+  // handle jenis sekolah
+  const handleFilterJenisSekolah = (
+    jenisSekolah: "SD" | "SMP" | "SMA" | undefined,
+  ) => {
+    setJenisSekolah(jenisSekolah);
   };
 
   // jenis kelamin
@@ -86,6 +99,7 @@ const CalonSantriPage: FC = () => {
       queryFrom,
       queryTo,
       debouncedSearch,
+      jenisSekolah,
     ],
     queryFn: () =>
       StudentService.read({
@@ -94,6 +108,7 @@ const CalonSantriPage: FC = () => {
         search: debouncedSearch,
         page: page.toString(),
         jenis_kelamin: jenisKelaminQuery as "laki_laki" | "perempuan",
+        jenis_sekolah: jenisSekolah,
       }),
     refetchOnWindowFocus: false,
   });
@@ -170,6 +185,7 @@ const CalonSantriPage: FC = () => {
           handleSearch={handleSearch}
           searchValue={isSearch}
           handleFilterJenisKelamin={handleFilterJenisKelamin}
+          handleFilterJenisSekolah={handleFilterJenisSekolah}
         />
 
         {/* content */}

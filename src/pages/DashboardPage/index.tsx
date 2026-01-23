@@ -141,16 +141,10 @@ const CardStudent: FC = () => {
               className="text-sm bg-[#12501A] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
               onClick={() => handleExport()}
             >
-              Excel
-            </button>
-            {/* button pdf */}
-            <button
-              type="button"
-              className="text-sm bg-[#d22e2e] text-white h-full px-4 rounded-md font-medium hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
-            >
-              PDF
+              Export Excel
             </button>
 
+            {/* selengkapnya */}
             <Link
               to={"/dashboard/ustad"}
               className="h-full px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white flex flex-col justify-center items-center hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
@@ -633,6 +627,11 @@ const ActivePsb: FC = () => {
       return PendaftaranService.create(data);
     },
     onSuccess: () => {
+      // refetch
+      queryClient.invalidateQueries({
+        queryKey: ["pendaftaran"],
+      });
+
       // notifikasi
       Swal.fire({
         toast: true,
@@ -646,11 +645,6 @@ const ActivePsb: FC = () => {
           container: "swal-z",
         },
         padding: "7px 12px",
-      });
-
-      // refetch
-      queryClient.invalidateQueries({
-        queryKey: ["pendaftaran"],
       });
     },
     onError: (error) => {

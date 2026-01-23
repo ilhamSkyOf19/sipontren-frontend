@@ -30,13 +30,9 @@ export class AuthService {
   // logout
   static async logout(): Promise<ResponseMessage> {
     // get response
-    const response = await AXIOS.post(
-      "/auth/logout",
-      {},
-      {
-        withCredentials: true,
-      },
-    ).then((res) => res.data);
+    const response = await AXIOS.post("/auth/logout", {
+      withCredentials: true,
+    }).then((res) => res.data);
 
     // return
     return response;

@@ -7,6 +7,7 @@ import useClickOutside from "../../hooks/useClickOutSide";
 import ButtonAddText from "../ButtonAddText";
 import FilterJenisKelamin from "../FilterJenisKelamin";
 import BoxInputDateFilter from "../BoxInputDateFilter";
+import FilterJenisSekolah from "../FilterJenisSekolah";
 
 // time
 
@@ -20,6 +21,9 @@ type Props = {
   ) => void;
   searchValue: string;
   linkAdd?: string;
+  handleFilterJenisSekolah?: (
+    jenisSekolah: "SD" | "SMP" | "SMA" | undefined,
+  ) => void;
 };
 
 const ComponentFilterAndButtonAdd: FC<Props> = ({
@@ -28,6 +32,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   searchValue,
   handleFilterJenisKelamin,
   linkAdd,
+  handleFilterJenisSekolah,
 }) => {
   // get search params
   const [searchParams] = useSearchParams();
@@ -37,6 +42,21 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
 
   // state modal filter
   const [isModalFilterDate, setIsModalFilterDate] = useState<boolean>(false);
+
+  // state jenis kelamin
+  const [isModalJenisSekolah, setIsModalJenisSekolah] = useState<{
+    active: boolean;
+    jenisSekolah: "SD" | "SMP" | "SMA" | undefined;
+  }>({ active: false, jenisSekolah: undefined });
+
+  // handle jenis kelamin
+  const handleJenisSekolah = (value: "SD" | "SMP" | "SMA" | undefined) => {
+    // set jenis kelamin
+    handleFilterJenisSekolah?.(value);
+
+    // close
+    setIsModalJenisSekolah({ active: false, jenisSekolah: value });
+  };
 
   // state jenis kelamin
   const [isModalJenisKelamin, setIsModalJenisKelamin] = useState<{
@@ -57,6 +77,10 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   const handleOpenModalFilterDate = () => {
     setIsModalFilterDate((prev) => !prev);
   };
+
+  // ref modal filter jenis sekolah
+  const refFilterJenisSekolah = useRef<HTMLDivElement>(null);
+  const refButtonJenisSekolah = useRef<HTMLButtonElement>(null);
 
   // ref modal filter jenis kelamin
   const refFilterJenisKelamin = useRef<HTMLDivElement>(null);
@@ -129,8 +153,11 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       {/* filter */}
       <div
         className={clsx(
-          " h-12 flex-row justify-start items-center gap-2 relative lg:flex-2 lg:h-full lg:justify-end",
-          handleFilter || handleFilterJenisKelamin || linkAdd
+          " h-12 flex-row justify-start items-center gap-2 relative lg:flex-3 lg:h-full lg:justify-end",
+          handleFilter ||
+            handleFilterJenisKelamin ||
+            linkAdd ||
+            handleFilterJenisSekolah
             ? "flex"
             : "hidden",
         )}
@@ -149,6 +176,24 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
               refModalJenisKelamin={refFilterJenisKelamin}
               isModalJenisKelamin={isModalJenisKelamin}
               handleJenisKelamin={handleJenisKelamin}
+            />
+          )}
+        </div>
+
+        {/* filter jenis sekolah */}
+        <div className="relative h-full">
+          {handleFilterJenisSekolah && (
+            <FilterJenisSekolah
+              handleButtonJenisSekolah={() =>
+                setIsModalJenisSekolah((prev) => ({
+                  ...prev,
+                  active: !prev.active,
+                }))
+              }
+              refButtonJenisSekolah={refButtonJenisSekolah}
+              refModalJenisSekolah={refFilterJenisSekolah}
+              isModalJenisSekolah={isModalJenisSekolah}
+              handleJenisSekolah={handleJenisSekolah}
             />
           )}
         </div>
@@ -222,14 +267,14 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                       type="from"
                       refInput={refInputDateFrom}
                       handleDate={handleSetDate}
-                      label={from ?? ""}
+                      label={from ? (isValidDate(from) ? from : "") : ""}
                       to={to ?? ""}
                     />
                     <BoxInputDateFilter
                       type="to"
                       refInput={refInputDateTo}
                       handleDate={handleSetDate}
-                      label={to ?? ""}
+                      label={to ? (isValidDate(to) ? to : "") : ""}
                       from={from ?? ""}
                     />
                   </div>

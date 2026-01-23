@@ -12,6 +12,7 @@ type Props<T extends FieldValues = any> = {
   clearError?: () => void;
   fullPreview?: boolean;
   formulirPendaftaran?: boolean;
+  previewPamflet?: boolean;
 };
 
 function BoxInputGambar<TFieldValues extends FieldValues = any>({
@@ -21,6 +22,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
   clearError,
   fullPreview,
   formulirPendaftaran,
+  previewPamflet,
 }: Props<TFieldValues>) {
   // state modal
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -106,6 +108,7 @@ function BoxInputGambar<TFieldValues extends FieldValues = any>({
               className={clsx(
                 " object-cover rounded-2xl",
                 fullPreview ? "w-full h-40 lg:h-60" : "w-55 h-60",
+                previewPamflet && "w-full lg:h-[70vh]",
               )}
             />
 

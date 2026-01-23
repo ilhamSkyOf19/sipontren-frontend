@@ -42,8 +42,8 @@ const ProfilePage: FC = () => {
         <SectionProgramUnggulan />
         <SectionFasilitas widthDevice={widthDevice} />
         <SectionPrestasi />
-        <SectionUstad widthDevice={widthDevice} />
-        <SectionAlumni widthDevice={widthDevice} />
+        <SectionUstad />
+        <SectionAlumni />
       </main>
     </>
   );

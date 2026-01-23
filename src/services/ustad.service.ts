@@ -25,12 +25,14 @@ export class UstadService {
   static async read({
     page,
     search,
+    limit,
   }: FilterData): Promise<ResponseData<ResponseUstadWithMetaType>> {
     // get response
     const response = await AXIOS.get("/ustad/read", {
       params: {
         page,
         search,
+        limit,
       },
     }).then((res) => res.data);
 

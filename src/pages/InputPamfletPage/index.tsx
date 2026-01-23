@@ -112,7 +112,7 @@ const InputPamfletPage: FC = () => {
               controller={fileController}
               required={false}
               clearError={() => clearErrors("pamflet")}
-              fullPreview={true}
+              previewPamflet={true}
             />
 
             {/* action */}

@@ -28,6 +28,7 @@ export class StudentService {
     search,
     page,
     jenis_kelamin,
+    jenis_sekolah,
   }: FilterData): Promise<ResponseData<ResponseStudentWithMetaType>> {
     // get response
     const response = await AXIOS.get("/student/read", {
@@ -37,6 +38,7 @@ export class StudentService {
         search,
         page,
         jenis_kelamin,
+        jenis_sekolah,
       },
     }).then((res) => res.data);
 

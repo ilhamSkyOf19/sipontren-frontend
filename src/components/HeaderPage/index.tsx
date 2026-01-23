@@ -27,7 +27,7 @@ const HeaderPage: FC<Props> = ({
       <div className="flex flex-col justify-center items-start gap-3 z-10 lg:pr-32 lg:gap-4">
         <ParallaxGoRight>
           {/* H1 UTAMA SEO */}
-          <h1 className="text-xl text-white font-semibold md:text-3xl lg:text-5xl">
+          <h1 className="text-xl text-white font-semibold md:text-3xl lg:text-5xl lg:mb-2">
             {window > 1024 ? (
               <Typewriter
                 words={[whiteText1]}
@@ -44,12 +44,12 @@ const HeaderPage: FC<Props> = ({
           </h1>
 
           {/* H2 pendukung */}
-          <h2 className="text-xl text-white font-semibold md:text-3xl lg:text-5xl">
+          <h2 className="text-xl text-white font-semibold md:text-3xl lg:text-5xl lg:mb-4">
             {whiteText2}
           </h2>
 
           {/* Lokasi wajib ada di heading */}
-          <h3 className="w-[80%] text-xl text-primary-yellow font-semibold md:text-2xl lg:text-3xl">
+          <h3 className="w-[80%] text-xl text-primary-yellow font-semibold md:text-2xl lg:text-3xl lg:mb-2">
             {YellowText}
           </h3>
 

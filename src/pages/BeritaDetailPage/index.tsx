@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 import { NewsService } from "../../services/news.service";
 import { convertDate } from "../../utils/utils";
+import { copyLink } from "../../utils/sweetalert/copyLink";
 
 const BeritaDetail = () => {
   // navigate
@@ -22,11 +22,6 @@ const BeritaDetail = () => {
   //   cek
   if (!news?.success) return;
 
-  // cek news
-  // useEffect(() => {
-  //   console.log(news);
-  // }, [news]);
-
   // word
   const words: string[] = news?.data.content?.split(".");
 
@@ -41,8 +36,9 @@ const BeritaDetail = () => {
       return acc;
     }, [])
     .map((group) =>
-      group.map((s) => (s.endsWith(".") ? s : s + ".")).join(" ")
+      group.map((s) => (s.endsWith(".") ? s : s + ".")).join(" "),
     );
+
   return (
     <main className="flex flex-col justify-start items-center overflow-hidden">
       <div className="w-full flex flex-col justify-start items-start py-10">
@@ -75,19 +71,39 @@ const BeritaDetail = () => {
           </div>
 
           {/* category */}
-          <div className="w-[90%] flex flex-row justify-start items-start">
-            <h3 className="px-5 py-2 border border-blue-400 rounded-md capitalize">
+          <div className="w-[90%] flex flex-row justify-between items-center gap-3">
+            <h3 className="px-5 py-1.5 text-sm lg:text-base lg:py-2 border border-blue-400 rounded-md capitalize">
               {news?.data.category ?? ""}
             </h3>
+
+            {/* share button */}
+            <button
+              type="button"
+              className="text-xs lg:text-sm text-secondary-blue underline lg:hidden"
+              onClick={() => copyLink()}
+            >
+              Copy Link Berita
+            </button>
           </div>
 
           {/* title */}
           <div className="w-[90%] flex flex-col gap-3 justify-start items-start">
             {/* author */}
-            <div className="w-full flex flex-row justify-start items-start">
+            <div className="w-full flex flex-row justify-start items-center gap-4">
               <p className="text-xs text-primary-blue font-medium lg:text-sm">
                 By Admin - {convertDate(news?.data.createdAt)}
               </p>
+
+              {<span className="text-base">|</span>}
+
+              {/* share button */}
+              <button
+                type="button"
+                className="text-xs lg:text-sm text-secondary-blue underline hidden lg:block"
+                onClick={() => copyLink()}
+              >
+                Copy Link Berita
+              </button>
             </div>
 
             <h3 className="font-semibold text-xl">{news?.data.title ?? ""}</h3>

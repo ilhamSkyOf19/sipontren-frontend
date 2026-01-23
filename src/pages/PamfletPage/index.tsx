@@ -50,7 +50,7 @@ const PamfletPage: FC = () => {
       </div>
 
       {/* card */}
-      <div className="w-full flex flex-col justify-start items-start gap-8 mt-12 lg:flex-row">
+      <div className="w-full flex flex-col justify-start items-start gap-8 mt-12 lg:flex-row flex-wrap">
         {/* card banner */}
         {isLoading ? (
           Array.from({ length: 3 }).map((_, index) => (
@@ -91,7 +91,7 @@ const CardPamflet: FC<CardPamfletProps> = ({
   linkUpdate,
 }) => {
   return (
-    <div className="w-full h-110 flex flex-col justify-start items-start bg-primary-white shadow-[0_0_10px_2px_rgba(0,0,0,0.1)] rounded-md overflow-hidden lg:h-130 lg:w-140 lg:items-end">
+    <div className="w-full h-110 flex flex-col justify-start items-start bg-primary-white shadow-[0_0_10px_2px_rgba(0,0,0,0.1)] rounded-md overflow-hidden lg:h-160 lg:w-140 lg:items-end shrink-0 ">
       {/* img */}
       <div className="flex-6 lg:flex-8 w-full overflow-hidden">
         <img

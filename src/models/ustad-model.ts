@@ -53,4 +53,5 @@ export type ResponseUstadWithMetaType = {
 export type FilterData = {
   search?: string;
   page?: string;
+  limit?: string;
 };

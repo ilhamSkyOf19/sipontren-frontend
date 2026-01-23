@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
+import { useMutation } from "@tanstack/react-query";
+import { AuthService } from "../../services/auth.service";
 // import { useMutation } from "@tanstack/react-query";
 
 // navigation
@@ -76,15 +78,15 @@ const SideBarDashboard: FC<Props> = ({ handleSideBarSmall }) => {
   const pathname = useLocation().pathname;
 
   // use mutation
-  //   const { mutateAsync } = useMutation({
-  //     mutationFn: async () => UserService.logout(),
-  //     onSuccess: () => {
-  //       window.location.href = "/login";
-  //     },
-  //     onError: () => {
-  //       window.location.href = "/login";
-  //     },
-  //   });
+  const { mutateAsync: handleLogout } = useMutation({
+    mutationFn: async () => AuthService.logout(),
+    onSuccess: () => {
+      window.location.href = "/login";
+    },
+    onError: () => {
+      window.location.href = "/login";
+    },
+  });
 
   return (
     <div
@@ -145,7 +147,7 @@ const SideBarDashboard: FC<Props> = ({ handleSideBarSmall }) => {
         {/* button logout */}
         <button
           type="button"
-          //   onClick={() => mutateAsync()}
+          onClick={() => handleLogout()}
           className={clsx(
             "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out hover:bg-primary-brown",
             isCloseSideBar ? "justify-start" : " justify-start",

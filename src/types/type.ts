@@ -45,4 +45,5 @@ export type FilterData = {
   search?: string;
   page?: string;
   jenis_kelamin?: "laki_laki" | "perempuan";
+  jenis_sekolah?: "SD" | "SMP" | "SMA";
 };

@@ -13,6 +13,8 @@ import React, { useState, type FC } from "react";
 import useClickOutside from "../../hooks/useClickOutSide";
 import logo from "../../assets/icons/file_thumb.webp";
 import { Link, useLocation } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { AuthService } from "../../services/auth.service";
 
 // navigation
 const navigationList: { label: string; link: string }[] = [
@@ -67,6 +69,17 @@ const NavbarDashboardMobile: FC = () => {
 
   //   pathname
   const pathname = useLocation().pathname;
+
+  // use mutation
+  const { mutateAsync: handleLogout } = useMutation({
+    mutationFn: async () => AuthService.logout(),
+    onSuccess: () => {
+      window.location.href = "/login";
+    },
+    onError: () => {
+      window.location.href = "/login";
+    },
+  });
 
   return (
     <>
@@ -140,9 +153,9 @@ const NavbarDashboardMobile: FC = () => {
           {/* button logout */}
           <button
             type="button"
-            //   onClick={() => mutateAsync()}
+            onClick={() => handleLogout()}
             className={clsx(
-              "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out hover:bg-primary-brown justify-start",
+              "w-full flex flex-row items-center gap-4 py-6 px-7 transition-all duration-200 ease-in-out hover:bg-primary-blue justify-start",
             )}
           >
             <LogOut size={24} className="text-primary-white" />

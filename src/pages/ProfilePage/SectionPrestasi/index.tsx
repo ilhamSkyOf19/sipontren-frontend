@@ -1,3 +1,4 @@
+import { memo } from "react";
 import CardTotalPrestasi from "../../../components/CardTotalPrestasi";
 import SubJudulCenter from "../../../components/SubJudulCenter";
 import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
@@ -18,4 +19,4 @@ const SectionPrestasi = () => {
   );
 };
 
-export default SectionPrestasi;
+export default memo(SectionPrestasi);
