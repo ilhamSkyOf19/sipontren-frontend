@@ -30,6 +30,7 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
         page: page.toString(),
         search: undefined,
       }),
+    refetchOnWindowFocus: false,
   });
 
   return (

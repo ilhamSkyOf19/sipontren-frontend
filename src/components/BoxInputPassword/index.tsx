@@ -57,7 +57,7 @@ const BoxInputPassword: FC<Props> = ({
           className="w-12 h-full flex flex-col justify-center items-center"
           onClick={() => setIsEye((prev) => !prev)}
         >
-          {isEye ? <Eye size={28} /> : <EyeOff size={28} />}
+          {isEye ? <Eye size={24} /> : <EyeOff size={24} />}
         </button>
       </div>
 

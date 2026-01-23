@@ -137,30 +137,34 @@ const BeritaPage: FC = () => {
       />
 
       <ModalContainer fullWidth={true} active={isModal.active}>
-        <div className="w-[95vw] flex flex-col justify-start items-start h-[80vh] py-2 px-4 overflow-y-scroll pt-12 lg:w-[50vw] lg:px-12 scrollbar-hidden lg:h-[90vh]">
-          {/* button close */}
+        <div className="w-[95vw] flex flex-col justify-start items-start h-[80vh] py-2 px-4  pt-12 lg:w-[50vw] lg:px-12 scrollbar-hidden lg:h-[90vh]">
+          {/* button close  */}
           <button
             type="button"
+            className="absolute top-2 right-2"
             onClick={() => setIsModal({ active: false, data: undefined })}
-            className="fixed right-3 top-2 p-2 bg-secondary-blue rounded-full"
           >
-            <X size={20} className="text-white" />
+            <X size={26} className="text-primary-black" />
           </button>
           {/* header */}
-          <h2 className="w-full text-center text-primary-black font-semibold text-base lg:text-xl">
-            {isModal?.data?.title}
-          </h2>
-          {/* img*/}
-          <div className="w-full flex flex-row justify-start items-center mt-6">
-            <img
-              src={`${import.meta.env.VITE_API_BASE_IMG_URL}/news/${isModal?.data?.thumbnail}`}
-              alt="logo sipontren"
-              className="w-full h-full object-contain rounded-xl"
-            />
+          <div className="w-full flex flex-col items-center pb-2 border-b-2 border-b-primary-black shrink-0">
+            <h3 className="w-full text-center text-primary-black font-semibold text-base lg:text-xl">
+              {isModal?.data?.title}
+            </h3>
           </div>
+          <div className="flex-1 overflow-y-auto ">
+            {/* img*/}
+            <div className="w-full flex flex-row justify-start items-center mt-6">
+              <img
+                src={`${import.meta.env.VITE_API_BASE_IMG_URL}/news/${isModal?.data?.thumbnail}`}
+                alt="logo sipontren"
+                className="w-full h-full object-contain rounded-xl"
+              />
+            </div>
 
-          {/* content */}
-          <p className="mt-8">{isModal?.data?.content}</p>
+            {/* content */}
+            <p className="mt-8 pb-6">{isModal?.data?.content}</p>
+          </div>
         </div>
       </ModalContainer>
     </main>

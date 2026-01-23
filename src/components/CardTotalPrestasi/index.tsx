@@ -38,7 +38,7 @@ const CardTotalPrestasi: FC<Props> = ({ jumlah = 0, tingkat }) => {
 
       {/* button view */}
       <Link
-        to="/profile"
+        to={`/prestasi/${tingkat.toLowerCase()}`}
         className="py-1.5 px-8 transition-all duration-200 ease-in-out rounded-lg text-secondary-blue hover:underline font-medium text-sm lg:text-sm -mt-2"
       >
         selengkapnya

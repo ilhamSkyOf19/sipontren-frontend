@@ -31,6 +31,7 @@ const SectionUstad: FC = () => {
         search: undefined,
         limit: "10",
       }),
+    refetchOnWindowFocus: false,
   });
 
   return (

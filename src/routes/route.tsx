@@ -23,9 +23,9 @@ import InputPamfletPage from "../pages/InputPamfletPage";
 import FormulirPendaftaranPage from "../pages/FormulirPendaftaranPage";
 import SuccessPage from "../pages/SuccessPage";
 import LoginPage from "../pages/LoginPage";
-import { AuthService } from "../services/auth.service";
 import DashboardPage from "../pages/DashboardPage";
 import ErrorNetwork from "../pages/ErrorNetworkPage";
+import PrestasiPage from "../pages/PrestasiPage";
 
 const route = createBrowserRouter([
   {
@@ -47,6 +47,10 @@ const route = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "/prestasi/:categoryPrestasi",
+        element: <PrestasiPage />,
       },
       {
         path: "/kemahadan",
