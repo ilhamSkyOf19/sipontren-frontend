@@ -13,7 +13,7 @@ export type IPrestasi = {
   nama: string;
   tahun_prestasi: number;
   prestasi: string;
-  photo: string;
+  photo: File;
   jenis_kelamin: JenisKelamin;
   createdAt: Date;
   updatedAt: Date;
@@ -22,9 +22,10 @@ export type IPrestasi = {
 export type CreatePrestasiType = {
   category_prestasi: CategoryPrestasi;
   nama: string;
-  tahun_prestasi: number;
+  tahun_prestasi: string;
   prestasi: string;
   jenis_kelamin: JenisKelamin;
+  photo: File;
 };
 
 export type UpdatePrestasiType = Partial<CreatePrestasiType> & {
@@ -61,26 +62,17 @@ export type ResponsePrestasiCountType = {
   kecamatan: number;
 };
 
-export const toResponsePrestasiType = (
-  prestasi: IPrestasi,
-): ResponsePrestasiType => {
-  return {
-    id: prestasi.id,
-    category_prestasi: prestasi.category_prestasi,
-    nama: prestasi.nama,
-    tahun_prestasi: prestasi.tahun_prestasi,
-    prestasi: prestasi.prestasi,
-    photo: prestasi.photo,
-    jenis_kelamin: prestasi.jenis_kelamin,
-    createdAt: prestasi.createdAt,
-    updatedAt: prestasi.updatedAt,
-  };
-};
-
 export type FilterPrestasiData = {
   search?: string;
   category_prestasi?: CategoryPrestasi;
   jenis_kelamin?: JenisKelamin;
   tahun_prestasi?: number;
   page?: string;
+};
+
+export type PrestasiFilterKey = "category_prestasi" | "tahun_prestasi";
+export type MoreFilter = {
+  category_prestasi: CategoryPrestasi | undefined;
+  jenis_kelamin: "laki_laki" | "perempuan" | undefined;
+  tahun_prestasi: number | undefined;
 };

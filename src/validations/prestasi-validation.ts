@@ -15,7 +15,7 @@ export class PrestasiValidation {
     .string("Nama harus diisi")
     .trim()
     .min(3, { message: "Nama minimal 3 karakter" })
-    .max(100, { message: "Nama maksimal 100 karakter" })
+    .max(50, { message: "Nama maksimal 50 karakter" })
     .regex(/^[a-zA-Z\s'.-]+$/, {
       message: "Nama hanya boleh berisi huruf dan tanda umum ( ' . - )",
     });
@@ -24,7 +24,7 @@ export class PrestasiValidation {
     .string()
     .trim()
     .min(5, "Prestasi minimal 5 karakter")
-    .max(500, "Prestasi terlalu panjang");
+    .max(100, "Prestasi terlalu panjang");
 
   private static imgSchema = z
     .instanceof(File, { message: "File harus diisi" })
@@ -34,6 +34,27 @@ export class PrestasiValidation {
     .refine((file) => ACCEPTED_TYPES.includes(file.type), {
       message: "Format file tidak valid",
     });
+
+  private static stringNumberSchema = (
+    msg: string,
+    min: number = 0,
+    max: number = 999,
+  ) =>
+    z
+      .string(`${msg} harus diisi`)
+      .trim()
+      .min(1, `${msg} harus diisi`)
+      // hanya angka
+      .regex(/^[0-9]+$/, `${msg} hanya boleh berisi angka`)
+      // validasi range
+      .refine((val) => {
+        const num = Number(val);
+        return num >= min;
+      }, `${msg} minimal ${min}`)
+      .refine((val) => {
+        const num = Number(val);
+        return num <= max;
+      }, `${msg} maksimal ${max}`);
 
   // CREATE
   static readonly CREATE = z
@@ -46,7 +67,7 @@ export class PrestasiValidation {
         "kecamatan",
       ]),
       nama: this.namaSchema,
-      tahun_prestasi: z.number().int().min(1900),
+      tahun_prestasi: this.stringNumberSchema("Tahun Prestasi", 2005, 2040),
       prestasi: this.prestasiSchema,
       jenis_kelamin: z.enum(["laki_laki", "perempuan"]),
       photo: this.imgSchema,
@@ -66,7 +87,11 @@ export class PrestasiValidation {
         ])
         .optional(),
       nama: this.namaSchema.optional(),
-      tahun_prestasi: z.number().int().optional(),
+      tahun_prestasi: this.stringNumberSchema(
+        "Tahun Prestasi",
+        2005,
+        2040,
+      ).optional(),
       prestasi: this.prestasiSchema.optional(),
       jenis_kelamin: z.enum(["laki_laki", "perempuan"]).optional(),
       photo: this.imgSchema.optional(),

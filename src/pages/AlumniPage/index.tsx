@@ -108,7 +108,7 @@ const AlumniPage: FC = () => {
             alumni?.data?.data.map((item, index) => (
               <CardData
                 key={item.id}
-                data={[item.name, item.angkatan, item.description]}
+                data={[item.name, item.angkatan.toString(), item.description]}
                 dataSizeSmall={item.name}
                 linkUpdate={`/dashboard/alumni/edit/${item.id}`}
                 index={index + (alumni.data?.meta.pageSize ?? 0) * (page - 1)}

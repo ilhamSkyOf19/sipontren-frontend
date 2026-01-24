@@ -71,7 +71,7 @@ const InputAlumniPage: FC = () => {
   useEffect(() => {
     if (id && dataAlumni?.success) {
       reset({
-        angkatan: dataAlumni.data.angkatan,
+        angkatan: dataAlumni.data.angkatan.toString(),
         name: dataAlumni.data.name,
         description: dataAlumni.data.description,
       });
@@ -175,8 +175,8 @@ const InputAlumniPage: FC = () => {
               placeholder="Pilih angkatan"
               required={true}
               defaultValue={
-                dataAlumni?.success && dataAlumni?.data.angkatan
-                  ? dataAlumni?.data.angkatan
+                dataAlumni?.success && dataAlumni?.data.angkatan.toString()
+                  ? dataAlumni?.data.angkatan.toString()
                   : ""
               }
               chooseList={chooseList}

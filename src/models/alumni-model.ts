@@ -26,7 +26,7 @@ export type UpdateAlumniType = Partial<CreateAlumniType> & {
 export type ResponseAlumniType = {
   id: number;
   name: string;
-  angkatan: string;
+  angkatan: number;
   description: string;
   img_alumni: string;
   createdAt: Date;

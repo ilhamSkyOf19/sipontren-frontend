@@ -68,15 +68,15 @@ const ModalDetailData: FC<Props> = ({
           {/* img */}
           {pathImg && img && (
             <div className="w-full flex flex-row justify-start items-start gap-2">
-              <div className="flex-1 flex flex-row justify-between items-start">
+              <div className="flex-2 flex flex-row justify-between items-start lg:flex-1">
                 <p className="text-sm lg:text-base font-medium capitalize">
                   Foto
                 </p>
                 <p className="text-sm lg:text-base font-medium">:</p>
               </div>
 
-              <div className="flex-1 w-full overflow-hidden">
-                <div className="w-35 h-45 overflow-hidden rounded-xl">
+              <div className="flex-3 w-full overflow-hidden lg:flex-1">
+                <div className="w-35 h-45 overflow-hidden rounded-xl lg:w-45 lg:h-55">
                   <img
                     src={`${import.meta.env.VITE_API_BASE_IMG_URL}/${pathImg}/${img}`}
                     alt="foto"

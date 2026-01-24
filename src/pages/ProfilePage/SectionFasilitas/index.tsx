@@ -8,6 +8,7 @@ import CardFasilitas from "../../../components/CardFasilitas";
 import NoData from "../../../components/NoData";
 import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
 import PrevNext from "../../../components/PrevNext";
+import ScrollXDesktop from "../../../layouts/ScrollXDesktop";
 
 // Props
 type Props = {
@@ -63,9 +64,9 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
                   deskripsi={item.keterangan}
                 />
               ))}
+              <div className="w-1 shrink-0 h-full" />
 
               {/* space */}
-              <div className="w-1 shrink-0 h-ful" />
             </ScrollXNonDesktop>
 
             {/* prev & next */}
@@ -93,7 +94,7 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
         dataFasilitas.data &&
         dataFasilitas.data.data.length > 0 ? (
         <ParallaxGoTop>
-          <ScrollXNonDesktop>
+          <ScrollXDesktop>
             {dataFasilitas.data.data.map((item, _index) => (
               <CardFasilitas
                 key={item.id}
@@ -103,8 +104,8 @@ const SectionFasilitas: FC<Props> = ({ widthDevice }) => {
               />
             ))}
             {/* space */}
-            <div className="w-1 shrink-0 h-ful" />
-          </ScrollXNonDesktop>
+            <div className="w-1 shrink-0 h-full" />
+          </ScrollXDesktop>
 
           {/* prev & next */}
           <PrevNext

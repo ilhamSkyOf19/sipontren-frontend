@@ -9,7 +9,7 @@ import type {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMatch, useNavigate, useParams } from "react-router-dom";
 import { StudentValidation } from "../../validations/student-validation";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { StudentService } from "../../services/student.service";
 import SubJudulLeft from "../../components/SubJudulLeft";
 import SubJudulCenter from "../../components/SubJudulCenter";
@@ -140,17 +140,17 @@ const FormulirPendaftaranPage: FC = () => {
 
       reset({
         jenis_sekolah: d.jenis_sekolah,
-        nisn: d.nisn,
-        nik: d.nik,
+        nisn: d.nisn.toString(),
+        nik: d.nik.toString(),
         nama_lengkap: d.nama_lengkap,
         jenis_kelamin: d.jenis_kelamin,
-        usia: d.usia,
+        usia: d.usia.toString(),
         tempat_lahir: d.tempat_lahir,
         tanggal_lahir: d.tanggal_lahir.toString(),
         alamat: d.alamat,
         no_telepon: d.no_telepon,
-        anak_ke: d.anak_ke,
-        jumlah_saudara: d.jumlah_saudara,
+        anak_ke: d.anak_ke.toString(),
+        jumlah_saudara: d.jumlah_saudara.toString(),
         asal_sekolah: d.asal_sekolah,
         alamat_sekolah_asal: d.alamat_sekolah_asal,
         nama_lengkap_ayah: d.nama_lengkap_ayah,
@@ -196,7 +196,7 @@ const FormulirPendaftaranPage: FC = () => {
       formData.append("jenis_kelamin", data.jenis_kelamin || "");
 
       // number → string
-      formData.append("usia", data.usia ? String(data.usia) : "");
+      formData.append("usia", data.usia ? data.usia : "");
 
       formData.append("tempat_lahir", data.tempat_lahir || "");
       formData.append("tanggal_lahir", data.tanggal_lahir || "");
@@ -204,10 +204,10 @@ const FormulirPendaftaranPage: FC = () => {
       formData.append("no_telepon", data.no_telepon || "");
 
       // number → string
-      formData.append("anak_ke", data.anak_ke ? String(data.anak_ke) : "");
+      formData.append("anak_ke", data.anak_ke ? data.anak_ke : "");
       formData.append(
         "jumlah_saudara",
-        data.jumlah_saudara ? String(data.jumlah_saudara) : "",
+        data.jumlah_saudara ? data.jumlah_saudara : "",
       );
 
       formData.append("asal_sekolah", data.asal_sekolah || "");

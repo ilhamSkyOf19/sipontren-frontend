@@ -9,7 +9,7 @@ const useClickOutside = ({ refs, onOutsideClick }: UseClickOutsideProps) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const isOutside = refs.every(
-        (ref) => ref.current && !ref.current.contains(event.target as Node)
+        (ref) => ref.current && !ref.current.contains(event.target as Node),
       );
 
       if (isOutside) {

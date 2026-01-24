@@ -61,7 +61,9 @@ const PrestasiPage: FC = () => {
       {/* header */}
       <div className="w-full flex flex-col justify-start items-center mt-12 relative">
         {/* header */}
-        <h3 className="text-xl font-medium text-secondary-blue">Prestasi</h3>
+        <h3 className="text-xl font-medium lg:text-2xl lg:font-semibold text-secondary-blue">
+          Daftar Prestasi
+        </h3>
 
         {/* back */}
         <button
@@ -163,7 +165,7 @@ const PrestasiPage: FC = () => {
 
       {/* modal container */}
       <ModalContainer active={isModal.active} fullWidth={true}>
-        <div className="w-[90vw] h-[90vh] flex flex-col pt-4 px-6 relative">
+        <div className="w-[90vw] h-[89vh] flex flex-col pt-4 px-6 relative lg:w-[30vw] lg:h-[80vh]">
           {/* button close  */}
           <button
             type="button"
@@ -187,18 +189,24 @@ const PrestasiPage: FC = () => {
           {/* SCROLL AREA */}
           <div className="flex-1 overflow-y-auto mt-6">
             {/* img */}
-            <div className="w-full flex justify-center overflow-hidden h-80">
-              <img
-                src={`${import.meta.env.VITE_API_BASE_IMG_URL}/prestasi/${isModal.data?.photo}`}
-                alt="photo"
-                className="object-cover w-[80%] h-full rounded-md"
-              />
+            <div className="w-full flex flex-row justify-center items-center">
+              <div className="w-full flex justify-center overflow-hidden h-80 lg:h-90 lg:w-[80%]">
+                <img
+                  src={`${import.meta.env.VITE_API_BASE_IMG_URL}/prestasi/${isModal.data?.photo}`}
+                  alt="photo"
+                  className="object-cover w-[80%] h-full rounded-md"
+                />
+              </div>
             </div>
 
             {/* content */}
             <div className="w-full flex flex-col items-center mt-3 gap-2">
               <h3 className="text-base text-secondary-blue font-medium">
                 {isModal.data?.nama}
+              </h3>
+
+              <h3 className="text-base text-secondary-blue font-medium text-center mb-2">
+                {isModal.data?.prestasi}
               </h3>
 
               <LabelComponent
@@ -215,17 +223,6 @@ const PrestasiPage: FC = () => {
                     : "Perempuan"
                 }
               />
-
-              {/* prestasi */}
-              <div className="w-full flex flex-col items-center mt-2 gap-2 pb-8">
-                <p className="text-sm font-medium text-primary-black">
-                  Deskripsi Prestasi
-                </p>
-
-                <p className="text-sm text-primary-black text-center">
-                  {isModal.data?.prestasi}
-                </p>
-              </div>
             </div>
           </div>
         </div>

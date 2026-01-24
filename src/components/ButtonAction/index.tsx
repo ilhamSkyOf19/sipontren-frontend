@@ -14,8 +14,8 @@ const ButtonAction: FC<Props> = ({ handleClick, color, icon, label }) => {
       onClick={() => handleClick()}
       type="button"
       className={clsx(
-        "rounded-lg transition-all duration-200 ease-in-out lg:w-full flex flex-row justify-center items-center",
-        color
+        "rounded-lg transition-all duration-200 ease-in-out lg:w-full flex flex-row justify-center items-center relative before:content-[''] before:inset-0 before:absolute before:bg-primary-black/30 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:ease-in-out before:duration-200 overflow-hidden",
+        color,
       )}
     >
       <div className="py-2.5 px-6 lg:hidden">{icon}</div>

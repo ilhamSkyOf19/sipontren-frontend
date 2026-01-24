@@ -26,7 +26,7 @@ const FilterJenisKelamin: FC<Props> = ({
         ref={refButtonJenisKelamin}
         onClick={() => handleButtonJenisKelamin()}
         type="button"
-        className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+        className="px-4 h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
       >
         <UsersRound size={24} />
         <span className="text-sm font-medium text-left hidden lg:block">

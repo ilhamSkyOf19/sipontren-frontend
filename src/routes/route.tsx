@@ -26,6 +26,8 @@ import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import ErrorNetwork from "../pages/ErrorNetworkPage";
 import PrestasiPage from "../pages/PrestasiPage";
+import PrestasiDashboardPage from "../pages/PrestasiDashboardPage";
+import InputPrestasiPage from "../pages/InputPrestasiPage";
 
 const route = createBrowserRouter([
   {
@@ -182,6 +184,20 @@ const route = createBrowserRouter([
       {
         path: "pamflet/edit/:id",
         element: <InputPamfletPage />,
+      },
+
+      // prestasi
+      {
+        path: "prestasi",
+        element: <PrestasiDashboardPage />,
+      },
+      {
+        path: "prestasi/tambah",
+        element: <InputPrestasiPage />,
+      },
+      {
+        path: "prestasi/edit/:id",
+        element: <InputPrestasiPage />,
       },
     ],
   },

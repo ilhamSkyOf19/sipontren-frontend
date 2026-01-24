@@ -31,11 +31,8 @@ export type UpdateUstadType = Partial<CreateUstadType> & {
 };
 
 // response type
-export type ResponseUstadType = Omit<CreateUstadType, "ustad_img"> & {
-  id: number;
+export type ResponseUstadType = Omit<IUstad, "ustad_img"> & {
   ustad_img: string;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 // response with meta

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ChevronDown, UsersRound } from "lucide-react";
+import { ChevronDown, School } from "lucide-react";
 import { type FC, type RefObject } from "react";
 
 // sekolah list
@@ -31,7 +31,7 @@ const FilterJenisSekolah: FC<Props> = ({
         type="button"
         className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
       >
-        <UsersRound size={24} />
+        <School size={24} />
         <span className="text-sm font-medium text-left hidden lg:block">
           {isModalJenisSekolah.jenisSekolah || "Jenis Sekolah"}
         </span>

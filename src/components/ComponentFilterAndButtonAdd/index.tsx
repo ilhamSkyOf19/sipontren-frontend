@@ -8,21 +8,43 @@ import ButtonAddText from "../ButtonAddText";
 import FilterJenisKelamin from "../FilterJenisKelamin";
 import BoxInputDateFilter from "../BoxInputDateFilter";
 import FilterJenisSekolah from "../FilterJenisSekolah";
+import type {
+  MoreFilter,
+  PrestasiFilterKey,
+} from "../../models/prestasi-model";
+import FilterCategoryAndTahunPrestasi from "../FilterCategoryAndTahunPrestasi";
 
 // time
 
 type Props = {
+  // handle filter
   handleFilter?: (
     newValues: Partial<{ page: number; from: string; to: string }>,
   ) => void;
+
+  // handle search
   handleSearch?: (search: string) => void;
+
+  // handle filter jenis kelamin
   handleFilterJenisKelamin?: (
     jenisKelamin: "laki_laki" | "perempuan" | undefined,
   ) => void;
+
+  // search value
   searchValue: string;
+
+  // link add
   linkAdd?: string;
+
+  // handle filter jenis sekolah
   handleFilterJenisSekolah?: (
     jenisSekolah: "SD" | "SMP" | "SMA" | undefined,
+  ) => void;
+
+  // handle filter category and tahun prestasi
+  handleFilterCategoryAndTahunPrestasi?: <K extends PrestasiFilterKey>(
+    key: K,
+    value: MoreFilter[K],
   ) => void;
 };
 
@@ -33,6 +55,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   handleFilterJenisKelamin,
   linkAdd,
   handleFilterJenisSekolah,
+  handleFilterCategoryAndTahunPrestasi,
 }) => {
   // get search params
   const [searchParams] = useSearchParams();
@@ -132,6 +155,17 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       })),
   });
 
+  // use jenis sekolah
+  useClickOutside({
+    refs: [refButtonJenisSekolah, refFilterJenisSekolah],
+
+    onOutsideClick: () =>
+      setIsModalJenisSekolah((prev) => ({
+        ...prev,
+        active: false,
+      })),
+  });
+
   return (
     <div className="w-full h-auto flex flex-col justify-between items-start gap-4 jg:flex-row lg:h-12 lg:items-center lg:flex-row">
       {/* search */}
@@ -153,7 +187,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
       {/* filter */}
       <div
         className={clsx(
-          " h-12 flex-row justify-start items-center gap-2 relative lg:flex-3 lg:h-full lg:justify-end",
+          "flex-row justify-start items-center gap-2 relative lg:flex-3 lg:h-full lg:justify-end flex-wrap",
           handleFilter ||
             handleFilterJenisKelamin ||
             linkAdd ||
@@ -163,8 +197,8 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
         )}
       >
         {/* filter jenis kelamin */}
-        <div className="relative h-full">
-          {handleFilterJenisKelamin && (
+        {handleFilterJenisKelamin && (
+          <div className="relative h-full">
             <FilterJenisKelamin
               handleButtonJenisKelamin={() =>
                 setIsModalJenisKelamin((prev) => ({
@@ -177,12 +211,22 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
               isModalJenisKelamin={isModalJenisKelamin}
               handleJenisKelamin={handleJenisKelamin}
             />
-          )}
-        </div>
+          </div>
+        )}
+
+        {handleFilterCategoryAndTahunPrestasi && (
+          <div className="relative h-full">
+            <FilterCategoryAndTahunPrestasi
+              handleFilterCategoryAndTahunPrestasi={
+                handleFilterCategoryAndTahunPrestasi
+              }
+            />
+          </div>
+        )}
 
         {/* filter jenis sekolah */}
-        <div className="relative h-full">
-          {handleFilterJenisSekolah && (
+        {handleFilterJenisSekolah && (
+          <div className="relative h-full">
             <FilterJenisSekolah
               handleButtonJenisSekolah={() =>
                 setIsModalJenisSekolah((prev) => ({
@@ -195,8 +239,8 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
               isModalJenisSekolah={isModalJenisSekolah}
               handleJenisSekolah={handleJenisSekolah}
             />
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="relative h-full flex flex-row justify-start items-center gap-4">
           {/* filter any date  */}
@@ -206,7 +250,7 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                 ref={refButtonAnyDate}
                 onClick={() => handleOpenModalFilterDate()}
                 type="button"
-                className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+                className="px-4 h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
               >
                 <Calendar size={24} />
                 <span className="text-sm font-medium hidden lg:block">

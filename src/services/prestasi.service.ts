@@ -12,7 +12,7 @@ export class PrestasiService {
     req: FormData,
   ): Promise<ResponseData<ResponsePrestasiType | null>> {
     // get response
-    const response = await AXIOS.post("/prestas/create", req, {
+    const response = await AXIOS.post("/prestasi/create", req, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

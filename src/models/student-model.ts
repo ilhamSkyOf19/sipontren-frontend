@@ -51,7 +51,17 @@ export type ResponseStudentType = Omit<
   | "foto_kk"
   | "fc_ktp"
   | "fc_kis_kip"
+  | "usia"
+  | "nik"
+  | "nisn"
+  | "anak_ke"
+  | "jumlah_saudara"
 > & {
+  usia: number;
+  nik: number;
+  nisn: number;
+  jumlah_saudara: number;
+  anak_ke: number;
   tanggal_lahir: Date;
   foto_formal: string;
   fc_akta_kelahiran: string;

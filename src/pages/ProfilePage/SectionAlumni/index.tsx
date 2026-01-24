@@ -54,12 +54,12 @@ const SectionAlumni: FC = () => {
                   key={item.id}
                   img={item.img_alumni}
                   nama={item.name}
-                  angkatan={item.angkatan}
+                  angkatan={item.angkatan.toString()}
                   deskripsi={item.description}
                 />
               ))}
               {/* space */}
-              <div className="w-1 shrink-0 h-ful" />
+              <div className="w-1 shrink-0 h-full" />
             </ScrollXNonDesktop>
 
             {/* prev & next */}
@@ -90,15 +90,14 @@ const SectionAlumni: FC = () => {
                 key={item.id}
                 img={item.img_alumni}
                 nama={item.name}
-                angkatan={item.angkatan}
+                angkatan={item.angkatan.toString()}
                 deskripsi={item.description}
               />
             ))}
             {/* space */}
-            <div className="w-1 shrink-0 h-ful" />
+            <div className="w-1 shrink-0 h-full" />
           </ScrollXDesktop>
 
-          {/* prev & next */}
           {/* prev & next */}
           <PrevNext
             page={page}

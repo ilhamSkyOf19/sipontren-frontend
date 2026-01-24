@@ -7,6 +7,7 @@ import {
   LogOut,
   Menu,
   Newspaper,
+  Trophy,
   UsersRound,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -48,6 +49,10 @@ const navigationList: { label: string; link: string }[] = [
   {
     label: "pamflet",
     link: "/dashboard/pamflet",
+  },
+  {
+    label: "prestasi",
+    link: "/dashboard/prestasi",
   },
 ];
 
@@ -220,6 +225,9 @@ const ButtonNavigation: FC<ButtonNavigationProps> = ({
       )}
       {(label === "banner" || label === "pamflet") && (
         <GalleryThumbnails size={24} className="text-primary-white" />
+      )}
+      {label === "prestasi" && (
+        <Trophy size={24} className="text-primary-white" />
       )}
 
       {/* label */}
