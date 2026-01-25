@@ -26,9 +26,9 @@ const FilterJenisKelamin: FC<Props> = ({
         ref={refButtonJenisKelamin}
         onClick={() => handleButtonJenisKelamin()}
         type="button"
-        className="px-4 h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+        className="lg:px-4 px-3 h-10 lg:h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
       >
-        <UsersRound size={24} />
+        <UsersRound className="lg:w-6 w-5" />
         <span className="text-sm font-medium text-left hidden lg:block">
           {isModalJenisKelamin.jenisKelamin
             ? isModalJenisKelamin.jenisKelamin === "laki_laki"
@@ -38,9 +38,8 @@ const FilterJenisKelamin: FC<Props> = ({
         </span>
 
         <ChevronDown
-          size={24}
           className={clsx(
-            "transition-transform duration-200 ease-in-out",
+            "transition-transform duration-200 ease-in-out lg:w-6 w-5",
             isModalJenisKelamin.active ? "-rotate-180" : "rotate-0",
           )}
         />

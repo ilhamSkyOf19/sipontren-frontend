@@ -28,6 +28,7 @@ import ErrorNetwork from "../pages/ErrorNetworkPage";
 import PrestasiPage from "../pages/PrestasiPage";
 import PrestasiDashboardPage from "../pages/PrestasiDashboardPage";
 import InputPrestasiPage from "../pages/InputPrestasiPage";
+import { AuthService } from "../services/auth.service";
 
 const route = createBrowserRouter([
   {
@@ -82,9 +83,9 @@ const route = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    // loader: async () => {
-    //   return await AuthService.cekAuth();
-    // },
+    loader: async () => {
+      return await AuthService.cekAuth();
+    },
     element: <LayoutDashboard />,
     children: [
       {

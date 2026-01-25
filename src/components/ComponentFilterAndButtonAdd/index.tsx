@@ -101,10 +101,6 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
     setIsModalFilterDate((prev) => !prev);
   };
 
-  // ref modal filter jenis sekolah
-  const refFilterJenisSekolah = useRef<HTMLDivElement>(null);
-  const refButtonJenisSekolah = useRef<HTMLButtonElement>(null);
-
   // ref modal filter jenis kelamin
   const refFilterJenisKelamin = useRef<HTMLDivElement>(null);
   const refButtonJenisKelamin = useRef<HTMLButtonElement>(null);
@@ -116,6 +112,10 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
   // ref modal filter any date
   const refFilterAnyDate = useRef<HTMLDivElement>(null);
   const refButtonAnyDate = useRef<HTMLButtonElement>(null);
+
+  // ref modal filter jenis sekolah
+  const refFilterJenisSekolah = useRef<HTMLDivElement>(null);
+  const refButtonJenisSekolah = useRef<HTMLButtonElement>(null);
 
   // handle set date from
   const handleSetDate = (type: "from" | "to", value: string) => {
@@ -243,6 +243,9 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
         )}
 
         <div className="relative h-full flex flex-row justify-start items-center gap-4">
+          {/* button add */}
+          {linkAdd && <ButtonAddText linkAdd={linkAdd} />}
+
           {/* filter any date  */}
           {handleFilter && (
             <>
@@ -250,23 +253,22 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                 ref={refButtonAnyDate}
                 onClick={() => handleOpenModalFilterDate()}
                 type="button"
-                className="px-4 h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+                className="lg:px-4 px-3 h-10 lg:h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
               >
-                <Calendar size={24} />
+                <Calendar className="w-5 lg:w-7" />
                 <span className="text-sm font-medium hidden lg:block">
                   Filter Tanggal
                 </span>
 
                 <ChevronDown
-                  size={24}
                   className={clsx(
-                    "transition-transform duration-200 ease-in-out",
+                    "transition-transform duration-200 ease-in-out w-5 lg:w-7",
                     isModalFilterDate ? "-rotate-180" : "rotate-0",
                   )}
                 />
               </button>
 
-              <div className=" flex-row justify-start items-center gap-2 ml-4 h-full px-4 bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg hidden lg:flex">
+              <div className="flex-row justify-start items-center gap-2 ml-4 h-full px-4 bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg hidden lg:flex">
                 {(from && to && from === to) || (!from && !to) ? (
                   <p className="text-sm font-medium">
                     {formatDateID(
@@ -296,11 +298,13 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
                 )}
               </div>
 
+              {/* modal filter */}
               <div
                 ref={refFilterAnyDate}
                 className={clsx(
-                  "w-[50vw] h-60 md:h-43 bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-80",
+                  "w-[50vw] h-60 md:h-43 bg-white shadow-[0_0_20px_2px_rgba(0,0,0,0.1)] flex flex-col justify-start items-start absolute lg:left-0 top-[110%] z-40 rounded-md transition-all duration-300 ease-in-out overflow-hidden overflow-y-scroll scrollbar-hidden md:w-80",
                   isModalFilterDate ? "max-h-60" : "max-h-0 shadow-none",
+                  handleFilterJenisSekolah && "-left-full",
                 )}
               >
                 <div className="w-full h-full flex flex-col justify-start items-center py-4 px-4 gap-2">
@@ -340,9 +344,6 @@ const ComponentFilterAndButtonAdd: FC<Props> = ({
               </div>
             </>
           )}
-
-          {/* button add */}
-          {linkAdd && <ButtonAddText linkAdd={linkAdd} />}
         </div>
       </div>
     </div>

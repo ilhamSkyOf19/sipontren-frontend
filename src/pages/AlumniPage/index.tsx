@@ -134,6 +134,8 @@ const AlumniPage: FC = () => {
       {/* modal */}
       <ModalContainer fullWidth={true} active={isModal.active}>
         <ModalDetailData
+          img={isModal.data?.img_alumni || ""}
+          pathImg="img_alumni"
           download={false}
           linkUpdate={`/dashboard/alumni/edit/${isModal.data?.id}`}
           size="sm"

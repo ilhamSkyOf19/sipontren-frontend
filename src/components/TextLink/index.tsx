@@ -10,7 +10,10 @@ type Props = {
 };
 const TextLink: FC<Props> = ({ link, text, active }) => {
   const nomor = "6285896890881";
-  const pesan = encodeURIComponent("Halo saya ingin bertanya");
+  const pesan = encodeURIComponent(
+    "Assalamu'alaikum, saya ingin menanyakan informasi terkait pendaftaran di Pondok Pesantren. " +
+      "Mohon info mengenai syarat dan prosedurnya. Terima kasih.",
+  );
 
   return (
     <>

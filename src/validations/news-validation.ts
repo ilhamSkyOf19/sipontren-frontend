@@ -25,10 +25,7 @@ export class NewsValidation {
     .string("content harus diisi")
     .trim()
     .min(20, { message: "content minimal 20 karakter" })
-    .max(2500, { message: "content maksimal 2500 karakter" })
-    .refine(minWords(5), {
-      message: "content minimal terdiri dari 5 kata",
-    });
+    .max(2500, { message: "content maksimal 2500 karakter" });
 
   private static categorySchema = z.enum(
     ["berita", "artikel"],
@@ -44,6 +41,13 @@ export class NewsValidation {
       message: "Format file tidak valid",
     });
 
+  private static linkBeritaSchema = z
+    .string("link berita harus diisi")
+    .trim()
+    .min(5, { message: "link berita minimal 5 karakter" })
+    .max(100, { message: "link berita maksimal 100 karakter" })
+    .optional();
+
   // CREATE
   static readonly CREATE = z
     .object({
@@ -51,6 +55,8 @@ export class NewsValidation {
       content: this.contentSchema,
       category: this.categorySchema,
       thumbnail: this.thumbnailSchema,
+
+      link_berita: this.linkBeritaSchema,
     })
     .strict() satisfies ZodType<CreateNewsType>;
 
@@ -61,6 +67,8 @@ export class NewsValidation {
       content: this.contentSchema.optional(),
       category: this.categorySchema.optional(),
       thumbnail: this.thumbnailSchema.optional(),
+
+      link_berita: this.linkBeritaSchema,
     })
     .strict() satisfies ZodType<UpdateNewsType>;
 }

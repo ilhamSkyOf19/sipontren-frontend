@@ -135,11 +135,11 @@ const FilterCategoryAndTahunPrestasi: FC<Props> = ({
   });
 
   return (
-    <div className="flex flex-row justify-start items-start gap-4 h-full">
+    <div className="flex flex-row justify-start items-center gap-4 h-full">
       {/* filter category prestasi */}
       <FilterButton
         buttonRef={refButtonCategoryPrestasi}
-        icon={<Trophy size={24} />}
+        icon={<Trophy className="w-5 lg:w-6" />}
         label={isModalCategoryPrestasi.categoryPrestasi || "Pilih Kategori"}
         active={isModalCategoryPrestasi.active}
         onClick={handleModalCategoryPrestasi}
@@ -179,17 +179,16 @@ const FilterCategoryAndTahunPrestasi: FC<Props> = ({
           ref={refButtonTahunPrestasi}
           onClick={() => handleModalTahunPrestasi()}
           type="button"
-          className="px-4 h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+          className="lg:px-4 px-3 h-10 lg:h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
         >
-          <CalendarDays size={24} />
+          <CalendarDays className="w-5 lg:w-6" />
           <span className="text-sm font-medium text-left hidden lg:block">
             {isModalTahunPrestasi.tahunPrestasi || "Pilih Tahun"}
           </span>
 
           <ChevronDown
-            size={24}
             className={clsx(
-              "transition-transform duration-200 ease-in-out",
+              "transition-transform duration-200 ease-in-out w-5 lg:w-6",
               isModalTahunPrestasi.active ? "-rotate-180" : "rotate-0",
             )}
           />
@@ -256,16 +255,15 @@ const FilterButton: FC<FilterButtonProps> = ({
       ref={buttonRef}
       onClick={onClick}
       type="button"
-      className="px-4 h-12 flex flex-row items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+      className="h-10 px-3 lg:px-4 lg:h-12 flex flex-row items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
     >
       {icon}
 
       <span className="text-sm font-medium hidden lg:block">{label}</span>
 
       <ChevronDown
-        size={24}
         className={clsx(
-          "transition-transform duration-200",
+          "transition-transform duration-200 w-5 lg:w-6",
           active ? "-rotate-180" : "rotate-0",
         )}
       />

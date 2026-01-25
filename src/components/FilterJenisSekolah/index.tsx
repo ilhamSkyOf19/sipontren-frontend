@@ -29,17 +29,16 @@ const FilterJenisSekolah: FC<Props> = ({
         ref={refButtonJenisSekolah}
         onClick={() => handleButtonJenisSekolah()}
         type="button"
-        className="px-4 h-full flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
+        className="lg:px-4 px-3 h-10 lg:h-12 flex flex-row justify-start items-center bg-white shadow-[0_2px_10px_1px_rgba(0,0,0,0.05)] rounded-lg gap-2"
       >
-        <School size={24} />
+        <School className="w-5 lg:w-7" />
         <span className="text-sm font-medium text-left hidden lg:block">
           {isModalJenisSekolah.jenisSekolah || "Jenis Sekolah"}
         </span>
 
         <ChevronDown
-          size={24}
           className={clsx(
-            "transition-transform duration-200 ease-in-out",
+            "transition-transform duration-200 ease-in-out w-5 lg:w-7",
             isModalJenisSekolah.active ? "-rotate-180" : "rotate-0",
           )}
         />

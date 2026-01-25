@@ -37,7 +37,7 @@ const ModalDetailData: FC<Props> = ({
     <div
       className={clsx(
         "w-[90vw] flex flex-col justify-start items-center py-8 px-4 overflow-y-scroll overflow-hidden scrollbar-hidden relative lg:w-[40vw] lg:px-8",
-        size === "sm" ? "h-[50]" : "h-[90vh]",
+        size === "sm" ? "max-h-[80vh]" : "max-h-[90vh]",
       )}
     >
       {/* button close */}

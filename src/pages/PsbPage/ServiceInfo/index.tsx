@@ -1,11 +1,18 @@
 import { memo, useState, type FC, type ReactNode } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
+import { Link } from "react-router-dom";
 const ServiceInfo = () => {
   const window = useWindowSize().width;
 
   const [active, setActive] = useState(1);
+
+  const nomor = "6285896890881";
+  const pesan = encodeURIComponent(
+    "Assalamu'alaikum, saya ingin menanyakan informasi terkait pendaftaran di Pondok Pesantren. " +
+      "Mohon info mengenai syarat dan prosedurnya. Terima kasih.",
+  );
   return (
-    <div className="w-full h-[72vh] border flex flex-col justify-start items-center rounded-4xl border-secondary-blue pb-0 overflow-hidden lg:flex-row lg:pb-0 lg:justify-start lg:px-6">
+    <div className="w-full h-[90vh] border flex flex-col justify-start items-center rounded-4xl border-secondary-blue pb-0 overflow-hidden lg:flex-row lg:pb-0 lg:justify-start lg:px-6">
       {window < 1024 ? (
         <>
           <SlideDownService
@@ -18,7 +25,7 @@ const ServiceInfo = () => {
           >
             <div className="w-full px-5 flex flex-col justify-start items-start gap-4 md:pr-20 md:py-6 md:gap-6">
               <div className="w-full flex flex-col justify-start items-start gap-1">
-                <p className="text-sm text-slate-500 md:text-lg">
+                <p className="text-sm text-primary-black md:text-lg">
                   Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak - Lampung
                   Tengah
                 </p>
@@ -37,24 +44,32 @@ const ServiceInfo = () => {
             id={2}
             active={active}
             setActive={setActive}
-            title="Pendaftaran On Desk"
+            title="Pendaftaran Online"
             no="02"
             first={false}
           >
             <div className="w-full px-5 flex flex-col justify-start items-start gap-4 md:pr-20 md:py-6 md:gap-6">
               <div className="w-full flex flex-col justify-start items-start gap-1">
                 {/* <TextSmBlue text="Waktu Pelayanan Pendaftaran" /> */}
-                <p className="text-sm text-slate-500 md:text-lg">
-                  Pondok Pesantren Muhammadiyah Al-Amin Seputih Banyak - Lampung
-                  Tengah
+                <p className="text-sm text-primary-black md:text-lg">
+                  Mengisi formulir pendaftaran melalui website pondok, atau klik{" "}
+                  {""}
+                  <Link
+                    to="/formulir"
+                    className="text-secondary-blue underline"
+                  >
+                    di sini
+                  </Link>
                 </p>
               </div>
               <div className="w-full flex flex-col justify-start items-start gap-1">
-                <p className="text-sm text-primary-blue font-semibold md:text-xl">
-                  Hari kerja pukul 08.00 - 16.00
-                </p>
-                <p className="text-sm text-primary-blue font-semibold md:text-xl">
-                  Pendaftaran Online Buka 24 Jam
+                <p className="text-sm text-primary-black md:text-xl">
+                  Cukup mengisi{" "}
+                  <Link to={"/fomulir"} className="text-secondary-blue">
+                    formulir pendaftaran
+                  </Link>{" "}
+                  yang sudah disediakan, dan unggah berkas sesuai dengan
+                  ketentuan yang ada.
                 </p>
               </div>
             </div>
@@ -63,19 +78,58 @@ const ServiceInfo = () => {
             id={3}
             active={active}
             setActive={setActive}
-            title="Syarat Pendaftaran"
+            title="Pendaftaran Offline"
             no="03"
+            first={false}
+          >
+            <div className="w-full px-5 flex flex-col justify-start items-start gap-4 md:pr-20 md:py-6 md:gap-6">
+              <div className="w-full flex flex-col justify-start items-start gap-1">
+                {/* <TextSmBlue text="Waktu Pelayanan Pendaftaran" /> */}
+                <p className="text-sm text-primary-black md:text-lg">
+                  Silahkan datang ke pondok pesantren untuk melakukan
+                  pendaftaran dengan membawa berkas pendaftaran.
+                </p>
+              </div>
+              <div className="w-full flex flex-col justify-start items-start gap-1">
+                <p className="text-sm text-primary-blue font-semibold md:text-xl">
+                  Dokumen Pendaftaran
+                </p>
+                <div className="w-full pl-2 flex flex-col justify-start items-start gap-4">
+                  <ol className="list-disc list-outside px-5 space-y-1">
+                    <li className="text-primary-blue text-sm md:text-xl">
+                      Foto berwarna (3x4) 4 lembar
+                    </li>
+                    <li className="text-primary-blue text-sm md:text-xl">
+                      FC. Akta Kelahiran
+                    </li>
+                    <li className="text-primary-blue text-sm md:text-xl">
+                      FC. Kartu Keluarga 3 lembar
+                    </li>
+                    <li className="text-primary-blue text-sm md:text-xl">
+                      FC. KTP orang tua, masing-masing 2 lembar
+                    </li>
+                    <li className="text-primary-blue text-sm md:text-xl">
+                      FC. KIP/KTS 2 lembar (bila ada)
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </SlideDownService>
+          <SlideDownService
+            id={4}
+            active={active}
+            setActive={setActive}
+            title="Pendaftaran Ulang"
+            no="04"
             first={false}
           >
             <div className="w-full px-5 flex flex-col justify-start items-start gap-4 md:py-7">
               <p className="text-sm text-primary-blue font-semibold md:text-xl">
-                Persyaratan
+                Dokumen Pendaftaran Ulang
               </p>
               <div className="w-full pl-2 flex flex-col justify-start items-start gap-4">
                 <ol className="list-disc list-outside px-5 space-y-1">
-                  <li className="text-primary-blue text-sm md:text-xl">
-                    Mengisi formulir pendaftaran (online/offline)
-                  </li>
                   <li className="text-primary-blue text-sm md:text-xl">
                     Foto berwarna (3x4) 4 lembar
                   </li>
@@ -96,25 +150,34 @@ const ServiceInfo = () => {
             </div>
           </SlideDownService>
           <SlideDownService
-            id={4}
+            id={5}
             active={active}
             setActive={setActive}
             title="Pusat Bantuan"
-            no="04"
+            no="05"
             first={false}
           >
             <div className="w-full px-5 flex flex-col justify-start items-start gap-2">
               <p className="text-sm text-primary-blue font-semibold md:text-xl">
                 Hubungi Pusat Bantuan
               </p>
-              <div className="w-full flex-col justify-start items-start pl-2">
-                <p className="text-sm text-slate-500 md:text-xl">
+              <div className="w-full flex flex-col justify-start items-start pl-2 gap-4">
+                <p className="text-sm text-primary-black md:text-xl">
                   {" "}
-                  No Telepone / WA : +62 822-7821-9515
+                  No Telepon / WhatsApp : <br />{" "}
+                  <span className="text-secondary-blue font-medium">
+                    +62 822-7821-9515
+                  </span>
                 </p>
-                <p className="text-sm text-slate-500 md:text-xl">
-                  No Telepone / WA : +62 822-7821-9515
-                </p>
+
+                <a
+                  href={`https://wa.me/${nomor}?text=${pesan}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-secondary-blue font-light md:text-xl lg:text-sm relative before:absolute before:w-full before:h-px before:bg-yellow-300 before:bottom-0 before:left-0 before:origin-left before:scale-x-0 before:transition-all before:duration-300 hover:before:scale-x-100 lg:font-normal"
+                >
+                  Silahkan klik disini
+                </a>
               </div>
             </div>
           </SlideDownService>
@@ -338,7 +401,7 @@ const SlideDownServiceDesktop: FC<SlideDownServiceDesktopProps> = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default ServiceInfo;

@@ -90,6 +90,9 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
                     deskripsi={item.content}
                   />
                 ))}
+
+                {/* space */}
+                <div className="w-1 shrink-0 h-ful" />
               </ScrollXNonDesktop>
             ) : (
               <div className="w-full h-full flex flex-col justify-center items-center py-32">
@@ -120,6 +123,9 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
                   deskripsi={item.content}
                 />
               ))}
+
+              {/* space */}
+              <div className="w-1 shrink-0 h-ful" />
             </ScrollXDesktop>
           ) : (
             <div className="w-full h-full flex flex-col justify-center items-center py-32">
@@ -134,7 +140,7 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
         {data?.success && data.data.length > 0 && (
           <Link
             to={"/berita-more"}
-            className="py-3 px-6 bg-secondary-blue rounded-lg text-white flex flex-row justify-start items-center gap-3 hover:bg-primary-blue transition-all ease-in-out duration-200"
+            className="text-sm py-2 px-4 lg:text-base lg:py-3 lg:px-6 bg-secondary-blue rounded-lg text-white flex flex-row justify-start items-center gap-3 hover:bg-primary-blue transition-all ease-in-out duration-200"
           >
             <span>Selengkapnya</span>
 

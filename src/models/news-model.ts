@@ -1,36 +1,78 @@
-// src/models/news-model.ts
+import type { ResponseLinkBeritaType } from "./linkBerita-model";
+
+// =======================
+// FILTER
+// =======================
 export type NewsFilterType = "today" | "week" | "month";
 
+// =======================
+// ENTITY (Prisma Result)
+// =======================
 export type INews = {
   id: number;
   category: "berita" | "artikel";
   title: string;
   content: string;
-  thumbnail: File;
+  thumbnail: string;
   createdAt: Date;
   updatedAt: Date;
+
+  // relasi
+  link_berita?: {
+    id: number;
+    label: string;
+    link: string;
+    newsId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
 };
 
-// create
+// =======================
+// LINK INPUT (CREATE)
+// =======================
+export type CreateLinkBeritaInputType = {
+  label: string;
+  link: string;
+};
+
+// =======================
+// CREATE
+// =======================
 export type CreateNewsType = {
   category: "berita" | "artikel";
   title: string;
   content: string;
   thumbnail: File;
+
+  link_berita?: string;
+  update_link_berita?: string;
 };
 
-// update
+// =======================
+// UPDATE
+// =======================
 export type UpdateNewsType = Partial<CreateNewsType>;
 
-// response
-export type ResponseNewsType = CreateNewsType & {
+// =======================
+// RESPONSE
+// =======================
+export type ResponseNewsType = {
   id: number;
+  category: "berita" | "artikel";
+  title: string;
+  content: string;
   thumbnail: string;
-  url_thumbnail?: string;
   createdAt: Date;
   updatedAt: Date;
+
+  // relasi
+  link_berita?: ResponseLinkBeritaType[];
 };
 
+// =======================
+// RESPONSE WITH META
+// =======================
 export type ResponseNewsWithMetaType = {
   data: ResponseNewsType[];
   meta: {
@@ -41,6 +83,9 @@ export type ResponseNewsWithMetaType = {
   };
 };
 
+// =======================
+// FILTER DATA
+// =======================
 export type FilterData = {
   from?: string;
   to?: string;

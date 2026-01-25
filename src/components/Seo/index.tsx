@@ -41,7 +41,10 @@ export default function Seo({
       {/* OpenGraph biar bagus saat dishare */}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      {/* <meta property="og:url" content={`https://domain-kamu.com${path}`} /> */}
+      <meta
+        property="og:url"
+        content={`${import.meta.env.VITE_BASE_URL}${path}`}
+      />
 
       <script type="application/ld+json">{JSON.stringify(finalSchema)}</script>
     </Helmet>
