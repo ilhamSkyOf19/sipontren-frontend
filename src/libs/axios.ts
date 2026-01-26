@@ -24,11 +24,11 @@ AXIOS.interceptors.response.use(
       window.location.href = "/login";
     }
 
-    // if (!error.response) {
-    //   console.error("Network error:", error.message);
-    //   window.location.href = "/error-network";
-    //   return;
-    // }
+    if (!error.response) {
+      console.error("Network error:", error.message);
+      window.location.href = "/error-network";
+      return;
+    }
 
     return Promise.reject(error);
   },

@@ -5,8 +5,10 @@ import type {
   CategoryPrestasi,
   MoreFilter,
   PrestasiFilterKey,
+  TahunType,
 } from "../../models/prestasi-model";
 import useClickOutside from "../../hooks/useClickOutSide";
+import { useSearchParams } from "react-router-dom";
 
 // choose list
 const tahunPrestasiList: number[] = [
@@ -34,19 +36,44 @@ type Props = {
 const FilterCategoryAndTahunPrestasi: FC<Props> = ({
   handleFilterCategoryAndTahunPrestasi,
 }) => {
-  // state modal category prestasi
+  // ambil search params
+  const [searchParams] = useSearchParams();
+
+  // ==========================
+  // STATE MODAL CATEGORY PRESTASI
+  // ==========================
   const [isModalCategoryPrestasi, setIsModalCategoryPrestasi] = useState<{
     active: boolean;
     categoryPrestasi: CategoryPrestasi | undefined;
-  }>({ active: false, categoryPrestasi: undefined });
+  }>(() => {
+    const param = searchParams.get("category_prestasi");
+    if (
+      param === "internasional" ||
+      param === "nasional" ||
+      param === "provinsi" ||
+      param === "kabupaten" ||
+      param === "kecamatan"
+    ) {
+      return { active: false, categoryPrestasi: param as CategoryPrestasi };
+    }
+    return { active: false, categoryPrestasi: undefined };
+  });
 
-  // state modal tahun prestasi
+  // ==========================
+  // STATE MODAL TAHUN PRESTASI
+  // ==========================
   const [isModalTahunPrestasi, setIsModalTahunPrestasi] = useState<{
     active: boolean;
     tahunPrestasi: number | undefined;
-  }>({ active: false, tahunPrestasi: undefined });
+  }>(() => {
+    const param = searchParams.get("tahun_prestasi");
+    const tahun = param ? Number(param) : undefined;
+    return { active: false, tahunPrestasi: tahun };
+  });
 
-  // hanlde modal prestasi
+  // ==========================
+  // HANDLE MODAL CATEGORY PRESTASI
+  // ==========================
   const handleModalCategoryPrestasi = () => {
     setIsModalCategoryPrestasi((prev) => ({
       ...prev,
@@ -54,29 +81,31 @@ const FilterCategoryAndTahunPrestasi: FC<Props> = ({
     }));
   };
 
-  //   handle choose category prestasi
+  // HANDLE PILIH CATEGORY PRESTASI
   const handleChooseCategoryPrestasi = (categoryPrestasi: CategoryPrestasi) => {
     handleFilterCategoryAndTahunPrestasi("category_prestasi", categoryPrestasi);
 
     setIsModalCategoryPrestasi((prev) => ({
       ...prev,
-      active: !prev.active,
-      categoryPrestasi: categoryPrestasi,
+      active: false,
+      categoryPrestasi,
     }));
   };
 
-  //   handle reset category prestasi
+  // HANDLE RESET CATEGORY PRESTASI
   const handleResetCategoryPrestasi = () => {
     handleFilterCategoryAndTahunPrestasi("category_prestasi", undefined);
 
     setIsModalCategoryPrestasi((prev) => ({
       ...prev,
-      active: !prev.active,
+      active: false,
       categoryPrestasi: undefined,
     }));
   };
 
-  // hanlde modal prestasi
+  // ==========================
+  // HANDLE MODAL TAHUN PRESTASI
+  // ==========================
   const handleModalTahunPrestasi = () => {
     setIsModalTahunPrestasi((prev) => ({
       ...prev,
@@ -84,24 +113,27 @@ const FilterCategoryAndTahunPrestasi: FC<Props> = ({
     }));
   };
 
-  //   handle choose tahun prestasi
+  // HANDLE PILIH TAHUN PRESTASI
   const handleChooseTahunPrestasi = (tahunPrestasi: number) => {
-    handleFilterCategoryAndTahunPrestasi("tahun_prestasi", tahunPrestasi);
+    handleFilterCategoryAndTahunPrestasi(
+      "tahun_prestasi",
+      tahunPrestasi as TahunType,
+    );
 
     setIsModalTahunPrestasi((prev) => ({
       ...prev,
-      active: !prev.active,
-      tahunPrestasi: tahunPrestasi,
+      active: false,
+      tahunPrestasi,
     }));
   };
 
-  //   handle reset tahun prestasi
+  // HANDLE RESET TAHUN PRESTASI
   const handleResetTahunPrestasi = () => {
     handleFilterCategoryAndTahunPrestasi("tahun_prestasi", undefined);
 
     setIsModalTahunPrestasi((prev) => ({
       ...prev,
-      active: !prev.active,
+      active: false,
       tahunPrestasi: undefined,
     }));
   };

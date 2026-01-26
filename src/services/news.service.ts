@@ -59,11 +59,15 @@ export class NewsService {
   // read by filter
   static async readByFilter(
     filter: NewsFilterType,
-  ): Promise<ResponseData<ResponseNewsType[]>> {
+    page: number,
+  ): Promise<ResponseData<ResponseNewsWithMetaType>> {
     // get response
-    const response = await AXIOS.get(`/news/readByFilter/${filter}`).then(
-      (res) => res.data,
-    );
+    const response = await AXIOS.get(`/news/readByFilter`, {
+      params: {
+        filter,
+        page,
+      },
+    }).then((res) => res.data);
 
     // return
     return response;

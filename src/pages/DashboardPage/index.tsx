@@ -7,7 +7,6 @@ import {
   ChevronDown,
   Mars,
   Newspaper,
-  Pencil,
   Trash,
   UsersRound,
   Venus,
@@ -45,6 +44,7 @@ import { UseFilter } from "../../hooks/useFilter";
 import NoData from "../../components/NoData";
 import { handleActionDelete } from "../../utils/sweetalert/delete";
 import Swal from "sweetalert2";
+import ButtonDeleteText from "../../components/ButtonDeleteText";
 
 const DashboardPage: FC = () => {
   // notification
@@ -146,7 +146,7 @@ const CardStudent: FC = () => {
 
             {/* selengkapnya */}
             <Link
-              to={"/dashboard/ustad"}
+              to={"/dashboard/calon-santri"}
               className="h-full px-4 bg-secondary-blue rounded-sm text-xs lg:text-sm text-primary-white flex flex-col justify-center items-center hover:-translate-y-1 transition-all ease-in-out duration-300 z-10"
             >
               selengkapnya
@@ -977,7 +977,7 @@ const ActivePsb: FC = () => {
 
       {/* modal periode */}
       <ModalContainer active={isModalPreviewDataPeriode} fullWidth={true}>
-        <div className="w-[90vw] lg:w-[50vw] lg:h-[80vh] py-4 px-6 flex flex-col justify-start items-start relative bg-primary-white rounded-3xl overflow-y-scroll scrollbar-hidden">
+        <div className="w-[90vw] max-h-[80vh] lg:w-[50vw] lg:h-[80vh] py-4 flex flex-col justify-start items-center relative bg-primary-white rounded-3xl">
           {/* button close  */}
           <button
             type="button"
@@ -987,21 +987,21 @@ const ActivePsb: FC = () => {
             <X size={28} className="text-primary-black" />
           </button>
           {/* header */}
-          <div className="w-full flex flex-col justify-start items-center pb-3 border-b-2 border-primary-black">
+          <div className="w-[90%] flex flex-col justify-start items-center pb-3 border-b-2 border-primary-black px-6">
             <h1 className="text-2xl font-medium text-primary-black">
               Data Periode
             </h1>
           </div>
 
           {/* content */}
-          <div className="w-full flex flex-col justify-start items-start mt-4">
+          <div className="w-full flex-col justify-start items-start mt-4 hidden lg:flex  overflow-y-scroll scrollbar-hidden px-6 py-4">
             {/* header */}
             <div className="px-4 w-full h-12 bg-gray-300 shadow-[0_0_10px_1px_rgba(0,0,0,0.1)] rounded-md flex flex-row justify-start items-center mb-4">
               {/* number */}
               <span className="flex-1 text-base font-semibold">No</span>
-              <span className="flex-2 text-base font-semibold">Dari</span>
-              <span className="flex-2 text-base font-semibold">Sampai</span>
-              <span className="flex-2 text-base font-semibold">Status</span>
+              <span className="flex-3 text-base font-semibold">Dari</span>
+              <span className="flex-3 text-base font-semibold">Sampai</span>
+              <span className="flex-3 text-base font-semibold">Status</span>
               <span className="flex-1 text-base font-semibold ">Action</span>
             </div>
 
@@ -1015,23 +1015,16 @@ const ActivePsb: FC = () => {
                   >
                     {/* number */}
                     <span className="flex-1 text-sm">{index + 1}</span>
-                    <span className="flex-2 text-sm">
+                    <span className="flex-3 text-sm">
                       {formatDateID(new Date(item.dari))}
                     </span>
-                    <span className="flex-2 text-sm">
+                    <span className="flex-3 text-sm">
                       {formatDateID(new Date(item.sampai))}
                     </span>
-                    <span className="flex-2 text-sm">
+                    <span className="flex-3 text-sm">
                       {item.aktif ? "aktif" : "non aktif"}
                     </span>
                     <div className="flex-1 flex flex-row justify-start items-center gap-1">
-                      {/* icon update */}
-                      <button
-                        type="button"
-                        className="p-1.5 bg-primary-blue rounded-sm"
-                      >
-                        <Pencil size={14} className="text-white" />
-                      </button>
                       {/* icon delete */}
                       <button
                         disabled={isPendingDelete}
@@ -1049,8 +1042,67 @@ const ActivePsb: FC = () => {
               )}
             </div>
           </div>
+
+          {/* card for mobile */}
+          <div className="w-full flex flex-col justify-start items-start mt-4 lg:hidden gap-6  overflow-y-scroll scrollbar-hidden px-6 py-4">
+            {/* card */}
+
+            {dataPeriode?.success && dataPeriode.data.length > 0 ? (
+              dataPeriode.data.map((item, index) => (
+                <div
+                  key={index}
+                  className="w-full py-4 bg-primary-white rounded-lg shadow-[0_0_10px_2px_rgba(0,0,0,0.1)] px-3 flex flex-col justify-start items-start gap-2"
+                >
+                  {/* content */}
+                  <LabelDataModalMobile
+                    label="Dari"
+                    value={formatDateID(new Date(item.dari))}
+                  />
+                  <LabelDataModalMobile
+                    label="to"
+                    value={formatDateID(new Date(item.sampai))}
+                  />
+
+                  <LabelDataModalMobile
+                    label="Active"
+                    value={item.aktif ? "Aktif" : "Non aktif"}
+                  />
+
+                  {/* action */}
+                  <div className="w-full flex flex-row justify-center items-center gap-2">
+                    {/* button delete */}
+                    <ButtonDeleteText
+                      handleDelete={() => handleDeleteData(item.id)}
+                    />
+                  </div>
+                </div>
+              ))
+            ) : (
+              <NoData />
+            )}
+          </div>
         </div>
       </ModalContainer>
+    </div>
+  );
+};
+
+// data modal mobile
+type LabelDataModalMobileProps = {
+  label: string;
+  value: string;
+};
+const LabelDataModalMobile: FC<LabelDataModalMobileProps> = ({
+  label,
+  value,
+}) => {
+  return (
+    <div className="w-full flex flex-row justify-start items-start gap-2">
+      <div className="flex-1 flex flex-row justify-between items-center">
+        <span className="text-sm text-primary-black">{label}</span>
+        <span className="text-sm text-primary-black">:</span>
+      </div>
+      <span className="flex-3 text-sm text-primary-black">{value}</span>
     </div>
   );
 };

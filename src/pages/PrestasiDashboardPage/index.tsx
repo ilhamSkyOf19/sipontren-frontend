@@ -13,30 +13,75 @@ import ModalDetailData from "../../components/ModalDetailData";
 import NoData from "../../components/NoData";
 import useNotifSuccess from "../../hooks/useNotifSuccess";
 import type {
+  CategoryPrestasi,
   MoreFilter,
   PrestasiFilterKey,
   ResponsePrestasiType,
+  TahunType,
 } from "../../models/prestasi-model";
 import { PrestasiService } from "../../services/prestasi.service";
+import { useSearchParams } from "react-router-dom";
 
 const PrestasiDashboardPage: FC = () => {
-  // notif succes
+  // ==========================
+  // NOTIF SUCCESS
+  // ==========================
   useNotifSuccess();
 
-  // use query client
+  // ==========================
+  // QUERY CLIENT
+  // ==========================
   const queryClient = useQueryClient();
 
-  // state filter
-  const initialMoreFilter: MoreFilter = {
-    category_prestasi: undefined,
-    jenis_kelamin: undefined,
-    tahun_prestasi: undefined,
-  };
+  // ==========================
+  // SEARCH PARAMS
+  // ==========================
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [isMoreFilter, setIsMoreFilter] =
-    useState<MoreFilter>(initialMoreFilter);
+  const [isMoreFilter, setIsMoreFilter] = useState<MoreFilter>(() => {
+    const categoryParam = searchParams.get("category_prestasi");
+    const jenisKelaminParam = searchParams.get("jenisKelamin");
+    const tahunPrestasiParam = searchParams.get("tahun_prestasi");
 
-  // handle set more filter
+    // validasi category_prestasi
+    const category = [
+      "internasional",
+      "nasional",
+      "provinsi",
+      "kabupaten",
+      "kecamatan",
+    ].includes(categoryParam as string)
+      ? (categoryParam as CategoryPrestasi)
+      : undefined;
+
+    // validasi jenis_kelamin
+    const jenisKelamin =
+      jenisKelaminParam === "laki_laki" || jenisKelaminParam === "perempuan"
+        ? (jenisKelaminParam as "laki_laki" | "perempuan")
+        : undefined;
+
+    // validasi tahun_prestasi
+    const validTahun: TahunType[] = [
+      2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016,
+      2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028,
+      2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040,
+    ];
+
+    const tahunNumber = Number(tahunPrestasiParam);
+    const tahun =
+      tahunPrestasiParam && validTahun.includes(tahunNumber as TahunType)
+        ? (tahunNumber as TahunType)
+        : undefined;
+
+    return {
+      category_prestasi: category,
+      jenisKelamin: jenisKelamin,
+      tahun_prestasi: tahun,
+    };
+  });
+  // ==========================
+  // HANDLE SET MORE FILTER
+  // ==========================
   const handleSetMoreFilter = <K extends keyof MoreFilter>(
     key: K,
     value: MoreFilter[K],
@@ -47,51 +92,78 @@ const PrestasiDashboardPage: FC = () => {
     }));
   };
 
-  // set jenis kelamin
+  // ==========================
+  // SYNC STATE KE URL PARAMS
+  // ==========================
+  useEffect(() => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev.toString());
+
+      // category_prestasi
+      if (isMoreFilter.category_prestasi)
+        newParams.set("category_prestasi", isMoreFilter.category_prestasi);
+      else newParams.delete("category_prestasi");
+
+      // jenis_kelamin
+      if (isMoreFilter.jenisKelamin)
+        newParams.set("jenisKelamin", isMoreFilter.jenisKelamin);
+      else newParams.delete("jenisKelamin");
+
+      // tahun_prestasi
+      if (isMoreFilter.tahun_prestasi)
+        newParams.set("tahun_prestasi", isMoreFilter.tahun_prestasi.toString());
+      else newParams.delete("tahun_prestasi");
+
+      return newParams;
+    });
+  }, [isMoreFilter]);
+
+  // ==========================
+  // SPECIFIC FILTER HANDLERS
+  // ==========================
   const handleFilterJenisKelamin = (
     value: "laki_laki" | "perempuan" | undefined,
   ) => {
-    handleSetMoreFilter("jenis_kelamin", value);
+    handleSetMoreFilter("jenisKelamin", value);
   };
 
-  // set category prestasi & tahun prestasi
   const handleFilterCategoryAndTahunPrestasi = <K extends PrestasiFilterKey>(
     key: K,
-    value: (typeof initialMoreFilter)[K],
+    value: MoreFilter[K],
   ) => {
     handleSetMoreFilter(key, value);
   };
 
-  // state modal
+  // ==========================
+  // MODAL STATE
+  // ==========================
   const [isModal, setIsModal] = useState<{
     active: boolean;
     data: ResponsePrestasiType | undefined;
-  }>({
-    active: false,
-    data: undefined,
-  });
+  }>({ active: false, data: undefined });
 
-  // use handle page
+  // ==========================
+  // PAGE & SEARCH
+  // ==========================
   const { handleChangePage, page } = useHandlePage();
-
-  //  use search
   const { handleSearch, isSearch } = useSearch();
   const [debouncedSearch, setDebouncedSearch] = useState<string>(isSearch);
 
-  // debounce search
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(isSearch), 700);
     return () => clearTimeout(timer);
   }, [isSearch]);
 
-  //   use query
+  // ==========================
+  // USE QUERY
+  // ==========================
   const { data: prestasi, isLoading } = useQuery({
     queryKey: [
       "prestasiForDashboard",
-      debouncedSearch,
       page,
+      debouncedSearch,
       isMoreFilter.category_prestasi?.toLocaleLowerCase(),
-      isMoreFilter.jenis_kelamin,
+      isMoreFilter.jenisKelamin,
       isMoreFilter.tahun_prestasi,
     ],
     queryFn: () =>
@@ -99,26 +171,22 @@ const PrestasiDashboardPage: FC = () => {
         page: page.toString(),
         search: debouncedSearch,
         category_prestasi: isMoreFilter.category_prestasi,
-        jenis_kelamin: isMoreFilter.jenis_kelamin,
+        jenis_kelamin: isMoreFilter.jenisKelamin,
         tahun_prestasi: isMoreFilter.tahun_prestasi,
       }),
     refetchOnWindowFocus: false,
   });
 
-  // handle delete
+  // ==========================
+  // HANDLE DELETE
+  // ==========================
   const handleDelete = async (id: number) => {
-    // handle delete
     const result = await handleActionDelete(id, PrestasiService.delete);
-
     if (!result) return;
 
-    // close modal detail
     setIsModal({ active: false, data: undefined });
 
-    // refresh
-    queryClient.invalidateQueries({
-      queryKey: ["prestasiForDashboard"],
-    });
+    queryClient.invalidateQueries({ queryKey: ["prestasiForDashboard"] });
   };
 
   return (

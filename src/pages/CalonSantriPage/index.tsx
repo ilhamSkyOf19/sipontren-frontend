@@ -18,25 +18,39 @@ import NoData from "../../components/NoData";
 import Swal from "sweetalert2";
 
 const CalonSantriPage: FC = () => {
-  // query client
+  // ==========================
+  // QUERY CLIENT
+  // ==========================
   const queryClient = useQueryClient();
 
-  // search params
+  // ==========================
+  // SEARCH PARAMS
+  // ==========================
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // state jenis sekolah
-  const [jenisSekolah, setJenisSekolah] = useState<
-    "SD" | "SMP" | "SMA" | undefined
-  >(undefined);
-
-  // state jenis kelamin
+  // ==========================
+  // STATE FILTER
+  // ==========================
   const [jenisKelamin, setJenisKelamin] = useState<
     "laki_laki" | "perempuan" | undefined
-  >(undefined);
+  >(() => {
+    const param = searchParams.get("jenisKelamin");
+    if (param === "laki_laki" || param === "perempuan") return param;
+    return undefined;
+  });
 
-  // use filter
+  const [jenisSekolah, setJenisSekolah] = useState<
+    "SD" | "SMP" | "SMA" | undefined
+  >(() => {
+    const param = searchParams.get("jenisSekolah");
+    if (param === "SD" || param === "SMP" || param === "SMA") return param;
+    return undefined;
+  });
+
+  // ==========================
+  // USE FILTER & SEARCH
+  // ==========================
   const { handleFilter, page, from, to } = UseFilter();
-  //  use search
   const { handleSearch, isSearch } = useSearch();
   const [debouncedSearch, setDebouncedSearch] = useState<string>(isSearch);
 
@@ -46,7 +60,9 @@ const CalonSantriPage: FC = () => {
     return () => clearTimeout(timer);
   }, [isSearch]);
 
-  // state modal
+  // ==========================
+  // MODAL STATE
+  // ==========================
   const [isModal, setIsModal] = useState<{
     active: boolean;
     data: ResponseStudentType | undefined;
@@ -55,51 +71,56 @@ const CalonSantriPage: FC = () => {
     data: undefined,
   });
 
-  // handle jenis kelamin
+  // ==========================
+  // HANDLER FILTER
+  // ==========================
   const handleFilterJenisKelamin = (
-    jenisKelamin: "laki_laki" | "perempuan" | undefined,
+    value: "laki_laki" | "perempuan" | undefined,
   ) => {
-    setJenisKelamin(jenisKelamin);
+    setJenisKelamin(value);
   };
 
-  // handle jenis sekolah
   const handleFilterJenisSekolah = (
-    jenisSekolah: "SD" | "SMP" | "SMA" | undefined,
+    value: "SD" | "SMP" | "SMA" | undefined,
   ) => {
-    setJenisSekolah(jenisSekolah);
+    setJenisSekolah(value);
   };
 
-  // jenis kelamin
-  const jenisKelaminQuery = searchParams.get("jenisKelamin") ?? "";
-
-  // set search params
+  // ==========================
+  // SYNC SEARCH PARAMS
+  // ==========================
   useEffect(() => {
     setSearchParams((prev) => {
-      // page
-      if (jenisKelamin === undefined) {
-        prev.delete("jenisKelamin");
-      } else {
-        prev.set("jenisKelamin", jenisKelamin);
-      }
+      const newParams = new URLSearchParams(prev.toString());
 
-      return prev;
+      if (jenisKelamin) newParams.set("jenisKelamin", jenisKelamin);
+      else newParams.delete("jenisKelamin");
+
+      if (jenisSekolah) newParams.set("jenisSekolah", jenisSekolah);
+      else newParams.delete("jenisSekolah");
+
+      return newParams;
     });
-  }, [jenisKelamin]);
+  }, [jenisKelamin, jenisSekolah]);
 
-  // query
+  // ==========================
+  // QUERY PARAMS
+  // ==========================
   const queryFrom = isValidDate(from) ? from : getTodayLocal();
   const queryTo = isValidDate(to) ? to : getTodayLocal();
 
-  // use query
+  // ==========================
+  // USE QUERY
+  // ==========================
   const { data: student, isLoading } = useQuery({
     queryKey: [
       "studentForDashboard",
       page,
-      jenisKelaminQuery,
+      searchParams.get("jenisKelamin") ?? undefined,
+      searchParams.get("jenisSekolah") ?? undefined,
       queryFrom,
       queryTo,
       debouncedSearch,
-      jenisSekolah,
     ],
     queryFn: () =>
       StudentService.read({
@@ -107,49 +128,51 @@ const CalonSantriPage: FC = () => {
         to: queryTo,
         search: debouncedSearch,
         page: page.toString(),
-        jenis_kelamin: jenisKelaminQuery as "laki_laki" | "perempuan",
-        jenis_sekolah: jenisSekolah,
+        jenis_kelamin: searchParams.get("jenisKelamin") as
+          | "laki_laki"
+          | "perempuan"
+          | undefined,
+        jenis_sekolah: searchParams.get("jenisSekolah") as
+          | "SD"
+          | "SMP"
+          | "SMA"
+          | undefined,
       }),
     refetchOnWindowFocus: false,
   });
 
-  // cek student
   if (!student?.success) return null;
 
-  // handle delete
+  // ==========================
+  // HANDLE DELETE
+  // ==========================
   const handleDelete = async (id: number) => {
-    // handle delete
     const result = await handleActionDelete(id, StudentService.delete);
-
     if (!result) return;
 
-    // close modal
     setIsModal({ active: false, data: undefined });
-
-    // refresh
-    queryClient.invalidateQueries({
-      queryKey: ["studentForDashboard"],
-    });
+    queryClient.invalidateQueries({ queryKey: ["studentForDashboard"] });
   };
 
-  // handle download
+  // ==========================
+  // HANDLE DOWNLOAD FILES
+  // ==========================
   const handleDownloadFiles = async () => {
     try {
       if (!isModal.data) return;
 
       await StudentService.downloadFile(
         [
-          isModal.data?.fc_akta_kelahiran,
-          isModal.data?.fc_kis_kip,
-          isModal.data?.fc_ktp,
-          isModal.data?.foto_formal,
-          isModal.data?.foto_kk,
+          isModal.data.fc_akta_kelahiran,
+          isModal.data.fc_kis_kip,
+          isModal.data.fc_ktp,
+          isModal.data.foto_formal,
+          isModal.data.foto_kk,
           "file2.pdf",
         ],
-        `dokumen-${isModal.data?.nama_lengkap}`,
+        `dokumen-${isModal.data.nama_lengkap}`,
       );
 
-      // notification
       Swal.fire({
         toast: true,
         position: "top-end",
@@ -158,9 +181,7 @@ const CalonSantriPage: FC = () => {
         showConfirmButton: false,
         timer: 1800,
         timerProgressBar: true,
-        customClass: {
-          container: "swal-z",
-        },
+        customClass: { container: "swal-z" },
         padding: "7px 12px",
       });
     } catch (error) {
@@ -169,7 +190,7 @@ const CalonSantriPage: FC = () => {
   };
 
   return (
-    <main className="w-full h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4">
+    <main className="w-full lg:h-full flex flex-col justify-start items-center relative overflow-hidden lg:pt-4 px-4">
       {/* header */}
       <HeaderDashboard
         title="Data Calon Santri"

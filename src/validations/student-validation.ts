@@ -8,7 +8,13 @@ import type {
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 // type
-const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+const ACCEPTED_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
+  "application/pdf",
+];
 
 export class StudentValidation {
   // ================= SCHEMA DASAR =================

@@ -7,9 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { NewsFilterType } from "../../../models/news-model";
 import { NewsService } from "../../../services/news.service";
 import CardBeritaSmall from "../../../components/CardBeritaSmall";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
 import ParallaxGoTop from "../../../fragments/ParallaxGoTop";
+import { UseFilter } from "../../../hooks/useFilter";
+import PrevNext from "../../../components/PrevNext";
 
 const filterNews: ("today" | "week" | "month")[] = ["today", "week", "month"];
 
@@ -19,15 +19,31 @@ type Props = {
 };
 
 const SectionBerita: FC<Props> = memo(({ width }) => {
+  // handle filter page
+  const { page, handleFilter } = UseFilter();
   // choose filter
   const [filter, setFilter] = useState<NewsFilterType>("today");
 
   // use query
   const { data, isLoading } = useQuery({
-    queryKey: ["news", filter],
-    queryFn: () => NewsService.readByFilter(filter),
+    queryKey: ["news", filter, page],
+    queryFn: () => NewsService.readByFilter(filter, page),
     refetchOnWindowFocus: false,
   });
+
+  // handle prev
+  const handlePrevPage = () => {
+    handleFilter({
+      page: page - 1,
+    });
+  };
+
+  // handle next
+  const handleNextPage = () => {
+    handleFilter({
+      page: page + 1,
+    });
+  };
 
   return (
     <section
@@ -78,9 +94,9 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
                 <div className="w-50 h-66 bg-gray-300 animate-pulse rounded-xl shrink-0" />
                 <div className="w-50 h-66 bg-gray-300 animate-pulse rounded-xl shrink-0" />
               </div>
-            ) : data?.success && data?.data && data?.data.length > 0 ? (
+            ) : data?.success && data?.data && data?.data.data.length > 0 ? (
               <ScrollXNonDesktop>
-                {data.data.map((item, index) => (
+                {data.data.data.map((item, index) => (
                   <CardBeritaSmall
                     key={index}
                     id={item.id}
@@ -111,21 +127,23 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
                 />
               ))}
             </div>
-          ) : data?.success && data?.data && data?.data.length > 0 ? (
+          ) : data?.success && data?.data && data?.data.data.length > 0 ? (
             <ScrollXDesktop>
-              {data.data.map((item, _index) => (
-                <CardBeritaSmall
-                  key={item.id}
-                  id={item.id}
-                  img={item.thumbnail}
-                  jenis={item.category}
-                  judul={item.title}
-                  deskripsi={item.content}
-                />
-              ))}
+              <div className="w-full flex flex-row justify-center items-center">
+                {data.data.data.map((item, _index) => (
+                  <CardBeritaSmall
+                    key={item.id}
+                    id={item.id}
+                    img={item.thumbnail}
+                    jenis={item.category}
+                    judul={item.title}
+                    deskripsi={item.content}
+                  />
+                ))}
 
-              {/* space */}
-              <div className="w-1 shrink-0 h-ful" />
+                {/* space */}
+                <div className="w-1 shrink-0 h-ful" />
+              </div>
             </ScrollXDesktop>
           ) : (
             <div className="w-full h-full flex flex-col justify-center items-center py-32">
@@ -136,16 +154,14 @@ const SectionBerita: FC<Props> = memo(({ width }) => {
           )}
         </ParallaxGoTop>
       </div>
-      <div className="w-full flex  justify-end items-center lg:pt-12 px-4 lg:px-12">
-        {data?.success && data.data.length > 0 && (
-          <Link
-            to={"/berita-more"}
-            className="text-sm py-2 px-4 lg:text-base lg:py-3 lg:px-6 bg-secondary-blue rounded-lg text-white flex flex-row justify-start items-center gap-3 hover:bg-primary-blue transition-all ease-in-out duration-200"
-          >
-            <span>Selengkapnya</span>
-
-            <ArrowRight size={20} />
-          </Link>
+      <div className="w-full flex  justify-end items-center lg:pt-12 lg:px-12">
+        {data?.success && data.data.meta.totalData > 4 && (
+          <PrevNext
+            handleNext={() => handleNextPage()}
+            handlePrev={() => handlePrevPage()}
+            page={page}
+            totalPage={data.data.meta.totalPage}
+          />
         )}
       </div>
     </section>
